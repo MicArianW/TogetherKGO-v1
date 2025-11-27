@@ -1,0 +1,410 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Community Board - TogetherKGO</title>
+  <link rel="stylesheet" href="assets/styles.css" />
+  <style>
+    .community-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .community-header {
+      text-align: center;
+      margin-bottom: 40px;
+    }
+
+    .community-header h2 {
+      font-size: 2.5rem;
+      margin-bottom: 10px;
+    }
+
+    .community-header p {
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    .submit-cta {
+      background: linear-gradient(135deg, #dcfce7 0%, #f0fdf4 100%);
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 40px;
+      text-align: center;
+    }
+
+    .submit-cta h3 {
+      margin: 0 0 12px 0;
+    }
+
+    .posts-grid {
+      display: grid;
+      gap: 24px;
+      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    }
+
+    .post-card {
+      background: white;
+      border: 1px solid #dcdcdc;
+      border-radius: 12px;
+      padding: 24px;
+      transition: all 0.3s;
+      position: relative;
+    }
+
+    .post-card:hover {
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transform: translateY(-2px);
+    }
+
+    .post-type-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      padding: 6px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+    }
+
+    .post-type-urgent {
+      background: #fee2e2;
+      color: #991b1b;
+    }
+
+    .post-type-event {
+      background: #dbeafe;
+      color: #1e40af;
+    }
+
+    .post-type-food_available {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .post-type-update {
+      background: #f3f4f6;
+      color: #374151;
+    }
+
+    .post-foodbank {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: #22c55e;
+      font-weight: 600;
+    }
+
+    .post-title {
+      font-size: 1.4rem;
+      font-weight: bold;
+      margin: 0 0 12px 0;
+      color: #000;
+    }
+
+    .post-message {
+      color: #444;
+      line-height: 1.6;
+      margin-bottom: 16px;
+    }
+
+    .post-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 16px;
+      border-top: 1px solid #e5e5e5;
+      font-size: 14px;
+      color: #666;
+    }
+
+    .post-date {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .post-contact {
+      background: #f8f8f8;
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 12px;
+      font-size: 14px;
+    }
+
+    .post-contact strong {
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    .no-posts {
+      text-align: center;
+      padding: 60px 20px;
+      color: #888;
+    }
+
+    .no-posts-icon {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    .filter-bar {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+
+    .filter-bar select {
+      padding: 10px 16px;
+      border: 1px solid #dcdcdc;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+    }
+
+    .post-image {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 16px;
+    }
+
+    @media (max-width: 768px) {
+      .posts-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .community-header h2 {
+        font-size: 2rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <header class="app-header">
+    <div class="branding">
+      <span class="logo">🍎</span>
+      <h1>TogetherKGO</h1>
+    </div>
+
+    <nav class="top-actions">
+      <a class="chip ghost" href="home.html">Home</a>
+      <a class="chip ghost" href="index.html">Food Resources</a>
+      <a class="chip" href="community.html">Community Board</a>
+      <a class="chip ghost" href="community-submit.html">Submit Update</a>
+    </nav>
+  </header>
+
+  <main class="community-container">
+    <div class="community-header">
+      <h2>📢 Community Board</h2>
+      <p>Real-time updates from food banks in the Kingston-Galloway-Orton Park area</p>
+    </div>
+
+    <div class="submit-cta card">
+      <h3>🏦 Are you a food bank staff member?</h3>
+      <p>Share updates about your services, special events, or important notices with the community.</p>
+      <a href="community-submit.html" class="primary big-btn" style="display: inline-block; margin-top: 12px;">Submit Community Update</a>
+    </div>
+
+    <div class="filter-bar">
+      <label for="filterFoodBank" style="font-weight: 600;">Filter by:</label>
+      <select id="filterFoodBank" onchange="filterPosts()">
+        <option value="all">All Food Banks</option>
+        <option value="fb1">East Scarborough Storefront</option>
+        <option value="fb2">Scarborough Centre for Healthy Communities</option>
+        <option value="fb3">West Hill Community Support Program</option>
+        <option value="fb4">Boys & Girls Club of East Scarborough</option>
+      </select>
+
+      <select id="filterType" onchange="filterPosts()">
+        <option value="all">All Types</option>
+        <option value="update">General Updates</option>
+        <option value="event">Special Events</option>
+        <option value="urgent">Urgent Notices</option>
+        <option value="food_available">Food Available</option>
+      </select>
+    </div>
+
+    <div id="postsContainer" class="posts-grid">
+      <!-- Posts will be loaded here by JavaScript -->
+    </div>
+
+    <div id="noPosts" class="no-posts" style="display: none;">
+      <div class="no-posts-icon">📭</div>
+      <h3>No posts yet</h3>
+      <p>Check back soon for updates from local food banks!</p>
+    </div>
+  </main>
+
+  <footer class="app-footer">
+    <div class="footer-content">
+      <p>&copy; 2025 TogetherKGO. Supporting the Kingston-Galloway-Orton Park community.</p>
+    </div>
+  </footer>
+
+  <script>
+    // Food bank names mapping
+    const foodBankNames = {
+      'fb1': 'East Scarborough Storefront',
+      'fb2': 'Scarborough Centre for Healthy Communities',
+      'fb3': 'West Hill Community Support Program',
+      'fb4': 'Boys & Girls Club of East Scarborough'
+    };
+
+    let allPosts = [];
+
+    // Load posts from JSON files
+    async function loadPosts() {
+      try {
+        // In production, this would load from data/posts/ folder
+        // For now, we'll check if posts exist
+        const postsFolder = 'data/posts/';
+        
+        // Try to load a manifest or individual post files
+        // This is a simplified version - in production, Decap CMS will create
+        // individual JSON files in data/posts/ folder
+        
+        // For demo purposes, show sample structure
+        const samplePosts = [
+          {
+            foodBankId: 'fb1',
+            title: 'Fresh Produce Available Today',
+            message: 'We have fresh vegetables and fruits available this afternoon from 2-4pm. First come, first served!',
+            type: 'food_available',
+            date: new Date().toISOString(),
+            contactInfo: '416-208-9889'
+          },
+          {
+            foodBankId: 'fb2',
+            title: 'Holiday Meal Distribution',
+            message: 'Join us this Saturday for our annual holiday meal distribution. We\'ll have complete meal kits available for families. Registration required.',
+            type: 'event',
+            date: new Date(Date.now() - 86400000).toISOString(),
+            contactInfo: '416-847-4147'
+          }
+        ];
+
+        // Load actual posts from Decap CMS generated files
+        // This would be implemented based on your file structure
+        allPosts = samplePosts;
+        
+        displayPosts(allPosts);
+      } catch (error) {
+        console.error('Error loading posts:', error);
+        document.getElementById('noPosts').style.display = 'block';
+      }
+    }
+
+    function displayPosts(posts) {
+      const container = document.getElementById('postsContainer');
+      const noPosts = document.getElementById('noPosts');
+
+      if (posts.length === 0) {
+        container.innerHTML = '';
+        noPosts.style.display = 'block';
+        return;
+      }
+
+      noPosts.style.display = 'none';
+
+      // Sort by date (newest first)
+      posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      container.innerHTML = posts.map(post => {
+        const postDate = new Date(post.date);
+        const formattedDate = postDate.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        });
+        const timeAgo = getTimeAgo(postDate);
+
+        return `
+          <div class="post-card" data-foodbank="${post.foodBankId}" data-type="${post.type}">
+            <span class="post-type-badge post-type-${post.type}">${post.type.replace('_', ' ')}</span>
+            
+            <div class="post-foodbank">
+              <span>🏦</span>
+              <span>${foodBankNames[post.foodBankId]}</span>
+            </div>
+
+            ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image" />` : ''}
+
+            <h3 class="post-title">${post.title}</h3>
+            
+            <div class="post-message">${post.message}</div>
+
+            ${post.contactInfo ? `
+              <div class="post-contact">
+                <strong>Contact for more info:</strong>
+                ${post.contactInfo}
+              </div>
+            ` : ''}
+
+            <div class="post-meta">
+              <div class="post-date">
+                <span>📅</span>
+                <span>${formattedDate} • ${timeAgo}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterPosts() {
+      const foodBankFilter = document.getElementById('filterFoodBank').value;
+      const typeFilter = document.getElementById('filterType').value;
+
+      let filtered = allPosts;
+
+      if (foodBankFilter !== 'all') {
+        filtered = filtered.filter(post => post.foodBankId === foodBankFilter);
+      }
+
+      if (typeFilter !== 'all') {
+        filtered = filtered.filter(post => post.type === typeFilter);
+      }
+
+      displayPosts(filtered);
+    }
+
+    function getTimeAgo(date) {
+      const seconds = Math.floor((new Date() - date) / 1000);
+      
+      const intervals = {
+        year: 31536000,
+        month: 2592000,
+        week: 604800,
+        day: 86400,
+        hour: 3600,
+        minute: 60
+      };
+
+      for (const [unit, secondsInUnit] of Object.entries(intervals)) {
+        const interval = Math.floor(seconds / secondsInUnit);
+        if (interval >= 1) {
+          return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+        }
+      }
+
+      return 'Just now';
+    }
+
+    // Load posts on page load
+    document.addEventListener('DOMContentLoaded', loadPosts);
+
+    // Reload posts every 5 minutes to check for new approved posts
+    setInterval(loadPosts, 5 * 60 * 1000);
+  </script>
+</body>
+</html>

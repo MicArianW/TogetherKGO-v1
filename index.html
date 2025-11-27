@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TogetherKGO – Food Resources</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/styles.css" />
+
+    <!-- Load config FIRST (this contains API KEY) -->
+    <script src="config.js"></script>
+
+    <!-- App scripts -->
+    <script defer src="assets/i18n.js"></script>
+    <script defer src="assets/app.js"></script>
+  </head>
+
+  <body>
+    <header class="app-header">
+      <div class="branding">
+        <span class="logo">🍎</span>
+        <h1 data-i18n="title">TogetherKGO – Food Resources</h1>
+      </div>
+
+      <nav class="top-actions">
+        <a class="chip ghost" href="home.html">Home</a>
+        <a class="chip ghost" href="community.html">Community Board</a>
+        <button id="lang-en" class="chip">EN</button>
+        <button id="lang-fr" class="chip">FR</button>
+        <button id="lang-ur" class="chip">اردو</button>
+        <button id="shareBtn" class="chip" data-i18n="share">Share</button>
+        <a class="chip ghost" href="README.html" target="_blank" data-i18n="help">Help</a>
+        <button class="chip" onclick="window.location.href='login.html'">Login</button>
+      </nav>
+    </header>
+
+    <main class="layout">
+      <aside class="sidebar">
+        <section class="card">
+          <h2 data-i18n="search_filters">Search & Filters</h2>
+
+          <label class="label" for="q" data-i18n="search_label">Search by name, keywords</label>
+          <input id="q" type="search" placeholder="food bank, community support…" />
+
+          <div class="grid2">
+            <div>
+              <label class="label" for="type">Type</label>
+              <select id="type">
+                <option value="">Any</option>
+                <option value="food_bank">Food Bank</option>
+                <option value="community_meal">Community Meal</option>
+                <option value="pantry">Pantry</option>
+                <option value="market">Market</option>
+                <option value="delivery">Delivery</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="label" for="openDay">Day Open</label>
+              <select id="openDay">
+                <option value="">Any</option>
+                <option value="Mon">Monday</option>
+                <option value="Tue">Tuesday</option>
+                <option value="Wed">Wednesday</option>
+                <option value="Thu">Thursday</option>
+                <option value="Fri">Friday</option>
+                <option value="Sat">Saturday</option>
+                <option value="Sun">Sunday</option>
+              </select>
+            </div>
+          </div>
+
+          <div>
+            <label class="label" for="radius">Search Radius</label>
+            <select id="radius">
+              <option value="99999">All Locations</option>
+              <option value="1000">Within 1 km</option>
+              <option value="2000">Within 2 km</option>
+              <option value="3000">Within 3 km</option>
+              <option value="5000">Within 5 km</option>
+            </select>
+          </div>
+
+          <div class="actions">
+            <button id="applyBtn" class="primary">Apply Filters</button>
+            <button id="resetBtn" class="ghost">Reset</button>
+          </div>
+        </section>
+
+        <section class="card info-card">
+          <h3>About Food Resources</h3>
+          <p class="subtle">Find food banks and community support services in the Kingston-Galloway-Orton Park area. All services are free and open to community members in need.</p>
+          
+          <div class="quick-contact">
+            <strong>Need Help?</strong>
+            <p class="subtle small">Contact any of the listed organizations directly for assistance or visit them during their operating hours.</p>
+          </div>
+        </section>
+      </aside>
+
+      <section class="content">
+        <div id="map" class="map"></div>
+
+        <section class="list card">
+          <h2>Food Resources in KGO Area</h2>
+          <div id="resultCount" class="subtle"></div>
+          <ul id="results"></ul>
+        </section>
+      </section>
+    </main>
+
+    <!-- Google Maps Loader -->
+    <script>
+      function loadGoogleMaps() {
+        if (!window.__CONFIG__ || !window.__CONFIG__.GOOGLE_MAPS_API_KEY) {
+          console.error("Missing API key in config.js");
+          return;
+        }
+
+        const script = document.createElement("script");
+        script.src =
+          "https://maps.googleapis.com/maps/api/js?key=" +
+          window.__CONFIG__.GOOGLE_MAPS_API_KEY +
+          "&callback=initMap";
+
+        script.async = true;
+        script.defer = true;
+
+        document.body.appendChild(script);
+      }
+
+      function initMap() {
+        if (window.__APP && window.__APP.initMap) {
+          window.__APP.initMap();
+        } else {
+          console.error("APP not ready yet");
+        }
+      }
+
+      window.initMap = initMap;
+
+      // Load Google Maps AFTER config.js and app.js
+      window.addEventListener("DOMContentLoaded", loadGoogleMaps);
+    </script>
+
+  </body>
+</html>

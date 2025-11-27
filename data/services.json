@@ -1,0 +1,69 @@
+[
+  {
+    "id": "fb1",
+    "name": "East Scarborough Storefront",
+    "type": "food_bank",
+    "address": "4040 Lawrence Ave E, Scarborough, ON M1E 2R6",
+    "location": {
+      "lat": 43.7659,
+      "lng": -79.1969
+    },
+    "days": ["Mon", "Tue", "Wed", "Thu"],
+    "hours": "Mon-Thu: 10am-6pm",
+    "phone": "416-208-9889",
+    "email": "info@thestorefront.org",
+    "website": "https://thestorefront.org/",
+    "description": "The East Scarborough Storefront harnesses the power of collaboration to support people and build community in one of the most diverse and marginalized neighbourhoods in East Scarborough.",
+    "tags": ["community_support", "diverse_community"]
+  },
+  {
+    "id": "fb2",
+    "name": "Scarborough Centre for Healthy Communities (SCHC)",
+    "type": "food_bank",
+    "address": "4100 Lawrence Ave E, Scarborough, ON M1E 2S2",
+    "location": {
+      "lat": 43.7667,
+      "lng": -79.1955
+    },
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+    "hours": "Mon-Fri: 9am-5pm",
+    "phone": "416-847-4147",
+    "email": "info@schcontario.ca",
+    "website": "https://schcontario.ca/",
+    "description": "SCHC provides accessible, equitable, and transformational health and social service choices to enhance the well-being of diverse communities.",
+    "tags": ["health_services", "social_services"]
+  },
+  {
+    "id": "fb3",
+    "name": "West Hill Community Support Program / Friends of Jesus Christ Food Bank",
+    "type": "food_bank",
+    "address": "4234 Lawrence Ave E #8, Scarborough, ON M1E 2S5",
+    "location": {
+      "lat": 43.7689,
+      "lng": -79.1975
+    },
+    "days": ["Tue"],
+    "hours": "Tuesday 9:00 AM–12:30 PM",
+    "phone": "416-282-1313",
+    "website": "http://westhillcommunitysupport.ca",
+    "description": "This organization provides essential services to combat food insecurity and offers direct access to food for all community members in need.",
+    "tags": ["food_security", "community_support"]
+  },
+  {
+    "id": "fb4",
+    "name": "Boys & Girls Club of East Scarborough",
+    "type": "food_bank",
+    "address": "100 Galloway Rd, Scarborough, ON M1E 1W7",
+    "location": {
+      "lat": 43.7616,
+      "lng": -79.1979
+    },
+    "days": ["Mon", "Tue", "Wed", "Thu", "Fri"],
+    "hours": "Mon-Fri 7am-6pm",
+    "phone": "416-281-0262",
+    "email": "info@esbgc.ca",
+    "website": "https://www.esbgc.ca/",
+    "description": "A trusted partner in building successful families within the community. Provides a safe and supportive environment for children, youth, and families.",
+    "tags": ["youth_programs", "family_support", "community_support"]
+  }
+]
