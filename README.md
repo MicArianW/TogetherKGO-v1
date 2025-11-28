@@ -1,6 +1,6 @@
-# TogetherKGO v2.0 - With Community Board
+# TogetherKGO v1.0 - With Community Board
 
-## 🎉 What's New in Version 2.0
+## 🎉 What's New in Version 1.0
 
 This version adds a **Community Board** feature that allows food bank staff to post updates that are approved by admins before going live.
 
@@ -291,6 +291,6 @@ Once deployed:
 
 ---
 
-**Version**: 2.0
-**Last Updated**: November 2024
+**Version**: 1.0
+**Last Updated**: November 2025
 **Built for**: Kingston-Galloway-Orton Park Community 🍎
