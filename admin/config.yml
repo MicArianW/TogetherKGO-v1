@@ -2,25 +2,18 @@ backend:
   name: git-gateway
   branch: main
 
-# Local backend for testing (comment out when deploying)
-# local_backend: true
-
 media_folder: "assets/images/posts"
 public_folder: "/assets/images/posts"
 
-# Publish mode - set to editorial workflow for approval process
 publish_mode: editorial_workflow
 
 collections:
-  # Community Posts Collection
   - name: "community_posts"
     label: "Community Posts"
     label_singular: "Community Post"
     folder: "data/posts"
     create: true
     slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
-    editor:
-      preview: true
     fields:
       - label: "Food Bank"
         name: "foodBankId"
@@ -47,11 +40,6 @@ collections:
           - { label: "Special Event", value: "event" }
           - { label: "Urgent Notice", value: "urgent" }
           - { label: "Food Available", value: "food_available" }
-      - label: "Image (Optional)"
-        name: "image"
-        widget: "image"
-        required: false
-        hint: "Optional image to accompany the post"
       - label: "Published Date"
         name: "date"
         widget: "datetime"
@@ -69,18 +57,3 @@ collections:
         widget: "datetime"
         required: false
         hint: "When this post should no longer be displayed"
-
-  # Food Banks Collection (read-only reference)
-  - name: "food_banks"
-    label: "Food Banks"
-    label_singular: "Food Bank"
-    file: "data/services.json"
-    fields:
-      - label: "Food Banks"
-        name: "foodBanks"
-        widget: "list"
-        fields:
-          - {label: "ID", name: "id", widget: "string"}
-          - {label: "Name", name: "name", widget: "string"}
-          - {label: "Type", name: "type", widget: "string"}
-          - {label: "Address", name: "address", widget: "string"}
