@@ -173,7 +173,6 @@ window.__APP = (function () {
         <div><strong>${it.name}</strong></div>
         <div class="subtle">${it.address}</div>
         <div style="margin: 8px 0;">
-          <span class="badge">${it.type.replace('_', ' ')}</span>
           ${(it.tags || [])
             .map((t) => `<span class="badge">${t.replace('_', ' ')}</span>`)
             .join("")}

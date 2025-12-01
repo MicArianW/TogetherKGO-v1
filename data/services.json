@@ -31,7 +31,7 @@
     "email": "info@schcontario.ca",
     "website": "https://schcontario.ca/",
     "description": "SCHC provides accessible, equitable, and transformational health and social service choices to enhance the well-being of diverse communities.",
-    "tags": ["health_services", "social_services"]
+    "tags": ["food_bank", "health_services", "social_services"]
   },
   {
     "id": "fb3",
@@ -47,7 +47,7 @@
     "phone": "416-282-1313",
     "website": "http://westhillcommunitysupport.ca",
     "description": "This organization provides essential services to combat food insecurity and offers direct access to food for all community members in need.",
-    "tags": ["food_security", "community_support"]
+    "tags": ["food_bank", "food_security", "community_support"]
   },
   {
     "id": "fb4",
@@ -64,6 +64,6 @@
     "email": "info@esbgc.ca",
     "website": "https://www.esbgc.ca/",
     "description": "A trusted partner in building successful families within the community. Provides a safe and supportive environment for children, youth, and families.",
-    "tags": ["youth_programs", "family_support", "community_support"]
+    "tags": ["food_bank", "youth_programs", "family_support", "community_support"]
   }
 ]
