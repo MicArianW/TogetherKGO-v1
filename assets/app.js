@@ -225,7 +225,8 @@ window.__APP = (function () {
       const text =
         [s.name, s.address, s.description, ...(s.tags || [])]
           .join(" ")
-          .toLowerCase();
+          .toLowerCase()
+          .replace(/_/g, ' '); // Replace underscores with spaces
       if (q && !text.includes(q)) return false;
 
       // Type filter

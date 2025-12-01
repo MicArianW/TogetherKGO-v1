@@ -5,7 +5,6 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Community Board - TogetherKGO</title>
   <link rel="stylesheet" href="assets/styles.css" />
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
     .community-container {
       max-width: 1200px;
@@ -200,7 +199,6 @@
       <a class="chip ghost" href="home.html">Home</a>
       <a class="chip ghost" href="index.html">Food Resources</a>
       <a class="chip" href="community.html">Community Board</a>
-      <a class="chip ghost" href="community-submit.html">Submit Update</a>
     </nav>
   </header>
 
@@ -211,7 +209,7 @@
     </div>
 
     <div class="submit-cta card">
-      <h3>🏦 Are you a food bank staff member?</h3>
+      <h3>Are you a food bank staff member?</h3>
       <p>Share updates about your services, special events, or important notices with the community.</p>
       <a href="community-submit.html" class="primary big-btn" style="display: inline-block; margin-top: 12px;">Submit Community Update</a>
     </div>
@@ -248,196 +246,164 @@
 
   <footer class="app-footer">
     <div class="footer-content">
-      <p>&copy; 2025 TogetherKGO. Supporting the Kingston-Galloway-Orton Park community.</p>
+      <p>&copy; 2024 TogetherKGO. Supporting the Kingston-Galloway-Orton Park community.</p>
     </div>
   </footer>
 
   <script>
     // Food bank names mapping
-    // Food bank names mapping
-const foodBankNames = {
-  'fb1': 'East Scarborough Storefront',
-  'fb2': 'Scarborough Centre for Healthy Communities',
-  'fb3': 'West Hill Community Support Program',
-  'fb4': 'Boys & Girls Club of East Scarborough'
-};
+    const foodBankNames = {
+      'fb1': 'East Scarborough Storefront',
+      'fb2': 'Scarborough Centre for Healthy Communities',
+      'fb3': 'West Hill Community Support Program',
+      'fb4': 'Boys & Girls Club of East Scarborough'
+    };
 
-let allPosts = [];
+    let allPosts = [];
 
-// Load posts from JSON files in data/posts/
-async function loadPosts() {
-  try {
-    // Fetch the list of post files from the data/posts directory
-    // Since we can't list directory contents directly in the browser,
-    // we'll use a different approach: try to load a posts index file
-    // or use GitHub API to get the file list
-    
-    // For GitHub-hosted sites, we can use the GitHub API
-    const repoOwner = 'MicArianW';
-    const repoName = 'TogetherKGO-v1';
-    const branch = 'main';
-    const postsPath = 'data/posts';
-    
-    const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${postsPath}?ref=${branch}`;
-    
-    const response = await fetch(apiUrl);
-    
-    if (!response.ok) {
-      console.log('No posts found or error accessing posts folder');
-      displayPosts([]);
-      return;
-    }
-    
-    const files = await response.json();
-    
-    // Filter for JSON files only
-    const jsonFiles = files.filter(file => file.name.endsWith('.json'));
-    
-    if (jsonFiles.length === 0) {
-      console.log('No post files found');
-      displayPosts([]);
-      return;
-    }
-    
-    // Load each post file
-    const postPromises = jsonFiles.map(async (file) => {
+    // Load posts from JSON files
+    async function loadPosts() {
       try {
-        const postResponse = await fetch(file.download_url);
-        const post = await postResponse.json();
-        return post;
+        // In production, this would load from data/posts/ folder
+        // For now, we'll check if posts exist
+        const postsFolder = 'data/posts/';
+        
+        // Try to load a manifest or individual post files
+        // This is a simplified version - in production, Decap CMS will create
+        // individual JSON files in data/posts/ folder
+        
+        // For demo purposes, show sample structure
+        const samplePosts = [
+          {
+            foodBankId: 'fb1',
+            title: 'Fresh Produce Available Today',
+            message: 'We have fresh vegetables and fruits available this afternoon from 2-4pm. First come, first served!',
+            type: 'food_available',
+            date: new Date().toISOString(),
+            contactInfo: '416-208-9889'
+          },
+          {
+            foodBankId: 'fb2',
+            title: 'Holiday Meal Distribution',
+            message: 'Join us this Saturday for our annual holiday meal distribution. We\'ll have complete meal kits available for families. Registration required.',
+            type: 'event',
+            date: new Date(Date.now() - 86400000).toISOString(),
+            contactInfo: '416-847-4147'
+          }
+        ];
+
+        // Load actual posts from Decap CMS generated files
+        // This would be implemented based on your file structure
+        allPosts = samplePosts;
+        
+        displayPosts(allPosts);
       } catch (error) {
-        console.error(`Error loading post ${file.name}:`, error);
-        return null;
+        console.error('Error loading posts:', error);
+        document.getElementById('noPosts').style.display = 'block';
       }
-    });
-    
-    const posts = await Promise.all(postPromises);
-    allPosts = posts.filter(post => post !== null);
-    
-    // Filter out expired posts
-    allPosts = allPosts.filter(post => {
-      if (!post.expiresDate) return true;
-      return new Date(post.expiresDate) > new Date();
-    });
-    
-    displayPosts(allPosts);
-    
-  } catch (error) {
-    console.error('Error loading posts:', error);
-    displayPosts([]);
-  }
-}
-
-function displayPosts(posts) {
-  const container = document.getElementById('postsContainer');
-  const noPosts = document.getElementById('noPosts');
-
-  if (posts.length === 0) {
-    container.innerHTML = '';
-    noPosts.style.display = 'block';
-    return;
-  }
-
-  noPosts.style.display = 'none';
-
-  // Sort by date (newest first)
-  posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-  container.innerHTML = posts.map(post => {
-    const postDate = new Date(post.date);
-    const formattedDate = postDate.toLocaleDateString('en-US', {
-      month: 'short',
-      day: 'numeric',
-      year: 'numeric'
-    });
-    const timeAgo = getTimeAgo(postDate);
-    
-    // Format post type for display
-    const typeDisplay = post.type.replace('_', ' ').toUpperCase();
-
-    return `
-      <div class="post-card" data-foodbank="${post.foodBankId}" data-type="${post.type}">
-        <span class="post-type-badge post-type-${post.type}">${typeDisplay}</span>
-        
-        <div class="post-foodbank">
-          <span>🏦</span>
-          <span>${foodBankNames[post.foodBankId]}</span>
-        </div>
-
-        ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image" />` : ''}
-
-        <h3 class="post-title">${post.title}</h3>
-        
-        <div class="post-message">${post.message}</div>
-
-        ${post.contactInfo ? `
-          <div class="post-contact">
-            <strong>Contact for more info:</strong>
-            ${post.contactInfo}
-          </div>
-        ` : ''}
-
-        <div class="post-meta">
-          <div class="post-date">
-            <span>📅</span>
-            <span>${formattedDate} • ${timeAgo}</span>
-          </div>
-        </div>
-      </div>
-    `;
-  }).join('');
-}
-
-function getTimeAgo(date) {
-  const seconds = Math.floor((new Date() - date) / 1000);
-  
-  const intervals = {
-    year: 31536000,
-    month: 2592000,
-    week: 604800,
-    day: 86400,
-    hour: 3600,
-    minute: 60
-  };
-  
-  for (const [unit, secondsInUnit] of Object.entries(intervals)) {
-    const interval = Math.floor(seconds / secondsInUnit);
-    if (interval >= 1) {
-      return interval === 1 ? `1 ${unit} ago` : `${interval} ${unit}s ago`;
     }
-  }
-  
-  return 'Just now';
-}
 
-function filterPosts() {
-  const foodBankFilter = document.getElementById('foodBankFilter').value;
-  const typeFilter = document.getElementById('typeFilter').value;
-  
-  let filteredPosts = allPosts;
-  
-  if (foodBankFilter !== 'all') {
-    filteredPosts = filteredPosts.filter(post => post.foodBankId === foodBankFilter);
-  }
-  
-  if (typeFilter !== 'all') {
-    filteredPosts = filteredPosts.filter(post => post.type === typeFilter);
-  }
-  
-  displayPosts(filteredPosts);
-}
+    function displayPosts(posts) {
+      const container = document.getElementById('postsContainer');
+      const noPosts = document.getElementById('noPosts');
 
-// Load posts when page loads
-document.addEventListener('DOMContentLoaded', () => {
-  loadPosts();
-  
-  // Set up filter listeners
-  document.getElementById('foodBankFilter').addEventListener('change', filterPosts);
-  document.getElementById('typeFilter').addEventListener('change', filterPosts);
-  
-  // Refresh posts every 5 minutes
-  setInterval(loadPosts, 5 * 60 * 1000);
-});
+      if (posts.length === 0) {
+        container.innerHTML = '';
+        noPosts.style.display = 'block';
+        return;
+      }
+
+      noPosts.style.display = 'none';
+
+      // Sort by date (newest first)
+      posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+      container.innerHTML = posts.map(post => {
+        const postDate = new Date(post.date);
+        const formattedDate = postDate.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric'
+        });
+        const timeAgo = getTimeAgo(postDate);
+
+        return `
+          <div class="post-card" data-foodbank="${post.foodBankId}" data-type="${post.type}">
+            <span class="post-type-badge post-type-${post.type}">${post.type.replace('_', ' ')}</span>
+            
+            <div class="post-foodbank">
+              <span>🏦</span>
+              <span>${foodBankNames[post.foodBankId]}</span>
+            </div>
+
+            ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image" />` : ''}
+
+            <h3 class="post-title">${post.title}</h3>
+            
+            <div class="post-message">${post.message}</div>
+
+            ${post.contactInfo ? `
+              <div class="post-contact">
+                <strong>Contact for more info:</strong>
+                ${post.contactInfo}
+              </div>
+            ` : ''}
+
+            <div class="post-meta">
+              <div class="post-date">
+                <span>📅</span>
+                <span>${formattedDate} • ${timeAgo}</span>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterPosts() {
+      const foodBankFilter = document.getElementById('filterFoodBank').value;
+      const typeFilter = document.getElementById('filterType').value;
+
+      let filtered = allPosts;
+
+      if (foodBankFilter !== 'all') {
+        filtered = filtered.filter(post => post.foodBankId === foodBankFilter);
+      }
+
+      if (typeFilter !== 'all') {
+        filtered = filtered.filter(post => post.type === typeFilter);
+      }
+
+      displayPosts(filtered);
+    }
+
+    function getTimeAgo(date) {
+      const seconds = Math.floor((new Date() - date) / 1000);
+      
+      const intervals = {
+        year: 31536000,
+        month: 2592000,
+        week: 604800,
+        day: 86400,
+        hour: 3600,
+        minute: 60
+      };
+
+      for (const [unit, secondsInUnit] of Object.entries(intervals)) {
+        const interval = Math.floor(seconds / secondsInUnit);
+        if (interval >= 1) {
+          return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+        }
+      }
+
+      return 'Just now';
+    }
+
+    // Load posts on page load
+    document.addEventListener('DOMContentLoaded', loadPosts);
+
+    // Reload posts every 5 minutes to check for new approved posts
+    setInterval(loadPosts, 5 * 60 * 1000);
   </script>
 </body>
 </html>
