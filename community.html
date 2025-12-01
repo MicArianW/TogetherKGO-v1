@@ -209,7 +209,7 @@
     </div>
 
     <div class="submit-cta card">
-      <h3>Are you a food bank staff member?</h3>
+      <h3>🏦 Are you a food bank staff member?</h3>
       <p>Share updates about your services, special events, or important notices with the community.</p>
       <a href="community-submit.html" class="primary big-btn" style="display: inline-block; margin-top: 12px;">Submit Community Update</a>
     </div>
@@ -261,45 +261,62 @@
 
     let allPosts = [];
 
-    // Load posts from JSON files
+    // Load posts from JSON files in data/posts/
     async function loadPosts() {
       try {
-        // In production, this would load from data/posts/ folder
-        // For now, we'll check if posts exist
-        const postsFolder = 'data/posts/';
+        // Use GitHub API to list files in data/posts directory
+        const repoOwner = 'MicArianW';
+        const repoName = 'TogetherKGO-v1';
+        const branch = 'main';
+        const postsPath = 'data/posts';
         
-        // Try to load a manifest or individual post files
-        // This is a simplified version - in production, Decap CMS will create
-        // individual JSON files in data/posts/ folder
+        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${postsPath}?ref=${branch}`;
         
-        // For demo purposes, show sample structure
-        const samplePosts = [
-          {
-            foodBankId: 'fb1',
-            title: 'Fresh Produce Available Today',
-            message: 'We have fresh vegetables and fruits available this afternoon from 2-4pm. First come, first served!',
-            type: 'food_available',
-            date: new Date().toISOString(),
-            contactInfo: '416-208-9889'
-          },
-          {
-            foodBankId: 'fb2',
-            title: 'Holiday Meal Distribution',
-            message: 'Join us this Saturday for our annual holiday meal distribution. We\'ll have complete meal kits available for families. Registration required.',
-            type: 'event',
-            date: new Date(Date.now() - 86400000).toISOString(),
-            contactInfo: '416-847-4147'
+        const response = await fetch(apiUrl);
+        
+        if (!response.ok) {
+          console.log('No posts found or error accessing posts folder');
+          displayPosts([]);
+          return;
+        }
+        
+        const files = await response.json();
+        
+        // Filter for JSON files only
+        const jsonFiles = files.filter(file => file.name.endsWith('.json'));
+        
+        if (jsonFiles.length === 0) {
+          console.log('No post files found');
+          displayPosts([]);
+          return;
+        }
+        
+        // Load each post file
+        const postPromises = jsonFiles.map(async (file) => {
+          try {
+            const postResponse = await fetch(file.download_url);
+            const post = await postResponse.json();
+            return post;
+          } catch (error) {
+            console.error(`Error loading post ${file.name}:`, error);
+            return null;
           }
-        ];
-
-        // Load actual posts from Decap CMS generated files
-        // This would be implemented based on your file structure
-        allPosts = samplePosts;
+        });
+        
+        const posts = await Promise.all(postPromises);
+        allPosts = posts.filter(post => post !== null);
+        
+        // Filter out expired posts
+        allPosts = allPosts.filter(post => {
+          if (!post.expiresDate) return true;
+          return new Date(post.expiresDate) > new Date();
+        });
         
         displayPosts(allPosts);
+        
       } catch (error) {
         console.error('Error loading posts:', error);
-        document.getElementById('noPosts').style.display = 'block';
+        displayPosts([]);
       }
     }
 
