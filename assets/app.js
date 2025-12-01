@@ -92,6 +92,11 @@ window.__APP = (function () {
         const contactInfo = [];
         if (item.phone) contactInfo.push(`<div>📞 ${item.phone}</div>`);
         if (item.email) contactInfo.push(`<div>📧 ${item.email}</div>`);
+        
+        // Google Maps directions link
+        const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(item.address)}`;
+        contactInfo.push(`<div><a href="${directionsUrl}" target="_blank" style="color: #1e40af;">🗺️ Get Directions</a></div>`);
+        
         if (item.website) contactInfo.push(`<div><a href="${item.website}" target="_blank">🌐 Website</a></div>`);
 
         info.setContent(`
@@ -157,6 +162,11 @@ window.__APP = (function () {
       
       const contactInfo = [];
       if (it.phone) contactInfo.push(`📞 ${it.phone}`);
+      
+      // Google Maps directions link
+      const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(it.address)}`;
+      contactInfo.push(`<a href="${directionsUrl}" target="_blank" style="color: #1e40af;">🗺️ Get Directions</a>`);
+      
       if (it.website) contactInfo.push(`<a href="${it.website}" target="_blank" style="color: #22c55e;">🌐 Website</a>`);
       
       li.innerHTML = `
