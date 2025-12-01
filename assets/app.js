@@ -163,9 +163,9 @@ window.__APP = (function () {
       const contactInfo = [];
       if (it.phone) contactInfo.push(`📞 ${it.phone}`);
       
-      // Google Maps directions link
+      // Google Maps directions link (green, like website)
       const directionsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(it.address)}`;
-      contactInfo.push(`<a href="${directionsUrl}" target="_blank" style="color: #1e40af;">🗺️ Get Directions</a>`);
+      contactInfo.push(`<a href="${directionsUrl}" target="_blank" style="color: #22c55e;">🗺️ Directions</a>`);
       
       if (it.website) contactInfo.push(`<a href="${it.website}" target="_blank" style="color: #22c55e;">🌐 Website</a>`);
       
