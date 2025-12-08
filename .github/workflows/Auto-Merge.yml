@@ -13,6 +13,10 @@ jobs:
       pull-requests: write
       contents: write
 
+    # Required - GitHub CLI (gh) checks for env var GH_TOKEN
+    env:
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+
     # Gather all pull requests with decap-cms label
     steps:
       - name: Gather PRs with label "decap-cms/pending_publish"
