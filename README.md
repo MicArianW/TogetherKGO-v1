@@ -1,3 +1,5 @@
+IGNORE DO NOT ACCEPT THESE CHANGES
+
 # TogetherKGO v1.0 - With Community Board
 
 ## 🎉 What's New in Version 1.0
