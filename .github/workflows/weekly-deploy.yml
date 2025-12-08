@@ -1,0 +1,77 @@
+name: 3x Weekly Deploy (Mon/Wed/Fri at 10am)
+
+# When to run this workflow
+on:
+  # Scheduled: Monday, Wednesday, Friday at 10am EST (2pm UTC in standard time, 3pm UTC in daylight time)
+  # Using 14:00 UTC as a safe middle ground (works for both EST and EDT)
+  schedule:
+    - cron: '0 14 * * 1'   # Monday 10am EST
+    - cron: '0 14 * * 3'   # Wednesday 10am EST
+    - cron: '0 14 * * 5'   # Friday 10am EST
+  
+  # Manual: Can be triggered manually from GitHub Actions tab
+  workflow_dispatch:
+    inputs:
+      reason:
+        description: 'Reason for manual deploy'
+        required: false
+        default: 'Manual deploy'
+
+jobs:
+  scheduled-deploy:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+      
+      - name: Display deploy info
+        run: |
+          echo "DEPLOY TRIGGERED"
+          echo "Day: $(date +%A, %B %d, %Y)"
+          echo "Time: $(date +%I:%M %p %Z)"
+          echo "Schedule: Monday, Wednesday, Friday at 10am EST"
+      
+      - name: Check for new posts
+        id: check_changes
+        run: |
+          # Look back 3 days to catch all posts since last deploy
+          DAYS_AGO=$(date -u -d '3 days ago' +%Y-%m-%dT%H:%M:%S)
+          
+          NEW_POSTS=$(git log --since="$DAYS_AGO" --name-only --pretty=format: -- data/posts/ | sort -u | wc -l)
+          
+          echo "Posts changed since last deploy: $NEW_POSTS"
+          
+          if [ "$NEW_POSTS" -gt 0 ] || [ "${{ github.event.inputs.reason }}" != "" ]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "New posts detected - deploying"
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No new posts - skipping deployment"
+          fi
+      
+      - name: Trigger Netlify Build
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          echo "Triggering Netlify deployment..."
+          
+          RESPONSE=$(curl -X POST -d '{}' ${{ secrets.NETLIFY_BUILD_HOOK }} -w "%{http_code}" -o /dev/null -s)
+          
+          if [ "$RESPONSE" = "200" ] || [ "$RESPONSE" = "201" ]; then
+            echo "Build hook triggered successfully"
+            echo "All new posts will be published shortly"
+            echo "Expected deployment time: 30-60 seconds"
+            echo "Site: https://meek-profiterole-385303.netlify.app"
+          else
+            echo "Build hook failed with status: $RESPONSE"
+            exit 1
+          fi
+      
+      - name: Skip deployment
+        if: steps.check_changes.outputs.has_changes == 'false'
+        run: |
+          echo "Skipping deployment - no new posts to publish"
+          echo "Saving build minutes"
+          echo "Next scheduled deploy: Check workflow schedule"
