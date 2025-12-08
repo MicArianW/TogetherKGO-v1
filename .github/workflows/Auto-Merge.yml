@@ -1,0 +1,37 @@
+name: Auto-Merge Pending Publish PRs
+
+on:
+  schedule:
+    # Monday at 16:00 UTC
+    - cron: "0 19 * * 1"
+  workflow_dispatch:
+
+jobs:
+  merge_pending_publish_prs:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+
+    # Gather all pull requests with decap-cms label
+    steps:
+      - name: Gather PRs with label "decap-cms/pending_publish"
+        id: gather
+        run: |
+          prs=$(gh pr list \
+            --state open \
+            --label "decap-cms/pending_publish" \
+            --json number \
+            --jq '.[].number')
+
+          echo "prs=$prs" >> $GITHUB_OUTPUT
+
+      # Pipe these requests, if not empty
+      - name: Merge PRs
+        if: steps.gather.outputs.prs != ''
+        run: |
+          for pr in ${{ steps.gather.outputs.prs }}; do
+            echo "Merging PR #$pr"
+            gh pr merge "$pr" --squash --auto --admin || \
+              echo "Failed to merge PR #$pr"
+          done
