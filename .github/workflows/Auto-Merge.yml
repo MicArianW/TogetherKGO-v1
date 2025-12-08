@@ -2,7 +2,7 @@ name: Auto-Merge Pending Publish PRs
 
 on:
   schedule:
-    # Monday at 16:00 UTC
+    # Monday at 21:00 UTC
     - cron: "00 21 * * 1"
   workflow_dispatch:
 
@@ -13,14 +13,14 @@ jobs:
       pull-requests: write
       contents: write
 
-    # Required - GitHub CLI (gh) checks for env var GH_TOKEN
     env:
-      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}  
+      GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    # Gather all pull requests with decap-cms label
     steps:
+      # Checkout repository for gh commands
       - uses: actions/checkout@v4
-      
+
+      # Gather all open PRs with the label
       - name: Gather PRs with label "decap-cms/pending_publish"
         id: gather
         run: |
@@ -28,16 +28,18 @@ jobs:
             --state open \
             --label "decap-cms/pending_publish" \
             --json number \
-            --jq '.[].number')
-
+            --jq '.[].number' | paste -sd "," -)
           echo "prs=$prs" >> $GITHUB_OUTPUT
 
-      # Pipe these requests, if not empty
+      # Merge each PR
       - name: Merge PRs
         if: steps.gather.outputs.prs != ''
         run: |
-          for pr in ${{ steps.gather.outputs.prs }}; do
-            echo "Merging PR #$pr"
+          # Split comma-separated PR numbers into an array
+          IFS=',' read -ra prs_array <<< "${{ steps.gather.outputs.prs }}"
+          
+          for pr in "${prs_array[@]}"; do
+            echo "Processing PR #$pr"
 
             # Skip workflow-changing PRs
             changed_files=$(gh pr view "$pr" --json files --jq '.files[].path')
@@ -45,7 +47,13 @@ jobs:
               echo "Skipping PR #$pr because it modifies workflows"
               continue
             fi
-            
+
+            # Merge PR immediately
             gh pr merge "$pr" --squash --admin || \
-              echo "Failed to merge PR #$pr - this could be due to failing checks, validate that the PR passed its checks"
+              echo "Failed to merge PR #$pr - verify CI/checks"
           done
+
+      # Log if no PRs found
+      - name: No PRs found
+        if: steps.gather.outputs.prs == ''
+        run: echo "No pending_publish PRs found to merge."
