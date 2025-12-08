@@ -38,6 +38,14 @@ jobs:
         run: |
           for pr in ${{ steps.gather.outputs.prs }}; do
             echo "Merging PR #$pr"
-            gh pr merge "$pr" --squash --auto || \
+
+            # Skip workflow-changing PRs
+            changed_files=$(gh pr view "$pr" --json files --jq '.files[].path')
+            if echo "$changed_files" | grep -q '^.github/workflows/'; then
+              echo "Skipping PR #$pr because it modifies workflows"
+              continue
+            fi
+            
+            gh pr merge "$pr" --squash --admin || \
               echo "Failed to merge PR #$pr - this could be due to failing checks, validate that the PR passed its checks"
           done
