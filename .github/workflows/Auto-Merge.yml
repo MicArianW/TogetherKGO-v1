@@ -38,6 +38,6 @@ jobs:
         run: |
           for pr in ${{ steps.gather.outputs.prs }}; do
             echo "Merging PR #$pr"
-            gh pr merge "$pr" --squash --auto --admin || \
-              echo "Failed to merge PR #$pr"
+            gh pr merge "$pr" --squash --auto || \
+              echo "Failed to merge PR #$pr - this could be due to failing checks, validate that the PR passed its checks"
           done
