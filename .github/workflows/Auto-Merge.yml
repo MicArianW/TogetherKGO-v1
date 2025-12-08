@@ -3,7 +3,7 @@ name: Auto-Merge Pending Publish PRs
 on:
   schedule:
     # Monday at 16:00 UTC
-    - cron: "0 19 * * 1"
+    - cron: "47 18 * * 1"
   workflow_dispatch:
 
 jobs:
