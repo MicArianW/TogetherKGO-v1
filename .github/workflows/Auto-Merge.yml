@@ -3,7 +3,7 @@ name: Auto-Merge Pending Publish PRs
 on:
   schedule:
     # Monday at 16:00 UTC
-    - cron: "47 18 * * 1"
+    - cron: "00 21 * * 1"
   workflow_dispatch:
 
 jobs:
@@ -19,6 +19,8 @@ jobs:
 
     # Gather all pull requests with decap-cms label
     steps:
+      - uses: actions/checkout@v4
+      
       - name: Gather PRs with label "decap-cms/pending_publish"
         id: gather
         run: |
