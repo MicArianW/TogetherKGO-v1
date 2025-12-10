@@ -1,62 +1,113 @@
-name: Auto-Merge Pending Publish PRs
+name: Auto-Merge Pending Publish PRs (Single Deploy)
 
 on:
   schedule:
-    # Monday at 10:35 AM ET
+    # Monday, Wednesday, Friday at 10:35 AM EST
     - cron: "35 14 * * 1"
     - cron: "35 14 * * 3"
     - cron: "35 14 * * 5"
-    
   workflow_dispatch:
 
 jobs:
-  merge_pending_publish_prs:
+  batch_merge_prs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
       contents: write
-
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
+    
     steps:
-      # Checkout repository for gh commands
-      - uses: actions/checkout@v4
-
-      # Gather all open PRs with the label
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+      
       - name: Gather PRs with label "decap-cms/pending_publish"
         id: gather
         run: |
           prs=$(gh pr list \
             --state open \
             --label "decap-cms/pending_publish" \
+            --json number,headRefName \
+            --jq '.[] | "\(.number):\(.headRefName)"' | paste -sd "," -)
+          
+          pr_count=$(gh pr list \
+            --state open \
+            --label "decap-cms/pending_publish" \
             --json number \
-            --jq '.[].number' | paste -sd "," -)
+            --jq '. | length')
+          
           echo "prs=$prs" >> $GITHUB_OUTPUT
-
-      # Merge each PR
-      - name: Merge PRs
+          echo "pr_count=$pr_count" >> $GITHUB_OUTPUT
+          
+          if [ "$pr_count" -gt 0 ]; then
+            echo "Found $pr_count pending PRs to merge"
+          else
+            echo "No pending PRs found"
+          fi
+      
+      - name: Batch merge all PRs into one commit
         if: steps.gather.outputs.prs != ''
         run: |
-          # Split comma-separated PR numbers into an array
-          IFS=',' read -ra prs_array <<< "${{ steps.gather.outputs.prs }}"
+          # Parse PR numbers and branch names
+          IFS=',' read -ra pr_array <<< "${{ steps.gather.outputs.prs }}"
           
-          for pr in "${prs_array[@]}"; do
-            echo "Processing PR #$pr"
-
+          pr_numbers=""
+          
+          # Checkout main and pull latest
+          git checkout main
+          git pull origin main
+          
+          # Merge each PR branch (but don't push yet)
+          for pr_info in "${pr_array[@]}"; do
+            pr_number=$(echo "$pr_info" | cut -d':' -f1)
+            branch_name=$(echo "$pr_info" | cut -d':' -f2)
+            
+            echo "Merging PR #$pr_number (branch: $branch_name)"
+            
             # Skip workflow-changing PRs
-            changed_files=$(gh pr view "$pr" --json files --jq '.files[].path')
+            changed_files=$(gh pr view "$pr_number" --json files --jq '.files[].path')
             if echo "$changed_files" | grep -q '^.github/workflows/'; then
-              echo "Skipping PR #$pr because it modifies workflows"
+              echo "Skipping PR #$pr_number - modifies workflows"
               continue
             fi
-
-            # Merge PR immediately
-            gh pr merge "$pr" --squash --admin || \
-              echo "Failed to merge PR #$pr - verify CI/checks"
+            
+            # Fetch and merge the PR branch
+            git fetch origin "$branch_name"
+            git merge "origin/$branch_name" --no-edit --no-ff
+            
+            pr_numbers="$pr_numbers #$pr_number"
           done
-
-      # Log if no PRs found
-      - name: No PRs found
+          
+          # Push all merges as ONE commit to main
+          if git diff --quiet origin/main; then
+            echo "No changes to push"
+          else
+            echo "Pushing batch merge of PRs:$pr_numbers"
+            git push origin main
+            echo "Successfully merged all PRs in one push"
+          fi
+      
+      - name: Close merged PRs
+        if: steps.gather.outputs.prs != ''
+        run: |
+          IFS=',' read -ra pr_array <<< "${{ steps.gather.outputs.prs }}"
+          
+          for pr_info in "${pr_array[@]}"; do
+            pr_number=$(echo "$pr_info" | cut -d':' -f1)
+            
+            # Close the PR (it's already merged)
+            gh pr close "$pr_number" --comment "Auto-merged in batch deploy" || true
+          done
+      
+      - name: No PRs to merge
         if: steps.gather.outputs.prs == ''
-        run: echo "No pending_publish PRs found to merge."
+        run: |
+          echo "No pending_publish PRs found to merge"
+          echo "Skipping deployment"
