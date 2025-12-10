@@ -1,0 +1,64 @@
+name: Merge Content Branch to Main
+
+on:
+  schedule:
+    # Monday, Wednesday, Friday at 10:35 AM EST
+    - cron: "35 14 * * 1"
+    - cron: "35 14 * * 3"
+    - cron: "35 14 * * 5"
+  workflow_dispatch:
+
+jobs:
+  merge-content:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+      
+      - name: Check for changes in content branch
+        id: check
+        run: |
+          # Fetch latest
+          git fetch origin decapcms-content
+          git fetch origin main
+          
+          # Check if there are differences
+          if git diff --quiet origin/main origin/decapcms-content -- data/posts/; then
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "No new posts in decapcms-content branch"
+          else
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "New posts detected in decapcms-content branch"
+          fi
+      
+      - name: Merge decapcms-content to main
+        if: steps.check.outputs.has_changes == 'true'
+        run: |
+          # Checkout main
+          git checkout main
+          git pull origin main
+          
+          # Merge content branch
+          git merge origin/decapcms-content --no-ff -m "Scheduled merge: Deploy posts from decapcms-content"
+          
+          # Push to main
+          git push origin main
+          
+          echo "Successfully merged decapcms-content to main"
+          echo "Netlify will auto-deploy the changes"
+      
+      - name: No changes to deploy
+        if: steps.check.outputs.has_changes == 'false'
+        run: |
+          echo "No new posts to deploy"
+          echo "Skipping merge - saving build minutes"
