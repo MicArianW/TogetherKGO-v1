@@ -1,114 +1,610 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>TogetherKGO – Home</title>
-  <link rel="stylesheet" href="assets/styles.css" />
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TogetherKGO - Community Food Resources</title>
+    <link rel="stylesheet" href="assets/styles.css">
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        /* Very Light Blue Color Scheme - Soft and Airy */
+        :root {
+            --primary-blue: #7DBFE8;
+            --dark-blue: #5BA3D0;
+            --light-blue: #E3F2FD;
+            --pale-blue: #F0F9FF;
+            --sky-blue: #BAE6FD;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --white: #FFFFFF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--white);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            margin-left: auto;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            background: var(--white);
+            border: 2px solid #C8E6C9;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+            background: var(--white);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Hero Section - Very Light Blue */
+        .hero {
+            background: linear-gradient(135deg, var(--sky-blue) 0%, var(--light-blue) 100%);
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            min-height: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Decorative wave border at bottom */
+        .hero::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 100px;
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 100"><path d="M 0 50 Q 50 20 100 50 T 200 50 T 300 50 T 400 50 T 500 50 T 600 50 T 700 50 T 800 50 T 900 50 T 1000 50 T 1100 50 T 1200 50 L 1200 100 L 0 100 Z" fill="%23DBEAFE" opacity="0.6"/></svg>') repeat-x;
+            background-size: 200px 100px;
+        }
+
+        .hero-content {
+            padding: 4rem 4rem 4rem 6rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-label {
+            font-family: 'Brush Script MT', cursive, 'Segoe Script', cursive;
+            font-size: 3rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            font-weight: normal;
+            font-style: italic;
+        }
+
+        .hero-title {
+            font-size: 4rem;
+            font-weight: 900;
+            color: var(--text-dark);
+            line-height: 1;
+            margin-bottom: 1.5rem;
+            text-transform: uppercase;
+            letter-spacing: -2px;
+        }
+
+        .hero-subtitle {
+            font-size: 1.8rem;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            font-weight: 300;
+        }
+
+        .hero-description {
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            line-height: 1.8;
+            margin-bottom: 2.5rem;
+            max-width: 600px;
+        }
+
+        .hero-button {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 1.25rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            align-self: flex-start;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-size: 1.1rem;
+            box-shadow: 0 4px 15px rgba(125, 191, 232, 0.3);
+        }
+
+        .hero-button:hover {
+            background: var(--dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(125, 191, 232, 0.4);
+        }
+
+        .hero-image {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Vertical text on left edge */
+        .hero-vertical-text {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%) rotate(-90deg);
+            transform-origin: center;
+            font-size: 1rem;
+            color: var(--primary-blue);
+            font-weight: 600;
+            letter-spacing: 3px;
+            white-space: nowrap;
+            text-transform: uppercase;
+        }
+
+        /* Features Section */
+        .features {
+            background: var(--white);
+            padding: 5rem 2rem;
+        }
+
+        .features-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-light);
+            margin-bottom: 3rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .feature-card {
+            background: var(--pale-blue);
+            padding: 2.5rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(125, 191, 232, 0.1);
+            transition: all 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(125, 191, 232, 0.2);
+            border-color: var(--sky-blue);
+        }
+
+        .feature-icon {
+            font-size: 3.5rem;
+            margin-bottom: 1.5rem;
+            display: block;
+        }
+
+        .feature-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+        }
+
+        .feature-description {
+            color: var(--text-light);
+            line-height: 1.7;
+            font-size: 1.05rem;
+        }
+
+        /* Community Impact Section */
+        .impact {
+            padding: 5rem 2rem;
+            background: var(--pale-blue);
+        }
+
+        .impact-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2.5rem;
+            background: var(--white);
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(125, 191, 232, 0.15);
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: scale(1.05);
+        }
+
+        .stat-number {
+            font-size: 3.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: var(--text-light);
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        /* CTA Section */
+        .cta {
+            background: linear-gradient(135deg, var(--primary-blue) 0%, var(--dark-blue) 100%);
+            color: var(--white);
+            padding: 5rem 2rem;
+            text-align: center;
+        }
+
+        .cta-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .cta-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-description {
+            font-size: 1.3rem;
+            margin-bottom: 2.5rem;
+            opacity: 0.95;
+            line-height: 1.7;
+        }
+
+        .btn-white {
+            background: var(--white);
+            color: var(--primary-blue);
+            padding: 1.25rem 2.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s;
+            font-size: 1.1rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-white:hover {
+            background: var(--pale-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.3);
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 4rem 2rem 1.5rem;
+        }
+
+        .footer-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            color: var(--white);
+            font-size: 1.2rem;
+        }
+
+        .footer-section p {
+            opacity: 0.8;
+            line-height: 1.6;
+        }
+
+        .footer-section ul {
+            list-style: none;
+        }
+
+        .footer-section a {
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            display: block;
+            margin-bottom: 0.75rem;
+            transition: color 0.3s;
+        }
+
+        .footer-section a:hover {
+            color: var(--white);
+        }
+
+        .footer-bottom {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding-top: 2rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            text-align: center;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.95rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 968px) {
+            .hero {
+                grid-template-columns: 1fr;
+                min-height: auto;
+            }
+
+            .hero-content {
+                padding: 3rem 2rem;
+            }
+
+            .hero-label {
+                font-size: 2rem;
+            }
+
+            .hero-title {
+                font-size: 2.5rem;
+            }
+
+            .hero-subtitle {
+                font-size: 1.3rem;
+            }
+
+            .hero-description {
+                font-size: 1.1rem;
+            }
+
+            .hero-image {
+                min-height: 400px;
+            }
+
+            .hero-vertical-text {
+                display: none;
+            }
+
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .cta-title {
+                font-size: 2rem;
+            }
+        }
+
+        @media (max-width: 640px) {
+            .nav-links {
+                display: none;
+            }
+
+            .hero-content {
+                padding: 2rem 1.5rem;
+            }
+
+            .hero-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <header class="app-header">
-    <div class="branding">
-      <span class="logo">🍎</span>
-      <h1>TogetherKGO</h1>
-    </div>
-
-    <nav class="top-actions">
-      <a class="chip ghost" href="home.html">Home</a>
-      <a class="chip ghost" href="index.html">Food Resources</a>
-      <a class="chip ghost" href="community.html">Community Board</a>
-      <button class="chip" onclick="window.location.href='login.html'">Login</button>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="home.html" class="logo">TogetherKGO</a>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="index.html">Find Food Banks</a></li>
+                <li><a href="community.html">Community</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
     </nav>
-  </header>
 
-  <main class="home-container">
-    <section class="home-hero">
-      <div class="hero-content">
-        <h2>Welcome to TogetherKGO</h2>
-        <p class="hero-subtitle">Your trusted community resource for food banks and support services in the Kingston-Galloway-Orton Park neighbourhood.</p>
-        
-        <div class="home-buttons">
-          <a href="index.html" class="primary big-btn">🗺️ Find Food Resources</a>
+    <!-- Hero Section - Very Light Blue -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                Bringing KGO<br>Together
+            </h1>
+            <div class="hero-subtitle">Supporting Our Community Since Day One</div>
+            <p class="hero-description">
+                TogetherKGO is the organization that brings the Kingston-Galloway-Orton community together for support in food security and essential services. We find pathways to connect people, resources, and food to reach those in need, providing dignity, hope, and a brighter future for all our neighbors.
+            </p>
+            <a href="index.html" class="hero-button">Find Food Resources</a>
         </div>
-      </div>
-    </section>
-
-    <section class="features-section">
-      <div class="features-container">
-        <h3 class="section-title">What We Offer</h3>
-        
-        <div class="features-grid">
-          <div class="feature-card">
-            <div class="feature-icon">📍</div>
-            <h4>Interactive Map</h4>
-            <p>Easily locate food banks and community resources near you with our interactive map view.</p>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">🔍</div>
-            <h4>Smart Search</h4>
-            <p>Filter resources by location, operating hours, and type of service to find what you need.</p>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">📞</div>
-            <h4>Contact Information</h4>
-            <p>Get direct phone numbers, emails, and websites for all community food resources.</p>
-          </div>
-
-          <div class="feature-card">
-            <div class="feature-icon">🕒</div>
-            <h4>Operating Hours</h4>
-            <p>View up-to-date operating hours and days to plan your visit accordingly.</p>
-          </div>
+        <div class="hero-image">
+            <!-- Replace with actual community image of KGO neighborhood -->
+            <img src="https://images.unsplash.com/photo-1559027615-cd4628902d4a?w=1200&q=80" alt="KGO Community gathering">
         </div>
-      </div>
     </section>
 
-    <section class="about-section">
-      <div class="about-container">
-        <div class="about-content">
-          <h3 class="section-title">About Kingston-Galloway-Orton Park</h3>
-          <p>The Kingston-Galloway-Orton Park (KGO) neighbourhood is a vibrant and diverse community in East Scarborough. Our mission is to connect residents with essential food resources and support services.</p>
-          
-          <div class="stats-grid">
-            <div class="stat-item">
-              <div class="stat-number">4</div>
-              <div class="stat-label">Food Banks</div>
+    <!-- Features Section -->
+    <section class="features">
+        <div class="features-container">
+            <h2 class="section-title">How We Support Our Community</h2>
+            <p class="section-subtitle">Connecting neighbors with the resources they need, when they need them</p>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <span class="feature-icon">📍</span>
+                    <h3 class="feature-title">Food Bank Locator</h3>
+                    <p class="feature-description">
+                        Find food banks and pantries in the Kingston-Galloway-Orton Park area with our easy-to-use interactive map. Get real-time information on hours, services, and how to access support.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📢</span>
+                    <h3 class="feature-title">Community Updates</h3>
+                    <p class="feature-description">
+                        Stay connected with the latest news, events, and programs in our neighborhood. We share important announcements and opportunities to help our community thrive.
+                    </p>
+                </div>
+                <div class="feature-card">
+                    <span class="feature-icon">📞</span>
+                    <h3 class="feature-title">Contact Information</h3>
+                    <p class="feature-description">
+                        Get direct phone numbers, emails, and websites for all community food resources.
+                    </p>
+                </div>
             </div>
-            <div class="stat-item">
-              <div class="stat-number">100%</div>
-              <div class="stat-label">Free Services</div>
-            </div>
-            <div class="stat-item">
-              <div class="stat-number">5+</div>
-              <div class="stat-label">Days per Week</div>
-            </div>
-          </div>
         </div>
-      </div>
     </section>
 
-    <section class="cta-section">
-      <div class="cta-container">
-        <h3>Need Food Assistance?</h3>
-        <p>All services listed are free and available to community members. No judgment, just support.</p>
-        <a href="index.html" class="primary big-btn">View All Resources</a>
-      </div>
+    <!-- Community Impact -->
+    <section class="impact">
+        <div class="impact-container">
+            <h2 class="section-title">Our Community Impact</h2>
+            <p class="section-subtitle">Together, we're making a difference in Kingston-Galloway-Orton Park</p>
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">4</div>
+                    <div class="stat-label">Local Food Banks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-label">Resource Access</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-label">Free Services</div>
+                </div>
+            </div>
+        </div>
     </section>
-  </main>
 
-  <footer class="app-footer">
-    <div class="footer-content">
-      <p>&copy; 2025 TogetherKGO. Supporting the Kingston-Galloway-Orton Park community.</p>
-      <div class="footer-links">
-        <a href="README.html">Help</a>
-        <a href="index.html">Resources</a>
-      </div>
-    </div>
-  </footer>
+    <!-- CTA Section -->
+    <section class="cta">
+        <div class="cta-container">
+            <h2 class="cta-title">Need Support Today?</h2>
+            <p class="cta-description">
+                Don't wait. Find the food resources and community support you need right now in the Kingston-Galloway-Orton Park neighborhood. We're here to help.
+            </p>
+            <a href="index.html" class="btn-white">Find Food Banks Near You</a>
+        </div>
+    </section>
 
-</body>
-</html>
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-section">
+                <h3>TogetherKGO</h3>
+                <p>Building a stronger, more connected Kingston-Galloway-Orton Park community through accessible food resources and support services.</p>
+            </div>
+            <div class="footer-section">
+                <h3>Quick Links</h3>
+                <ul>
+                    <li><a href="index.html">Find Food Banks</a></li>
+                    <li><a href="community.html">Community Posts</a></li>
+                    <li><a href="#about">About Us</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Resources</h3>
+                <ul>
+                    <li><a href="#services">Support Services</a></li>
+                    <li><a href="#donate">Donate</a></li>
+                    <li><a href="#partners">Community Partners</a></li>
+                </ul>
+            </div>
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b0d9ded6dff0c4dfd7d5c4d8d5c2dbd7df9edfc2d7">[email&#160;protected]</a></p>
+                <p>Phone: (416) XXX-XXXX</p>
+                <p>Serving the KGO community</p>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 TogetherKGO | Bringing the Kingston-Galloway-Orton community together.</p>
+        </div>
+    </footer>
+
+    <!-- Netlify
