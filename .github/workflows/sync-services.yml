@@ -30,7 +30,7 @@ jobs:
           const path = require('path');
           
           // Read existing services.json (with your 4 food banks)
-          const servicesPath = 'services.json';
+          const servicesPath = 'data/services.json';
           let services = [];
           
           if (fs.existsSync(servicesPath)) {
@@ -54,7 +54,7 @@ jobs:
           
           if (fs.existsSync(servicesDir)) {
             const files = fs.readdirSync(servicesDir)
-              .filter(file => file.endsWith('.json'));
+              .filter(file => file.endsWith('.json') && file !== 'services.json');
             
             console.log(`Found ${files.length} service listing files`);
             
@@ -124,10 +124,10 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           
-          if git diff --quiet services.json; then
+          if git diff --quiet data/services.json; then
             echo "No changes to services.json"
           else
-            git add services.json
+            git add data/services.json
             git commit -m "Auto-update: Sync approved service listings to services.json"
             git push
             echo "✅ services.json updated and deployed!"
