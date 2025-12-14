@@ -88,11 +88,14 @@ jobs:
           # Push all merges as ONE commit to main
           if git diff --quiet origin/main; then
             echo "No changes to push"
+            echo "merged=false" >> $GITHUB_OUTPUT
           else
             echo "Pushing batch merge of PRs:$pr_numbers"
             git push origin main
             echo "Successfully merged all PRs in one push"
+            echo "merged=true" >> $GITHUB_OUTPUT
           fi
+        id: merge
       
       - name: Close merged PRs
         if: steps.gather.outputs.prs != ''
@@ -105,6 +108,13 @@ jobs:
             # Close the PR (it's already merged)
             gh pr close "$pr_number" --comment "Auto-merged in batch deploy" || true
           done
+      
+      - name: Trigger Sync Workflow
+        if: steps.merge.outputs.merged == 'true'
+        run: |
+          echo "Triggering sync workflow to update services.json..."
+          gh workflow run sync-services.yml
+          echo "✅ Sync workflow triggered!"
       
       - name: No PRs to merge
         if: steps.gather.outputs.prs == ''
