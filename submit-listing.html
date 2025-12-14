@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Your Listing - TogetherKGO</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        /* Color Scheme */
+        :root {
+            --primary-blue: #7DBFE8;
+            --dark-blue: #5BA3D0;
+            --light-blue: #E3F2FD;
+            --pale-blue: #F0F9FF;
+            --green-border: #C8E6C9;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --white: #FFFFFF;
+            --success-green: #10B981;
+            --error-red: #EF4444;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background: var(--pale-blue);
+        }
+
+        /* Navigation */
+        nav {
+            background: var(--white);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            margin-left: auto;
+        }
+
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            background: var(--white);
+            border: 2px solid var(--green-border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-links a:hover {
+            color: var(--primary-blue);
+            background: var(--white);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        /* Header Section */
+        .page-header {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
+
+        .page-header p {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        /* Form Container */
+        .form-container {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .form-section h2 {
+            font-size: 1.5rem;
+            color: var(--primary-blue);
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--light-blue);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-size: 1rem;
+        }
+
+        label .required {
+            color: var(--error-red);
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="tel"],
+        input[type="url"],
+        textarea,
+        select {
+            width: 100%;
+            padding: 0.875rem;
+            border: 2px solid var(--light-blue);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-family: inherit;
+            transition: all 0.3s;
+            background: var(--white);
+        }
+
+        input:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+            box-shadow: 0 0 0 3px rgba(125, 191, 232, 0.1);
+        }
+
+        textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .helper-text {
+            font-size: 0.875rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        /* Checkbox Group */
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-top: 0.5rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+        }
+
+        .checkbox-item label {
+            margin: 0;
+            font-weight: 400;
+        }
+
+        /* Days Selection */
+        .days-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(80px, 1fr));
+            gap: 0.75rem;
+            margin-top: 0.5rem;
+        }
+
+        .day-checkbox {
+            position: relative;
+        }
+
+        .day-checkbox input[type="checkbox"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .day-checkbox label {
+            display: block;
+            padding: 0.75rem;
+            text-align: center;
+            border: 2px solid var(--light-blue);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin: 0;
+            font-weight: 500;
+        }
+
+        .day-checkbox input:checked + label {
+            background: var(--primary-blue);
+            color: var(--white);
+            border-color: var(--primary-blue);
+        }
+
+        /* Submit Button */
+        .submit-section {
+            margin-top: 2.5rem;
+            padding-top: 2rem;
+            border-top: 2px solid var(--light-blue);
+        }
+
+        .submit-btn {
+            background: var(--primary-blue);
+            color: var(--white);
+            padding: 1.25rem 3rem;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s;
+            width: 100%;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 0 4px 15px rgba(125, 191, 232, 0.3);
+        }
+
+        .submit-btn:hover {
+            background: var(--dark-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(125, 191, 232, 0.4);
+        }
+
+        .submit-btn:disabled {
+            background: var(--text-light);
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        /* Success Message */
+        .success-message {
+            display: none;
+            background: var(--success-green);
+            color: var(--white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .success-message.show {
+            display: block;
+        }
+
+        .success-message h3 {
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: var(--text-dark);
+            color: var(--white);
+            padding: 2rem;
+            margin-top: 4rem;
+            text-align: center;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .form-container {
+                padding: 2rem 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="home.html" class="logo">TogetherKGO</a>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="index.html">Find Food Banks</a></li>
+                <li><a href="community.html">Community</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <!-- Success Message -->
+        <div class="success-message" id="successMessage">
+            <h3>✅ Thank You for Your Submission!</h3>
+            <p>Your listing has been received and will be reviewed by our team. We'll contact you if we need any additional information.</p>
+        </div>
+
+        <!-- Page Header -->
+        <div class="page-header">
+            <h1>Submit Your Organization</h1>
+            <p>Are you a food bank, community center, or service provider in the Kingston-Galloway-Orton Park area? Join our directory to help connect community members with essential resources.</p>
+        </div>
+
+        <!-- Submission Form -->
+        <div class="form-container">
+            <form name="service-listings" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="listingForm">
+                <!-- Netlify Form Fields -->
+                <input type="hidden" name="form-name" value="service-listings">
+                <p style="display: none;">
+                    <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+                </p>
+
+                <!-- Basic Information -->
+                <div class="form-section">
+                    <h2>Basic Information</h2>
+                    
+                    <div class="form-group">
+                        <label for="orgName">Organization Name <span class="required">*</span></label>
+                        <input type="text" id="orgName" name="organization_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="orgType">Organization Type <span class="required">*</span></label>
+                        <select id="orgType" name="organization_type" required>
+                            <option value="">Select type...</option>
+                            <option value="food_bank">Food Bank</option>
+                            <option value="community_center">Community Center</option>
+                            <option value="social_services">Social Services</option>
+                            <option value="health_services">Health Services</option>
+                            <option value="youth_programs">Youth Programs</option>
+                            <option value="family_support">Family Support</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="description">Description <span class="required">*</span></label>
+                        <textarea id="description" name="description" required placeholder="Describe the services your organization provides..."></textarea>
+                        <span class="helper-text">Tell us what makes your organization special and how you help the community.</span>
+                    </div>
+                </div>
+
+                <!-- Location Information -->
+                <div class="form-section">
+                    <h2>Location & Contact</h2>
+                    
+                    <div class="form-group">
+                        <label for="address">Full Address <span class="required">*</span></label>
+                        <input type="text" id="address" name="address" required placeholder="123 Street Name, City, ON M1E 2R6">
+                        <span class="helper-text">Include street number, street name, city, province, and postal code.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="phone">Phone Number <span class="required">*</span></label>
+                        <input type="tel" id="phone" name="phone" required placeholder="416-XXX-XXXX">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" placeholder="info@yourorganization.org">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="website">Website</label>
+                        <input type="url" id="website" name="website" placeholder="https://www.yourorganization.org">
+                    </div>
+                </div>
+
+                <!-- Operating Hours -->
+                <div class="form-section">
+                    <h2>Operating Hours</h2>
+                    
+                    <div class="form-group">
+                        <label>Days Open <span class="required">*</span></label>
+                        <div class="days-grid">
+                            <div class="day-checkbox">
+                                <input type="checkbox" id="mon" name="days_open" value="Mon">
+                                <label for="mon">Monday</label>
+                            </div>
+                            <div class="day-checkbox">
+                                <input type="checkbox" id="tue" name="days_open" value="Tue">
+                                <label for="tue">Tuesday</label>
+                            </div>
+                            <div class="day-checkbox">
+                                <input type="checkbox" id="wed" name="days_open" value="Wed">
+                                <label for="wed">Wednesday</label>
+                            </div>
+                            <div class="day-checkbox">
+                                <input type="checkbox" id="thu" name="days_open" value="Thu">
+                                <label for="thu">Thursday</label>
+                            </div>
+                            <div class="day-checkbox">
+                                <input type="checkbox" id="fri" name="days_open" value="Fri">
+                                <label for="fri">Friday</label>
+                            </div>
+                            <div class="day-checkbox">
+                                <input type="checkbox" id="sat" name="days_open" value="Sat">
+                                <label for="sat">Saturday</label>
+                            </div>
+                            <div class="day-checkbox">
+                                <input type="checkbox" id="sun" name="days_open" value="Sun">
+                                <label for="sun">Sunday</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="hours">Operating Hours <span class="required">*</span></label>
+                        <input type="text" id="hours" name="operating_hours" required placeholder="e.g., Mon-Fri: 9am-5pm, Sat: 10am-2pm">
+                        <span class="helper-text">Specify your operating hours (e.g., "Mon-Fri: 9am-5pm" or "Tuesday: 10am-3pm")</span>
+                    </div>
+                </div>
+
+                <!-- Services Offered -->
+                <div class="form-section">
+                    <h2>Services Offered</h2>
+                    
+                    <div class="form-group">
+                        <label>What services do you provide? (Select all that apply)</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="service_food" name="services" value="food_bank">
+                                <label for="service_food">Food Bank</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="service_meals" name="services" value="hot_meals">
+                                <label for="service_meals">Hot Meals</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="service_community" name="services" value="community_support">
+                                <label for="service_community">Community Support</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="service_youth" name="services" value="youth_programs">
+                                <label for="service_youth">Youth Programs</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="service_family" name="services" value="family_support">
+                                <label for="service_family">Family Support</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="service_health" name="services" value="health_services">
+                                <label for="service_health">Health Services</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="service_social" name="services" value="social_services">
+                                <label for="service_social">Social Services</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="service_housing" name="services" value="housing_support">
+                                <label for="service_housing">Housing Support</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="additionalInfo">Additional Information</label>
+                        <textarea id="additionalInfo" name="additional_info" placeholder="Any other information you'd like to share (special programs, accessibility features, languages spoken, etc.)"></textarea>
+                    </div>
+                </div>
+
+                <!-- Contact Person -->
+                <div class="form-section">
+                    <h2>Contact Person (for review purposes only)</h2>
+                    
+                    <div class="form-group">
+                        <label for="contactName">Your Name <span class="required">*</span></label>
+                        <input type="text" id="contactName" name="contact_name" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactEmail">Your Email <span class="required">*</span></label>
+                        <input type="email" id="contactEmail" name="contact_email" required>
+                        <span class="helper-text">We'll use this to contact you about your submission.</span>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="contactPhone">Your Phone Number</label>
+                        <input type="tel" id="contactPhone" name="contact_phone">
+                    </div>
+                </div>
+
+                <!-- Submit Button -->
+                <div class="submit-section">
+                    <button type="submit" class="submit-btn">Submit Your Listing</button>
+                    <p style="text-align: center; margin-top: 1rem; color: var(--text-light); font-size: 0.95rem;">
+                        Your submission will be reviewed before appearing on the map. We'll contact you if we need more information.
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <p>&copy; 2025 TogetherKGO | Bringing the Kingston-Galloway-Orton community together.</p>
+    </footer>
+
+    <script>
+        // Form submission handling
+        const form = document.getElementById('listingForm');
+        const successMessage = document.getElementById('successMessage');
+
+        form.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(form);
+            
+            fetch('/', {
+                method: 'POST',
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString()
+            })
+            .then(() => {
+                // Show success message
+                successMessage.classList.add('show');
+                // Reset form
+                form.reset();
+                // Scroll to top
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                // Hide message after 10 seconds
+                setTimeout(() => {
+                    successMessage.classList.remove('show');
+                }, 10000);
+            })
+            .catch((error) => {
+                alert('Error submitting form. Please try again or contact us directly.');
+                console.error('Error:', error);
+            });
+        });
+    </script>
+</body>
+</html>
