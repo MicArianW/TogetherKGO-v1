@@ -8,6 +8,7 @@ public_folder: "/assets/images/posts"
 publish_mode: editorial_workflow
 
 collections:
+  # COMMUNITY POSTS - ORIGINAL, NO CHANGES
   - name: "community_posts"
     label: "Community Posts"
     label_singular: "Community Post"
@@ -59,3 +60,144 @@ collections:
         widget: "datetime"
         required: false
         hint: "When this post should no longer be displayed"
+
+  # SERVICE LISTINGS - NEW COLLECTION FOR ORGANIZATIONS
+  - name: "service_listings"
+    label: "Service Listings"
+    label_singular: "Service Listing"
+    folder: "data/services"
+    create: true
+    slug: "{{slug}}"
+    extension: "json"
+    format: "json"
+    identifier_field: "name"
+    summary: "{{name}} - {{type}}"
+    fields:
+      - label: "Organization Name"
+        name: "name"
+        widget: "string"
+        required: true
+        hint: "Full name of the organization"
+      
+      - label: "Organization Type"
+        name: "type"
+        widget: "select"
+        required: true
+        options:
+          - { label: "Food Bank", value: "food_bank" }
+          - { label: "Community Center", value: "community_center" }
+          - { label: "Social Services", value: "social_services" }
+          - { label: "Health Services", value: "health_services" }
+          - { label: "Youth Programs", value: "youth_programs" }
+          - { label: "Family Support", value: "family_support" }
+          - { label: "General Organization", value: "organization" }
+      
+      - label: "Description"
+        name: "description"
+        widget: "text"
+        required: true
+        hint: "Describe the services your organization provides"
+      
+      - label: "Full Address"
+        name: "address"
+        widget: "string"
+        required: true
+        hint: "Include street, city, province, postal code"
+      
+      - label: "Location Coordinates"
+        name: "location"
+        widget: "object"
+        fields:
+          - label: "Latitude"
+            name: "lat"
+            widget: "number"
+            value_type: "float"
+            step: 0.0001
+            required: true
+            hint: "Use Google Maps to find coordinates (e.g., 43.7659)"
+          - label: "Longitude"
+            name: "lng"
+            widget: "number"
+            value_type: "float"
+            step: 0.0001
+            required: true
+            hint: "For Toronto area, this should be negative (e.g., -79.1969)"
+      
+      - label: "Days Open"
+        name: "days"
+        widget: "select"
+        multiple: true
+        required: true
+        options:
+          - { label: "Monday", value: "Mon" }
+          - { label: "Tuesday", value: "Tue" }
+          - { label: "Wednesday", value: "Wed" }
+          - { label: "Thursday", value: "Thu" }
+          - { label: "Friday", value: "Fri" }
+          - { label: "Saturday", value: "Sat" }
+          - { label: "Sunday", value: "Sun" }
+      
+      - label: "Operating Hours"
+        name: "hours"
+        widget: "string"
+        required: true
+        hint: "e.g., Mon-Fri: 9am-5pm or Tuesday: 10am-3pm"
+      
+      - label: "Phone Number"
+        name: "phone"
+        widget: "string"
+        required: true
+        hint: "Main contact number (e.g., 416-XXX-XXXX)"
+      
+      - label: "Email Address"
+        name: "email"
+        widget: "string"
+        required: false
+        hint: "Contact email (optional)"
+      
+      - label: "Website"
+        name: "website"
+        widget: "string"
+        required: false
+        hint: "Organization website URL (optional)"
+      
+      - label: "Services/Tags"
+        name: "tags"
+        widget: "select"
+        multiple: true
+        required: false
+        options:
+          - { label: "Food Bank", value: "food_bank" }
+          - { label: "Hot Meals", value: "hot_meals" }
+          - { label: "Community Support", value: "community_support" }
+          - { label: "Youth Programs", value: "youth_programs" }
+          - { label: "Family Support", value: "family_support" }
+          - { label: "Health Services", value: "health_services" }
+          - { label: "Social Services", value: "social_services" }
+          - { label: "Housing Support", value: "housing_support" }
+          - { label: "Food Security", value: "food_security" }
+          - { label: "Diverse Community", value: "diverse_community" }
+      
+      - label: "Additional Information"
+        name: "additional_info"
+        widget: "text"
+        required: false
+        hint: "Any other relevant information (accessibility, languages, special programs, etc.)"
+      
+      - label: "Contact Person Name"
+        name: "contact_name"
+        widget: "string"
+        required: false
+        hint: "For internal use only - person who submitted this listing"
+      
+      - label: "Contact Person Email"
+        name: "contact_email"
+        widget: "string"
+        required: false
+        hint: "For internal use only"
+      
+      - label: "Contact Person Phone"
+        name: "contact_phone"
+        widget: "string"
+        required: false
+        hint: "For internal use only"
