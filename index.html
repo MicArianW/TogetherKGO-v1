@@ -47,6 +47,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: nowrap;
         }
 
         .logo {
@@ -54,13 +55,17 @@
             font-weight: bold;
             color: var(--primary-blue);
             text-decoration: none;
+            flex-shrink: 0;
+            margin-right: 2rem;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
             list-style: none;
             margin-left: auto;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
         .nav-links a {
@@ -185,12 +190,13 @@
         }
 
         .hero-content {
-            padding: 4rem 4rem 4rem 6rem;
+            padding: 4rem 2rem 4rem 4rem;
             display: flex;
             flex-direction: column;
             justify-content: center;
             position: relative;
             z-index: 2;
+            max-width: 700px;
         }
 
         .hero-label {
@@ -489,7 +495,46 @@
         }
 
         /* Responsive Design */
+        @media (max-width: 1200px) {
+            .nav-links {
+                gap: 0.75rem;
+            }
+            
+            .nav-links a {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.95rem;
+            }
+            
+            .hero-title {
+                font-size: 4.5rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 2rem;
+            }
+        }
+
         @media (max-width: 968px) {
+            .nav-container {
+                flex-wrap: wrap;
+            }
+            
+            .logo {
+                flex: 0 0 auto;
+            }
+            
+            .nav-links {
+                flex: 1 1 100%;
+                justify-content: center;
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+            
+            .nav-links a {
+                padding: 0.5rem 0.9rem;
+                font-size: 0.9rem;
+            }
+            
             .hero {
                 grid-template-columns: 1fr;
                 min-height: auto;
@@ -497,6 +542,7 @@
 
             .hero-content {
                 padding: 3rem 2rem;
+                max-width: 100%;
             }
 
             .hero-label {
@@ -504,15 +550,15 @@
             }
 
             .hero-title {
-                font-size: 2.5rem;
+                font-size: 3.5rem;
             }
 
             .hero-subtitle {
-                font-size: 1.3rem;
+                font-size: 1.75rem;
             }
 
             .hero-description {
-                font-size: 1.1rem;
+                font-size: 1.25rem;
             }
 
             .hero-image {
@@ -523,17 +569,16 @@
                 display: none;
             }
 
-            .nav-links {
-                gap: 1rem;
-                font-size: 0.9rem;
-            }
-
             .section-title {
                 font-size: 2rem;
             }
 
             .cta-title {
                 font-size: 2rem;
+            }
+            
+            .language-menu {
+                right: 0;
             }
         }
 
@@ -556,7 +601,7 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <a href="home.html" class="logo">TogetherKGO</a>
+            <a href="index.html" class="logo">TogetherKGO</a>
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="food-banks.html">Find Food Banks</a></li>
@@ -596,7 +641,7 @@
             <p class="hero-description">
                 TogetherKGO is the organization that brings the Kingston-Galloway-Orton community together for support in food security and essential services. We find pathways to connect people, resources, and food to reach those in need, providing dignity, hope, and a brighter future for all our neighbors.
             </p>
-            <a href="index.html" class="hero-button">Find Food Resources</a>
+            <a href="food-banks.html" class="hero-button">Find Food Resources</a>
         </div>
         <div class="hero-image">
             <img src="https://images.pexels.com/photos/6995201/pexels-photo-6995201.jpeg" alt="Volunteers at community food bank">
@@ -663,7 +708,7 @@
             <p class="cta-description">
                 Don't wait. Find the food resources and community support you need right now in the Kingston-Galloway-Orton Park neighborhood. We're here to help.
             </p>
-            <a href="index.html" class="btn-white">Find Food Banks Near You</a>
+            <a href="food-banks.html" class="btn-white">Find Food Banks Near You</a>
         </div>
     </section>
 
@@ -677,7 +722,7 @@
             <div class="footer-section">
                 <h3>Quick Links</h3>
                 <ul>
-                    <li><a href="index.html">Find Food Banks</a></li>
+                    <li><a href="food-banks.html">Find Food Banks</a></li>
                     <li><a href="community.html">Community Posts</a></li>
                     <li><a href="#about">About Us</a></li>
                     <li><a href="#contact">Contact</a></li>
@@ -739,16 +784,22 @@
             // Close dropdown
             document.getElementById('languageMenu').classList.remove('show');
             
-            // Wait for Google Translate to initialize
-            setTimeout(function() {
+            // Wait for Google Translate to fully load
+            const checkTranslate = setInterval(function() {
                 const selectElement = document.querySelector('.goog-te-combo');
                 if (selectElement) {
+                    clearInterval(checkTranslate);
                     selectElement.value = lang;
-                    selectElement.dispatchEvent(new Event('change'));
-                } else {
-                    console.error('Google Translate not loaded yet');
+                    // Trigger change event
+                    const event = new Event('change', { bubbles: true });
+                    selectElement.dispatchEvent(event);
                 }
-            }, 500);
+            }, 100);
+            
+            // Stop checking after 5 seconds
+            setTimeout(function() {
+                clearInterval(checkTranslate);
+            }, 5000);
         }
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
