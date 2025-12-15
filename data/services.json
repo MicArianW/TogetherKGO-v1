@@ -124,5 +124,25 @@
     "description": "test listing",
     "tags": [],
     "website": "https://curranhallcommunity.ca/ "
+  },
+  {
+    "id": "fb6",
+    "name": "SOSO World Ministries",
+    "type": "food_bank",
+    "address": "400 McCowan Road E, Scarborough, Ontario M1J 1J5",
+    "location": {
+      "lat": 43.741087,
+      "lng": -79.23962
+    },
+    "days": [
+      "Mon"
+    ],
+    "hours": "Mon: 1pm-3pm",
+    "phone": "647-330-2254",
+    "description": "Food Bank",
+    "tags": [
+      "food_bank",
+      "community_support"
+    ]
   }
 ]
