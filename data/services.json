@@ -102,5 +102,49 @@
       "family_support",
       "community_support"
     ]
+  },
+  {
+    "id": "fb5",
+    "name": "Curran Hall Community Centre",
+    "type": "community_center",
+    "address": "277 Orton Park Rd, Scarborough, ON M1G 3T4",
+    "location": {
+      "lat": 43.78,
+      "lng": -79.21
+    },
+    "days": [
+      "Mon",
+      "Tue",
+      "Wed"
+    ],
+    "hours": "Mon-Wed: 9am-5pm",
+    "phone": "416-396-5156",
+    "description": "Community Center",
+    "tags": [
+      "community_support",
+      "youth_programs",
+      "social_services"
+    ]
+  },
+  {
+    "id": "fb6",
+    "name": "SOSO World Ministries",
+    "type": "food_bank",
+    "address": "400 McCowan Rd Toronto, ON, M1J 1J5",
+    "location": {
+      "lat": 43.741087,
+      "lng": -79.23962
+    },
+    "days": [
+      "Mon"
+    ],
+    "hours": "Mon: 9am-5pm",
+    "phone": "647-330-2254",
+    "description": "Food Bank",
+    "tags": [
+      "food_bank",
+      "family_support",
+      "food_security"
+    ]
   }
 ]
