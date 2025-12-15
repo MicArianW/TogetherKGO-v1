@@ -90,9 +90,16 @@
 
         /* Google Translate Widget Styling */
         #google_translate_element {
-            display: none;
             position: absolute;
             left: -9999px;
+            opacity: 0;
+            pointer-events: none;
+        }
+        
+        /* Ensure Google Translate elements can still function */
+        .goog-te-combo {
+            opacity: 1 !important;
+            pointer-events: all !important;
         }
 
         /* Language Dropdown */
@@ -752,6 +759,7 @@
     <!-- Google Translate Script -->
     <div id="google_translate_element" style="display:none;"></div>
     <script type="text/javascript">
+        // Initialize Google Translate
         function googleTranslateElementInit() {
             new google.translate.TranslateElement({
                 pageLanguage: 'en',
@@ -777,30 +785,57 @@
             }
         });
 
-        // Change language using Google Translate
-        function changeLanguage(lang) {
+        // Change language using Google Translate - More reliable method
+        function changeLanguage(langCode) {
             event.preventDefault();
             
             // Close dropdown
             document.getElementById('languageMenu').classList.remove('show');
             
-            // Wait for Google Translate to fully load
-            const checkTranslate = setInterval(function() {
-                const selectElement = document.querySelector('.goog-te-combo');
+            // Method 1: Try to find and trigger the Google Translate dropdown
+            let attempts = 0;
+            const maxAttempts = 50; // Try for 5 seconds (50 * 100ms)
+            
+            const tryTranslate = setInterval(function() {
+                attempts++;
+                
+                // Look for the Google Translate select element
+                const selectElement = document.querySelector('select.goog-te-combo');
+                
                 if (selectElement) {
-                    clearInterval(checkTranslate);
-                    selectElement.value = lang;
-                    // Trigger change event
-                    const event = new Event('change', { bubbles: true });
-                    selectElement.dispatchEvent(event);
+                    clearInterval(tryTranslate);
+                    console.log('Google Translate found, changing to: ' + langCode);
+                    
+                    // Set the value
+                    selectElement.value = langCode;
+                    
+                    // Trigger all possible events to ensure it works
+                    selectElement.dispatchEvent(new Event('change', { bubbles: true }));
+                    selectElement.dispatchEvent(new Event('click', { bubbles: true }));
+                    
+                    // Force the translation by simulating user interaction
+                    if (typeof selectElement.onchange === 'function') {
+                        selectElement.onchange();
+                    }
+                } else if (attempts >= maxAttempts) {
+                    clearInterval(tryTranslate);
+                    console.error('Google Translate not ready after 5 seconds. Please refresh the page.');
+                    alert('Translation is loading. Please wait a moment and try again.');
                 }
             }, 100);
-            
-            // Stop checking after 5 seconds
-            setTimeout(function() {
-                clearInterval(checkTranslate);
-            }, 5000);
         }
+        
+        // Add a visual indicator when Google Translate is ready
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                const selectElement = document.querySelector('select.goog-te-combo');
+                if (selectElement) {
+                    console.log('Google Translate is ready!');
+                } else {
+                    console.log('Waiting for Google Translate to load...');
+                }
+            }, 2000);
+        });
     </script>
     <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 
