@@ -14,6 +14,7 @@ jobs:
     permissions:
       pull-requests: write
       contents: write
+      actions: write
     env:
       GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     
@@ -109,12 +110,116 @@ jobs:
             gh pr close "$pr_number" --comment "Auto-merged in batch deploy" || true
           done
       
-      - name: Trigger Sync Workflow
+      - name: Sync to services.json
         if: steps.merge.outputs.merged == 'true'
         run: |
-          echo "Triggering sync workflow to update services.json..."
-          gh workflow run sync-services.yml
-          echo "✅ Sync workflow triggered!"
+          echo "Syncing approved service listings to services.json..."
+          
+          node << 'EOF'
+          const fs = require('fs');
+          const path = require('path');
+          
+          // Read existing services.json (with your food banks)
+          const servicesPath = 'data/services.json';
+          let services = [];
+          
+          if (fs.existsSync(servicesPath)) {
+            services = JSON.parse(fs.readFileSync(servicesPath, 'utf8'));
+            console.log(`Loaded ${services.length} existing services from services.json`);
+          }
+          
+          // Track the highest existing ID number
+          let maxId = 0;
+          services.forEach(service => {
+            const match = service.id.match(/fb(\d+)/);
+            if (match) {
+              maxId = Math.max(maxId, parseInt(match[1]));
+            }
+          });
+          
+          console.log(`Highest existing ID: fb${maxId}`);
+          
+          // Get all approved service listing files from data/services
+          const servicesDir = 'data/services';
+          
+          if (fs.existsSync(servicesDir)) {
+            const files = fs.readdirSync(servicesDir)
+              .filter(file => file.endsWith('.json') && file !== 'services.json');
+            
+            console.log(`Found ${files.length} service listing files`);
+            
+            files.forEach(file => {
+              const filePath = path.join(servicesDir, file);
+              const listing = JSON.parse(fs.readFileSync(filePath, 'utf8'));
+              
+              // Generate unique ID
+              let id = file.replace('.json', '').toLowerCase().replace(/[^a-z0-9]/g, '-');
+              
+              // Check if this listing already exists (by name or ID)
+              const existingIndex = services.findIndex(s => 
+                s.name === listing.name || s.id === id
+              );
+              
+              // If not using fb{N} format, assign next available fb ID
+              if (!id.startsWith('fb')) {
+                if (existingIndex === -1) {
+                  maxId++;
+                  id = `fb${maxId}`;
+                } else {
+                  id = services[existingIndex].id;
+                }
+              }
+              
+              // Create service object matching services.json format
+              const serviceObj = {
+                id: id,
+                name: listing.name,
+                type: listing.type,
+                address: listing.address,
+                location: {
+                  lat: listing.location.lat,
+                  lng: listing.location.lng
+                },
+                days: listing.days || [],
+                hours: listing.hours,
+                phone: listing.phone,
+                description: listing.description,
+                tags: listing.tags || []
+              };
+              
+              // Add optional fields if they exist
+              if (listing.email) serviceObj.email = listing.email;
+              if (listing.website) serviceObj.website = listing.website;
+              
+              if (existingIndex >= 0) {
+                // Update existing service
+                console.log(`Updating existing service: ${listing.name} (${id})`);
+                services[existingIndex] = serviceObj;
+              } else {
+                // Add new service
+                console.log(`Adding new service: ${listing.name} (${id})`);
+                services.push(serviceObj);
+              }
+            });
+          }
+          
+          // Write updated services.json
+          fs.writeFileSync(servicesPath, JSON.stringify(services, null, 2));
+          
+          console.log(`✅ Updated services.json with ${services.length} total services`);
+          EOF
+      
+      - name: Commit services.json if changed
+        if: steps.merge.outputs.merged == 'true'
+        run: |
+          if git diff --quiet data/services.json; then
+            echo "No changes to services.json"
+          else
+            git add data/services.json
+            git commit -m "Auto-update: Sync approved service listings to services.json"
+            git push
+            echo "✅ services.json updated and deployed!"
+          fi
       
       - name: No PRs to merge
         if: steps.gather.outputs.prs == ''
