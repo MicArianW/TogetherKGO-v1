@@ -50,7 +50,7 @@
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
             color: var(--primary-blue);
             text-decoration: none;
@@ -81,6 +81,85 @@
             border-color: var(--primary-blue);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Google Translate Widget Styling */
+        #google_translate_element {
+            display: none;
+            position: absolute;
+            left: -9999px;
+        }
+
+        /* Language Dropdown */
+        .language-dropdown {
+            position: relative;
+        }
+
+        .language-btn {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .language-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: var(--white);
+            border: 2px solid #C8E6C9;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            z-index: 1000;
+        }
+
+        .language-menu.show {
+            display: block;
+        }
+
+        .language-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+        }
+
+        .language-menu a:first-child {
+            border-radius: 6px 6px 0 0;
+        }
+
+        .language-menu a:last-child {
+            border-radius: 0 0 6px 6px;
+        }
+
+        .language-menu a:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Hide Google Translate branding */
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+
+        body {
+            top: 0px !important;
+        }
+
+        .goog-te-gadget {
+            color: transparent !important;
+        }
+
+        .goog-te-gadget .goog-te-combo {
+            margin: 0 !important;
         }
 
         /* Hero Section - Very Light Blue */
@@ -124,7 +203,7 @@
         }
 
         .hero-title {
-            font-size: 4rem;
+            font-size: 5.5rem;
             font-weight: 900;
             color: var(--text-dark);
             line-height: 1;
@@ -134,18 +213,18 @@
         }
 
         .hero-subtitle {
-            font-size: 1.8rem;
+            font-size: 2.25rem;
             color: var(--text-dark);
             margin-bottom: 2rem;
             font-weight: 300;
         }
 
         .hero-description {
-            font-size: 1.25rem;
+            font-size: 1.5rem;
             color: var(--text-dark);
             line-height: 1.8;
             margin-bottom: 2.5rem;
-            max-width: 600px;
+            max-width: 650px;
         }
 
         .hero-button {
@@ -479,11 +558,30 @@
         <div class="nav-container">
             <a href="home.html" class="logo">TogetherKGO</a>
             <ul class="nav-links">
-                <li><a href="home.html">Home</a></li>
-                <li><a href="index.html">Find Food Banks</a></li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="food-banks.html">Find Food Banks</a></li>
                 <li><a href="community.html">Community</a></li>
                 <li><a href="submit-listing.html">Submit Listing</a></li>
                 <li><a href="resources.html">Resources</a></li>
+                <li class="language-dropdown">
+                    <a href="#" class="language-btn" onclick="toggleLanguageMenu(event)">
+                        🌐 Languages
+                    </a>
+                    <div class="language-menu" id="languageMenu">
+                        <a href="#" onclick="changeLanguage('en')">English</a>
+                        <a href="#" onclick="changeLanguage('ta')">தமிழ் (Tamil)</a>
+                        <a href="#" onclick="changeLanguage('bn')">বাংলা (Bengali)</a>
+                        <a href="#" onclick="changeLanguage('tl')">Tagalog (Filipino)</a>
+                        <a href="#" onclick="changeLanguage('gu')">ગુજરાતી (Gujarati)</a>
+                        <a href="#" onclick="changeLanguage('ur')">اردو (Urdu)</a>
+                        <a href="#" onclick="changeLanguage('fa')">فارسی (Persian/Farsi)</a>
+                        <a href="#" onclick="changeLanguage('es')">Español (Spanish)</a>
+                        <a href="#" onclick="changeLanguage('fr')">Français (French)</a>
+                        <a href="#" onclick="changeLanguage('hi')">हिन्दी (Hindi)</a>
+                        <a href="#" onclick="changeLanguage('ar')">العربية (Arabic)</a>
+                        <a href="#" onclick="changeLanguage('zh-CN')">中文 (Chinese)</a>
+                    </div>
+                </li>
             </ul>
         </div>
     </nav>
@@ -605,4 +703,55 @@
         </div>
     </footer>
 
-    <!-- Netlify
+    <!-- Netlify 
+    <!-- Google Translate Script -->
+    <div id="google_translate_element" style="display:none;"></div>
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ta,bn,tl,gu,ur,fa,es,fr,hi,ar,zh-CN',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        // Toggle language dropdown menu
+        function toggleLanguageMenu(event) {
+            event.preventDefault();
+            const menu = document.getElementById('languageMenu');
+            menu.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.language-dropdown');
+            const menu = document.getElementById('languageMenu');
+            if (dropdown && !dropdown.contains(event.target)) {
+                menu.classList.remove('show');
+            }
+        });
+
+        // Change language using Google Translate
+        function changeLanguage(lang) {
+            event.preventDefault();
+            
+            // Close dropdown
+            document.getElementById('languageMenu').classList.remove('show');
+            
+            // Wait for Google Translate to initialize
+            setTimeout(function() {
+                const selectElement = document.querySelector('.goog-te-combo');
+                if (selectElement) {
+                    selectElement.value = lang;
+                    selectElement.dispatchEvent(new Event('change'));
+                } else {
+                    console.error('Google Translate not loaded yet');
+                }
+            }, 500);
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+</body>
+</html>
