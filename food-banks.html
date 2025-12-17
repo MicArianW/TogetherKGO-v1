@@ -219,17 +219,18 @@
   <body>
     <header class="app-header">
       <!-- Translation Help Banner -->
-      <div id="translationHelp" style="background: linear-gradient(135deg, #BAE6FD 0%, #E3F2FD 100%); padding: 16px 20px; text-align: center; border-bottom: 1px solid #C8E6C9; display: none;">
+      <div id="translationHelp" style="background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); padding: 18px 20px; text-align: center; border-bottom: 2px solid #10B981; display: none;">
         <div style="max-width: 900px; margin: 0 auto;">
-          <div style="font-size: 15px; color: #1F2937; margin-bottom: 8px;">
-            <strong>🌐 How to Translate This Page (Map Will Work!):</strong>
+          <div style="font-size: 16px; color: #065F46; margin-bottom: 8px; font-weight: bold;">
+            ✅ Translation Active - Map Stays in English
           </div>
-          <div style="font-size: 13px; color: #374151; line-height: 1.6;">
-            <strong>Chrome/Edge:</strong> Click the translate icon <span style="background: #E3F2FD; padding: 2px 6px; border-radius: 3px;">⚙️</span> in the address bar, or right-click → "Translate to..."<br>
-            <strong>Safari:</strong> Click <span style="background: #E3F2FD; padding: 2px 6px; border-radius: 3px;">aA</span> in address bar → "Translate to..."<br>
-            <strong>Note:</strong> This keeps the interactive map working perfectly!
+          
+          <div style="font-size: 14px; color: #047857; line-height: 1.6;">
+            The page text, filters, and sidebar will translate to your language.<br>
+            The interactive map and food bank listings stay in English so everything works properly.
           </div>
-          <button onclick="document.getElementById('translationHelp').style.display='none'" style="margin-top: 10px; background: #7DBFE8; border: none; color: white; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;">Got it</button>
+          
+          <button onclick="document.getElementById('translationHelp').style.display='none'" style="margin-top: 10px; background: #10B981; border: none; color: white; padding: 6px 18px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;">Got it</button>
         </div>
       </div>
       
@@ -333,12 +334,12 @@
       </aside>
 
       <section class="content">
-        <div id="map" class="map"></div>
+        <div id="map" class="map notranslate" translate="no"></div>
 
         <section class="list card">
           <h2>Food Resources in KGO Area</h2>
           <div id="resultCount" class="subtle"></div>
-          <ul id="results"></ul>
+          <ul id="results" class="notranslate" translate="no"></ul>
         </section>
       </section>
     </main>
@@ -468,6 +469,22 @@
             min-width: 200px;
         }
     }
+    
+    /* Protect map and critical interactive elements from translation */
+    #map,
+    .leaflet-container,
+    .mapboxgl-map,
+    #results,
+    .result-card,
+    .tag,
+    .notranslate {
+        translate: no !important;
+    }
+    
+    /* Mark elements that should not be translated with notranslate class */
+    #map * {
+        translate: no !important;
+    }
     </style>
 
     <button class="floating-lang-btn" onclick="toggleFloatingLangMenu(event)">
@@ -553,38 +570,55 @@
             localStorage.setItem('preferredLanguage', langCode);
             
             if (langCode === 'en') {
-                // Return to English
+                // Remove preference and reload to English
+                localStorage.removeItem('preferredLanguage');
+                // If on translated page, reload to original
                 if (window.location.href.includes('translate.google.com')) {
-                    // Extract original URL from Google Translate
                     const urlMatch = window.location.href.match(/u=([^&]+)/);
                     if (urlMatch) {
                         window.location.href = decodeURIComponent(urlMatch[1]);
-                    } else {
-                        window.location.href = window.location.pathname;
                     }
+                } else {
+                    window.location.reload();
                 }
                 return;
             }
             
-            // Show warning about map functionality
-            const proceed = confirm(
-                `🌐 TRANSLATION OPTIONS\n\n` +
-                `⚠️ Google Translate will break the interactive map.\n\n` +
-                `✅ RECOMMENDED: Use Your Browser's Translate Instead:\n` +
-                `   • Chrome/Edge: Look for translate icon (⚙️) in address bar\n` +
-                `   • Safari: Click "aA" in address bar → Translate\n` +
-                `   • This keeps the map working!\n\n` +
-                `❌ Or continue with Google Translate (map won't work)\n\n` +
-                `Continue with Google Translate anyway?`
-            );
-            
-            if (proceed) {
-                // Translate page
-                const currentUrl = window.location.href;
-                const cleanUrl = currentUrl.split('#')[0].split('?')[0];
-                const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${langCode}&u=${encodeURIComponent(cleanUrl)}`;
-                window.location.href = translateUrl;
+            // Show banner explaining translation behavior
+            const banner = document.getElementById('translationHelp');
+            if (banner) {
+                banner.style.display = 'block';
             }
+            
+            // Try to trigger browser's translation
+            // This sets the HTML lang attribute to trigger browser translate
+            document.documentElement.lang = langCode;
+            
+            // Create a meta tag to suggest translation
+            const meta = document.createElement('meta');
+            meta.httpEquiv = 'content-language';
+            meta.content = langCode;
+            document.head.appendChild(meta);
+            
+            // Show instructions for manual translation
+            alert(
+                `🌐 How to translate this page:\n\n` +
+                `1. Look for the translate icon (🌐) in your browser's address bar\n` +
+                `2. Click it and select your language\n\n` +
+                `The map and food bank listings will stay in English (so they work properly),\n` +
+                `but all other text will translate to ${getLanguageName(langCode)}.\n\n` +
+                `This keeps the interactive map fully functional!`
+            );
+        }
+        
+        function getLanguageName(code) {
+            const names = {
+                'ta': 'Tamil', 'bn': 'Bengali', 'tl': 'Tagalog',
+                'gu': 'Gujarati', 'ur': 'Urdu', 'fa': 'Persian',
+                'es': 'Spanish', 'fr': 'French', 'hi': 'Hindi',
+                'ar': 'Arabic', 'zh-CN': 'Chinese'
+            };
+            return names[code] || code;
         }
 
         // Auto-translate popup if user has language preference
