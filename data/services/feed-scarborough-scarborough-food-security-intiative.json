@@ -1,0 +1,25 @@
+{
+  "name": "Feed Scarborough (Scarborough Food Security Intiative)",
+  "phone": "416-936-3975",
+  "hours": "Mon-Fri: 10am-4pm, Sat: 10am-1pm",
+  "address": "3595 St Clair Ave E, Scarborough, ON M1K 1L8",
+  "location": {
+    "lat": 43.7176,
+    "lng": -79.25703
+  },
+  "days": [
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri",
+    "Sat"
+  ],
+  "tags": [
+    "food_bank",
+    "social_services",
+    "food_security"
+  ],
+  "type": "organization",
+  "description": "Food access programs. Food bank"
+}
