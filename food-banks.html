@@ -38,13 +38,9 @@
       
       .branding .logo {
         font-size: 1.5rem;
-      }
-      
-      .branding h1 {
-        font-size: 1.25rem;
-        font-weight: bold;
         color: #7DBFE8;
-        margin: 0;
+        text-decoration: none;
+        font-weight: bold;
       }
       
       .top-actions {
@@ -55,6 +51,7 @@
       
       /* Style nav links like home page */
       .top-actions a.chip.ghost,
+      .top-actions button.chip.ghost,
       .top-actions a.nav-link {
         color: #1F2937;
         text-decoration: none;
@@ -65,20 +62,18 @@
         background: #FFFFFF;
         border: 2px solid #C8E6C9;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        cursor: pointer;
+        font-family: inherit;
+        font-size: 1rem;
       }
       
       .top-actions a.chip.ghost:hover,
+      .top-actions button.chip.ghost:hover,
       .top-actions a.nav-link:hover {
         color: #7DBFE8;
         border-color: #7DBFE8;
         transform: translateY(-2px);
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      }
-      
-      /* Keep other buttons (language, share, etc.) with original chip style */
-      .top-actions button.chip {
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
       }
       
       /* Inline Language Dropdown for food-banks page */
@@ -94,12 +89,12 @@
         top: 100%;
         left: 0;
         margin-top: 0.5rem;
-        background: var(--white);
+        background: #FFFFFF;
         border: 2px solid #C8E6C9;
         border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         min-width: 200px;
-        z-index: 1000;
+        z-index: 10000;
         opacity: 0;
         transform: translateY(-10px);
         transition: opacity 0.3s ease, transform 0.3s ease;
@@ -117,13 +112,14 @@
       .nav-dropdown-menu-home-inline a {
         display: block;
         padding: 0.75rem 1.25rem;
-        color: var(--text-dark);
+        color: #1F2937;
         text-decoration: none;
         font-weight: 600;
         transition: all 0.2s;
         border: none;
         box-shadow: none;
         border-radius: 0;
+        background: #FFFFFF;
       }
       
       .nav-dropdown-menu-home-inline a:first-child {
@@ -135,8 +131,8 @@
       }
       
       .nav-dropdown-menu-home-inline a:hover {
-        background: var(--light-blue);
-        color: var(--primary-blue);
+        background: #E3F2FD;
+        color: #7DBFE8;
         transform: none;
         box-shadow: none;
       }
@@ -158,12 +154,14 @@
         top: 100%;
         right: 0;
         margin-top: 0.5rem;
-        background: var(--white);
+        background: #FFFFFF;
         border: 2px solid #C8E6C9;
         border-radius: 8px;
-        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
         min-width: 200px;
-        z-index: 1000;
+        z-index: 10000;
+        max-height: 400px;
+        overflow-y: auto;
       }
       
       .language-menu-inline.show {
@@ -173,13 +171,14 @@
       .language-menu-inline a {
         display: block;
         padding: 0.75rem 1.25rem;
-        color: var(--text-dark);
+        color: #1F2937;
         text-decoration: none;
         font-weight: 600;
         transition: all 0.2s;
         border: none;
         box-shadow: none;
         border-radius: 0;
+        background: #FFFFFF;
       }
       
       .language-menu-inline a:first-child {
@@ -191,8 +190,8 @@
       }
       
       .language-menu-inline a:hover {
-        background: var(--light-blue);
-        color: var(--primary-blue);
+        background: #E3F2FD;
+        color: #7DBFE8;
         transform: none;
         box-shadow: none;
       }
@@ -219,9 +218,23 @@
 
   <body>
     <header class="app-header">
+      <!-- Translation Help Banner -->
+      <div id="translationHelp" style="background: linear-gradient(135deg, #BAE6FD 0%, #E3F2FD 100%); padding: 16px 20px; text-align: center; border-bottom: 1px solid #C8E6C9; display: none;">
+        <div style="max-width: 900px; margin: 0 auto;">
+          <div style="font-size: 15px; color: #1F2937; margin-bottom: 8px;">
+            <strong>🌐 How to Translate This Page (Map Will Work!):</strong>
+          </div>
+          <div style="font-size: 13px; color: #374151; line-height: 1.6;">
+            <strong>Chrome/Edge:</strong> Click the translate icon <span style="background: #E3F2FD; padding: 2px 6px; border-radius: 3px;">⚙️</span> in the address bar, or right-click → "Translate to..."<br>
+            <strong>Safari:</strong> Click <span style="background: #E3F2FD; padding: 2px 6px; border-radius: 3px;">aA</span> in address bar → "Translate to..."<br>
+            <strong>Note:</strong> This keeps the interactive map working perfectly!
+          </div>
+          <button onclick="document.getElementById('translationHelp').style.display='none'" style="margin-top: 10px; background: #7DBFE8; border: none; color: white; padding: 6px 16px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;">Got it</button>
+        </div>
+      </div>
+      
       <div class="branding">
         <a href="index.html" class="logo">TogetherKGO</a>
-        <h1 data-i18n="title">TogetherKGO – Food Resources</h1>
       </div>
 
       <nav class="top-actions">
@@ -512,6 +525,12 @@
         function changeLanguageInline(langCode) {
             event.preventDefault();
             document.getElementById('languageMenuInline').classList.remove('show');
+            
+            // Show help banner
+            if (langCode !== 'en') {
+                document.getElementById('translationHelp').style.display = 'block';
+            }
+            
             translateToLanguage(langCode);
         }
 
@@ -519,6 +538,12 @@
         function translatePageFloating(langCode) {
             event.preventDefault();
             document.getElementById('floatingLangMenu').classList.remove('show');
+            
+            // Show help banner
+            if (langCode !== 'en') {
+                document.getElementById('translationHelp').style.display = 'block';
+            }
+            
             translateToLanguage(langCode);
         }
 
@@ -529,8 +554,31 @@
             
             if (langCode === 'en') {
                 // Return to English
-                window.location.href = window.location.pathname;
-            } else {
+                if (window.location.href.includes('translate.google.com')) {
+                    // Extract original URL from Google Translate
+                    const urlMatch = window.location.href.match(/u=([^&]+)/);
+                    if (urlMatch) {
+                        window.location.href = decodeURIComponent(urlMatch[1]);
+                    } else {
+                        window.location.href = window.location.pathname;
+                    }
+                }
+                return;
+            }
+            
+            // Show warning about map functionality
+            const proceed = confirm(
+                `🌐 TRANSLATION OPTIONS\n\n` +
+                `⚠️ Google Translate will break the interactive map.\n\n` +
+                `✅ RECOMMENDED: Use Your Browser's Translate Instead:\n` +
+                `   • Chrome/Edge: Look for translate icon (⚙️) in address bar\n` +
+                `   • Safari: Click "aA" in address bar → Translate\n` +
+                `   • This keeps the map working!\n\n` +
+                `❌ Or continue with Google Translate (map won't work)\n\n` +
+                `Continue with Google Translate anyway?`
+            );
+            
+            if (proceed) {
                 // Translate page
                 const currentUrl = window.location.href;
                 const cleanUrl = currentUrl.split('#')[0].split('?')[0];
