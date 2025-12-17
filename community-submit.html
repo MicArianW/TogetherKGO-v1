@@ -4,34 +4,247 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Submit Community Update - TogetherKGO</title>
-  <link rel="stylesheet" href="assets/styles.css" />
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
   <style>
-    .submission-form {
-      max-width: 700px;
-      margin: 40px auto;
-      padding: 20px;
+    /* Light Blue Color Scheme */
+    :root {
+      --primary-blue: #7DBFE8;
+      --dark-blue: #5BA3D0;
+      --light-blue: #E3F2FD;
+      --pale-blue: #F0F9FF;
+      --sky-blue: #BAE6FD;
+      --text-dark: #1F2937;
+      --text-light: #6B7280;
+      --white: #FFFFFF;
+      --green-border: #C8E6C9;
     }
 
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      color: var(--text-dark);
+      line-height: 1.6;
+      background: var(--pale-blue);
+    }
+
+    /* Navigation matching other pages */
+    nav {
+      background: var(--white);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+      padding: 1rem 0;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .nav-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 2rem;
+      font-weight: bold;
+      color: var(--primary-blue);
+      text-decoration: none;
+      flex-shrink: 0;
+      margin-right: 2rem;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      list-style: none;
+      margin-left: auto;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .nav-links a {
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 700;
+      transition: all 0.3s;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      background: var(--white);
+      border: 2px solid var(--green-border);
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .nav-links a:hover {
+      color: var(--primary-blue);
+      background: var(--white);
+      border-color: var(--primary-blue);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+    }
+
+    /* Navigation Dropdown */
+    .nav-dropdown {
+      position: relative;
+    }
+
+    .dropdown-toggle {
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .nav-dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      margin-top: 0.5rem;
+      background: var(--white);
+      border: 2px solid var(--green-border);
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      min-width: 200px;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      pointer-events: none;
+    }
+
+    /* Show dropdown on hover */
+    .nav-dropdown:hover .nav-dropdown-menu {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: all;
+    }
+
+    .nav-dropdown-menu a {
+      display: block;
+      padding: 0.75rem 1.25rem;
+      color: var(--text-dark);
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.2s;
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+      margin: 0;
+    }
+
+    .nav-dropdown-menu a:first-child {
+      border-radius: 6px 6px 0 0;
+    }
+
+    .nav-dropdown-menu a:last-child {
+      border-radius: 0 0 6px 6px;
+    }
+
+    .nav-dropdown-menu a:hover {
+      background: var(--light-blue);
+      color: var(--primary-blue);
+      transform: none;
+      box-shadow: none;
+    }
+
+    /* Page Header */
+    .page-header {
+      background: linear-gradient(135deg, var(--sky-blue) 0%, var(--light-blue) 100%);
+      padding: 3rem 2rem;
+      text-align: center;
+    }
+
+    .page-header h1 {
+      font-size: 2.5rem;
+      color: var(--text-dark);
+      margin-bottom: 1rem;
+    }
+
+    .page-header p {
+      font-size: 1.15rem;
+      color: var(--text-light);
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* Main Container */
+    .submission-form {
+      max-width: 800px;
+      margin: 3rem auto;
+      padding: 0 2rem;
+    }
+
+    /* Info Box */
+    .info-box {
+      background: var(--white);
+      border-left: 4px solid var(--primary-blue);
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .info-box strong {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--text-dark);
+      font-size: 1.1rem;
+    }
+
+    .info-box p {
+      color: var(--text-light);
+      margin: 0;
+    }
+
+    /* Form Card */
+    .form-card {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      margin-bottom: 2rem;
+    }
+
+    /* Form Groups */
     .form-group {
-      margin-bottom: 20px;
+      margin-bottom: 1.5rem;
     }
 
     .form-group label {
       display: block;
       font-weight: 600;
-      margin-bottom: 8px;
-      color: #333;
+      margin-bottom: 0.5rem;
+      color: var(--text-dark);
+    }
+
+    .required {
+      color: #EF4444;
     }
 
     .form-group input,
     .form-group textarea,
     .form-group select {
       width: 100%;
-      padding: 12px;
-      border: 1px solid #dcdcdc;
+      padding: 0.75rem;
+      border: 2px solid var(--light-blue);
       border-radius: 8px;
-      font-size: 16px;
+      font-size: 1rem;
+      font-family: inherit;
+      transition: all 0.3s;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: var(--primary-blue);
+      box-shadow: 0 0 0 3px rgba(125, 191, 232, 0.1);
     }
 
     .form-group textarea {
@@ -40,161 +253,234 @@
     }
 
     .form-hint {
-      font-size: 14px;
-      color: #666;
-      margin-top: 4px;
+      font-size: 0.875rem;
+      color: var(--text-light);
+      margin-top: 0.25rem;
     }
 
+    /* Submit Button */
     .submit-btn {
-      background: #22c55e;
+      background: var(--primary-blue);
       color: white;
-      padding: 14px 32px;
+      padding: 1rem 2rem;
       border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 700;
       cursor: pointer;
       width: 100%;
-      transition: background 0.2s;
+      transition: all 0.3s;
+      box-shadow: 0 4px 12px rgba(125, 191, 232, 0.3);
     }
 
     .submit-btn:hover {
-      background: #16a34a;
+      background: var(--dark-blue);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 16px rgba(125, 191, 232, 0.4);
     }
 
+    /* Success Message */
     .success-message {
-      background: #dcfce7;
-      border: 1px solid #22c55e;
-      padding: 16px;
+      background: #D1FAE5;
+      border: 2px solid #10B981;
+      padding: 1rem 1.5rem;
       border-radius: 8px;
-      margin-bottom: 20px;
+      margin-bottom: 2rem;
       display: none;
+      color: #065F46;
     }
 
-    .info-box {
-      background: #f0f9ff;
-      border-left: 4px solid #3b82f6;
-      padding: 16px;
-      margin-bottom: 24px;
-      border-radius: 4px;
+    .success-message strong {
+      display: block;
+      margin-bottom: 0.5rem;
     }
 
-    .required {
-      color: #ef4444;
+    /* What Happens Next */
+    .next-steps {
+      background: var(--white);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .next-steps h4 {
+      margin-top: 0;
+      margin-bottom: 1rem;
+      color: var(--text-dark);
+      font-size: 1.25rem;
+    }
+
+    .next-steps ol {
+      padding-left: 1.5rem;
+      line-height: 1.8;
+      color: var(--text-light);
+    }
+
+    .next-steps li {
+      margin-bottom: 0.5rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .nav-container {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .logo {
+        margin-right: 0;
+      }
+
+      .nav-links {
+        justify-content: center;
+        gap: 0.5rem;
+      }
+
+      .nav-links a {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+
+      .page-header h1 {
+        font-size: 2rem;
+      }
+
+      .submission-form {
+        padding: 0 1rem;
+      }
+
+      .form-card {
+        padding: 1.5rem;
+      }
     }
   </style>
 </head>
 
 <body>
-  <header class="app-header">
-    <div class="branding">
-      <span class="logo">🍎</span>
-      <h1>TogetherKGO</h1>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">TogetherKGO</a>
+      <ul class="nav-links">
+        <li class="nav-dropdown">
+          <a href="index.html" class="dropdown-toggle">Home</a>
+          <div class="nav-dropdown-menu" id="navDropdownMenu">
+            <a href="food-banks.html">Find Food Banks</a>
+            <a href="submit-listing.html">Submit Listing</a>
+            <a href="resources.html">Resources</a>
+          </div>
+        </li>
+        <li><a href="community.html">Community</a></li>
+      </ul>
     </div>
+  </nav>
 
-    <nav class="top-actions">
-      <a class="chip ghost" href="home.html">Home</a>
-      <a class="chip ghost" href="index.html">Food Resources</a>
-      <a class="chip ghost" href="community.html">Community Board</a>
-    </nav>
-  </header>
+  <!-- Page Header -->
+  <div class="page-header">
+    <h1>Submit Community Update</h1>
+    <p>Share important updates, events, and notices with the KGO community</p>
+  </div>
 
+  <!-- Main Form Container -->
   <main class="submission-form">
-    <h2>Submit Community Update</h2>
-    
     <div class="info-box">
-      <strong>📝 For Food Bank Staff Only</strong>
-      <p>Use this form to share updates with the community about your food bank's services, special events, or important notices. All submissions will be reviewed by our admin team before appearing on the community board.</p>
+      <strong>For Food Bank & Organization Staff</strong>
+      <p>Use this form to share updates with the community about your organization's services, special events, or important notices. All submissions will be reviewed by our admin team before appearing on the community board.</p>
     </div>
 
     <div class="success-message" id="successMessage">
-      <strong>✅ Success!</strong> Your update has been submitted and is pending approval. It will appear on the community board once reviewed by our admin team.
+      <strong>✅ Success!</strong>
+      <p>Your update has been submitted and is pending approval. It will appear on the community board once reviewed by our admin team.</p>
     </div>
 
-    <!-- Netlify Form -->
-    <form name="community-update" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
-      <!-- Hidden fields for Netlify -->
-      <input type="hidden" name="form-name" value="community-update" />
-      <p style="display:none;">
-        <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-      </p>
+    <!-- Form Card -->
+    <div class="form-card">
+      <!-- Netlify Form -->
+      <form name="community-update" method="POST" data-netlify="true" netlify-honeypot="bot-field" onsubmit="handleSubmit(event)">
+        <!-- Hidden fields for Netlify -->
+        <input type="hidden" name="form-name" value="community-update" />
+        <p style="display:none;">
+          <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+        </p>
 
-      <!-- Food Bank Selection -->
-      <div class="form-group">
-        <label for="foodBank">Your Food Bank <span class="required">*</span></label>
-        <select id="foodBank" name="foodBank" required>
-          <option value="">Select your food bank...</option>
-          <option value="fb1">East Scarborough Storefront</option>
-          <option value="fb2">Scarborough Centre for Healthy Communities</option>
-          <option value="fb3">West Hill Community Support Program</option>
-          <option value="fb4">Boys & Girls Club of East Scarborough</option>
-        </select>
-      </div>
+        <!-- Organization Selection -->
+        <div class="form-group">
+          <label for="organization">Your Organization <span class="required">*</span></label>
+          <select id="organization" name="organization" required>
+            <option value="">Select your organization...</option>
+            <option value="fb1">East Scarborough Storefront</option>
+            <option value="fb2">Scarborough Centre for Healthy Communities</option>
+            <option value="fb3">West Hill Community Support Program</option>
+            <option value="fb4">Boys & Girls Club of East Scarborough</option>
+          </select>
+        </div>
 
-      <!-- Contact Name -->
-      <div class="form-group">
-        <label for="contactName">Your Name <span class="required">*</span></label>
-        <input type="text" id="contactName" name="contactName" required placeholder="Jane Doe" />
-        <div class="form-hint">This is for verification purposes only and won't be displayed publicly</div>
-      </div>
+        <!-- Contact Name -->
+        <div class="form-group">
+          <label for="contactName">Your Name <span class="required">*</span></label>
+          <input type="text" id="contactName" name="contactName" required placeholder="Jane Doe" />
+          <div class="form-hint">This is for verification purposes only and won't be displayed publicly</div>
+        </div>
 
-      <!-- Contact Email -->
-      <div class="form-group">
-        <label for="contactEmail">Your Email <span class="required">*</span></label>
-        <input type="email" id="contactEmail" name="contactEmail" required placeholder="jane@foodbank.org" />
-        <div class="form-hint">We'll use this to contact you if we have questions about your submission</div>
-      </div>
+        <!-- Contact Email -->
+        <div class="form-group">
+          <label for="contactEmail">Your Email <span class="required">*</span></label>
+          <input type="email" id="contactEmail" name="contactEmail" required placeholder="jane@organization.org" />
+          <div class="form-hint">We'll use this to contact you if we have questions about your submission</div>
+        </div>
 
-      <!-- Post Type -->
-      <div class="form-group">
-        <label for="postType">Update Type <span class="required">*</span></label>
-        <select id="postType" name="postType" required>
-          <option value="">Select type...</option>
-          <option value="update">General Update</option>
-          <option value="event">Special Event</option>
-          <option value="urgent">Urgent Notice</option>
-          <option value="food_available">Food Available Today</option>
-        </select>
-      </div>
+        <!-- Post Type -->
+        <div class="form-group">
+          <label for="postType">Update Type <span class="required">*</span></label>
+          <select id="postType" name="postType" required>
+            <option value="">Select type...</option>
+            <option value="update">General Update</option>
+            <option value="event">Special Event</option>
+            <option value="urgent">Urgent Notice</option>
+            <option value="food_available">Food Available Today</option>
+          </select>
+        </div>
 
-      <!-- Title -->
-      <div class="form-group">
-        <label for="title">Update Title <span class="required">*</span></label>
-        <input type="text" id="title" name="title" required placeholder="Fresh Produce Available Today" maxlength="100" />
-        <div class="form-hint">Keep it short and descriptive (max 100 characters)</div>
-      </div>
+        <!-- Title -->
+        <div class="form-group">
+          <label for="title">Update Title <span class="required">*</span></label>
+          <input type="text" id="title" name="title" required placeholder="Fresh Produce Available Today" maxlength="100" />
+          <div class="form-hint">Keep it short and descriptive (max 100 characters)</div>
+        </div>
 
-      <!-- Message -->
-      <div class="form-group">
-        <label for="message">Message <span class="required">*</span></label>
-        <textarea id="message" name="message" required placeholder="We have fresh vegetables and fruits available this afternoon from 2-4pm. First come, first served!"></textarea>
-        <div class="form-hint">Provide details about your update</div>
-      </div>
+        <!-- Message -->
+        <div class="form-group">
+          <label for="message">Message <span class="required">*</span></label>
+          <textarea id="message" name="message" required placeholder="We have fresh vegetables and fruits available this afternoon from 2-4pm. First come, first served!"></textarea>
+          <div class="form-hint">Provide details about your update</div>
+        </div>
 
-      <!-- Public Contact Info (optional) -->
-      <div class="form-group">
-        <label for="publicContact">Public Contact Info (Optional)</label>
-        <input type="text" id="publicContact" name="publicContact" placeholder="416-XXX-XXXX or email@foodbank.org" />
-        <div class="form-hint">This will be displayed publicly if provided (e.g., for event RSVPs)</div>
-      </div>
+        <!-- Public Contact Info (optional) -->
+        <div class="form-group">
+          <label for="publicContact">Public Contact Info (Optional)</label>
+          <input type="text" id="publicContact" name="publicContact" placeholder="416-XXX-XXXX or email@organization.org" />
+          <div class="form-hint">This will be displayed publicly if provided (e.g., for event RSVPs)</div>
+        </div>
 
-      <!-- Expires Date (optional) -->
-      <div class="form-group">
-        <label for="expiresDate">Post Expires On (Optional)</label>
-        <input type="date" id="expiresDate" name="expiresDate" />
-        <div class="form-hint">If this update is time-sensitive, choose when it should stop appearing</div>
-      </div>
+        <!-- Expires Date (optional) -->
+        <div class="form-group">
+          <label for="expiresDate">Post Expires On (Optional)</label>
+          <input type="date" id="expiresDate" name="expiresDate" />
+          <div class="form-hint">If this update is time-sensitive, choose when it should stop appearing</div>
+        </div>
 
-      <!-- Submission Time (hidden) -->
-      <input type="hidden" id="submissionTime" name="submissionTime" />
+        <!-- Submission Time (hidden) -->
+        <input type="hidden" id="submissionTime" name="submissionTime" />
 
-      <!-- Submit Button -->
-      <button type="submit" class="submit-btn">Submit Update for Approval</button>
-    </form>
+        <!-- Submit Button -->
+        <button type="submit" class="submit-btn">Submit Update for Approval</button>
+      </form>
+    </div>
 
-    <div style="margin-top: 24px; padding: 16px; background: #f8f8f8; border-radius: 8px;">
-      <h4 style="margin-top: 0;">What happens next?</h4>
-      <ol style="padding-left: 20px; line-height: 1.8;">
+    <!-- What Happens Next -->
+    <div class="next-steps">
+      <h4>What happens next?</h4>
+      <ol>
         <li>Your submission is received and stored securely</li>
         <li>Our admin team reviews your update (usually within 24 hours)</li>
         <li>If approved, your post appears on the Community Board</li>
@@ -202,12 +488,6 @@
       </ol>
     </div>
   </main>
-
-  <footer class="app-footer">
-    <div class="footer-content">
-      <p>&copy; 2024 TogetherKGO. Supporting the Kingston-Galloway-Orton Park community.</p>
-    </div>
-  </footer>
 
   <script>
     // Set submission time
