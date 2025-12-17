@@ -144,6 +144,61 @@
             box-shadow: none;
         }
 
+        /* Language Dropdown */
+        .language-dropdown {
+            position: relative;
+        }
+
+        .language-btn {
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .language-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: var(--white);
+            border: 2px solid var(--green-border);
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            z-index: 1000;
+        }
+
+        .language-menu.show {
+            display: block;
+        }
+
+        .language-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+        }
+
+        .language-menu a:first-child {
+            border-radius: 6px 6px 0 0;
+        }
+
+        .language-menu a:last-child {
+            border-radius: 0 0 6px 6px;
+        }
+
+        .language-menu a:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            transform: none;
+            box-shadow: none;
+        }
+
         /* Header Section */
         .page-header {
             background: linear-gradient(135deg, var(--sky-blue) 0%, var(--light-blue) 100%);
@@ -565,45 +620,65 @@
         // Load posts from data/posts folder
         async function loadPosts() {
             try {
-                // Fetch all JSON files from data/posts
-                const response = await fetch('data/posts/');
-                const text = await response.text();
+                // Use GitHub API to list files in data/posts directory
+                const repoOwner = 'MicArianW';
+                const repoName = 'TogetherKGO-v1';
+                const branch = 'main';
+                const postsPath = 'data/posts';
                 
-                // Parse directory listing to find JSON files
-                const parser = new DOMParser();
-                const doc = parser.parseFromString(text, 'text/html');
-                const links = Array.from(doc.querySelectorAll('a'))
-                    .map(a => a.getAttribute('href'))
-                    .filter(href => href && href.endsWith('.json'));
-
-                // Load each post
-                const postPromises = links.map(async (file) => {
+                const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${postsPath}?ref=${branch}`;
+                
+                const response = await fetch(apiUrl);
+                
+                if (!response.ok) {
+                    console.log('No posts found or error accessing posts folder');
+                    displayPosts([]);
+                    document.getElementById('loading').style.display = 'none';
+                    return;
+                }
+                
+                const files = await response.json();
+                
+                // Filter for JSON files only
+                const jsonFiles = files.filter(file => file.name.endsWith('.json'));
+                
+                if (jsonFiles.length === 0) {
+                    console.log('No post files found');
+                    displayPosts([]);
+                    document.getElementById('loading').style.display = 'none';
+                    return;
+                }
+                
+                // Load each post file
+                const postPromises = jsonFiles.map(async (file) => {
                     try {
-                        const res = await fetch(`data/posts/${file}`);
-                        return await res.json();
-                    } catch (err) {
-                        console.error(`Error loading ${file}:`, err);
+                        const postResponse = await fetch(file.download_url);
+                        const post = await postResponse.json();
+                        return post;
+                    } catch (error) {
+                        console.error(`Error loading post ${file.name}:`, error);
                         return null;
                     }
                 });
-
-                allPosts = (await Promise.all(postPromises))
-                    .filter(post => post !== null)
-                    .filter(post => {
-                        // Filter out expired posts
-                        if (post.expiresDate) {
-                            return new Date(post.expiresDate) > new Date();
-                        }
-                        return true;
-                    })
-                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+                
+                allPosts = await Promise.all(postPromises);
+                allPosts = allPosts.filter(post => post !== null);
+                
+                // Filter out expired posts
+                allPosts = allPosts.filter(post => {
+                    if (!post.expiresDate) return true;
+                    return new Date(post.expiresDate) > new Date();
+                });
+                
+                // Sort by date
+                allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
                 displayPosts(allPosts);
                 document.getElementById('loading').style.display = 'none';
             } catch (error) {
                 console.error('Error loading posts:', error);
+                displayPosts([]);
                 document.getElementById('loading').style.display = 'none';
-                document.getElementById('noPosts').style.display = 'block';
             }
         }
 
