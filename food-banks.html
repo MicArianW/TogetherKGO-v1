@@ -82,6 +82,66 @@
       }
       
       /* Inline Language Dropdown for food-banks page */
+      /* Home Dropdown with Hover */
+      .nav-dropdown-home-inline {
+        position: relative;
+        display: inline-block;
+      }
+      
+      .nav-dropdown-menu-home-inline {
+        display: none;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        margin-top: 0.5rem;
+        background: var(--white);
+        border: 2px solid #C8E6C9;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        min-width: 200px;
+        z-index: 1000;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition: opacity 0.3s ease, transform 0.3s ease;
+        pointer-events: none;
+      }
+      
+      /* Show dropdown on hover */
+      .nav-dropdown-home-inline:hover .nav-dropdown-menu-home-inline {
+        display: block;
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: all;
+      }
+      
+      .nav-dropdown-menu-home-inline a {
+        display: block;
+        padding: 0.75rem 1.25rem;
+        color: var(--text-dark);
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.2s;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+      }
+      
+      .nav-dropdown-menu-home-inline a:first-child {
+        border-radius: 6px 6px 0 0;
+      }
+      
+      .nav-dropdown-menu-home-inline a:last-child {
+        border-radius: 0 0 6px 6px;
+      }
+      
+      .nav-dropdown-menu-home-inline a:hover {
+        background: var(--light-blue);
+        color: var(--primary-blue);
+        transform: none;
+        box-shadow: none;
+      }
+
+      /* Inline Language Dropdown for food-banks page */
       .language-dropdown-inline {
         position: relative;
         display: inline-block;
@@ -165,11 +225,15 @@
       </div>
 
       <nav class="top-actions">
-        <a class="chip ghost" href="index.html">Home</a>
-        <a class="chip ghost" href="food-banks.html">Find Food Banks</a>
-        <a class="chip ghost" href="community.html">Community</a>
-        <a class="chip ghost" href="submit-listing.html">Submit Listing</a>
-        <a class="chip ghost" href="resources.html">Resources</a>
+        <div class="language-dropdown-inline nav-dropdown-home-inline">
+          <a class="chip ghost" href="index.html">Home</a>
+          <div class="nav-dropdown-menu-home-inline" id="navDropdownMenuHomeInline">
+            <a href="food-banks.html">Find Food Banks</a>
+            <a href="community.html">Community</a>
+            <a href="submit-listing.html">Submit Listing</a>
+            <a href="resources.html">Resources</a>
+          </div>
+        </div>
         <div class="language-dropdown-inline">
           <button class="chip ghost language-btn-inline" onclick="toggleLanguageMenuInline(event)">🌐 Languages</button>
           <div class="language-menu-inline" id="languageMenuInline">
