@@ -1,15 +1,13 @@
-name: Auto-Merge Pending Publish PRs (Single Deploy)
+name: Auto-Merge Pending Publish PRs (Single Deploy - Optimized)
 
 on:
   schedule:
-    # Monday, Wednesday, Friday at 10:35 AM EST
-    - cron: "35 14 * * 1"
-    - cron: "35 14 * * 3"
-    - cron: "35 14 * * 5"
+    # Monday, Wednesday, Friday at 10:35 AM EST (14:35 UTC)
+    - cron: "35 14 * * 1,3,5"
   workflow_dispatch:
 
 jobs:
-  batch_merge_prs:
+  batch_merge_and_sync:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -53,79 +51,72 @@ jobs:
             echo "No pending PRs found"
           fi
       
-      - name: Batch merge all PRs into one commit
+      - name: Batch merge all PRs (Don't push yet)
         if: steps.gather.outputs.prs != ''
+        id: merge
         run: |
           # Parse PR numbers and branch names
           IFS=',' read -ra pr_array <<< "${{ steps.gather.outputs.prs }}"
           
           pr_numbers=""
+          merged_prs=""
           
           # Checkout main and pull latest
           git checkout main
           git pull origin main
           
-          # Merge each PR branch (but don't push yet)
+          # Merge each PR branch locally (but DON'T push yet)
           for pr_info in "${pr_array[@]}"; do
             pr_number=$(echo "$pr_info" | cut -d':' -f1)
             branch_name=$(echo "$pr_info" | cut -d':' -f2)
             
-            echo "Merging PR #$pr_number (branch: $branch_name)"
+            echo "🔀 Merging PR #$pr_number (branch: $branch_name)"
             
-            # Skip workflow-changing PRs
+            # Skip workflow-changing PRs for safety
             changed_files=$(gh pr view "$pr_number" --json files --jq '.files[].path')
             if echo "$changed_files" | grep -q '^.github/workflows/'; then
-              echo "Skipping PR #$pr_number - modifies workflows"
+              echo "⚠️ Skipping PR #$pr_number - modifies workflows"
               continue
             fi
             
             # Fetch and merge the PR branch
             git fetch origin "$branch_name"
-            git merge "origin/$branch_name" --no-edit --no-ff
-            
-            pr_numbers="$pr_numbers #$pr_number"
+            if git merge "origin/$branch_name" --no-edit --no-ff; then
+              echo "✅ Merged PR #$pr_number"
+              pr_numbers="$pr_numbers #$pr_number"
+              merged_prs="$merged_prs $pr_number"
+            else
+              echo "❌ Failed to merge PR #$pr_number"
+            fi
           done
           
-          # Push all merges as ONE commit to main
+          echo "merged_prs=$merged_prs" >> $GITHUB_OUTPUT
+          
+          # Check if we have changes (but don't push yet)
           if git diff --quiet origin/main; then
-            echo "No changes to push"
-            echo "merged=false" >> $GITHUB_OUTPUT
+            echo "No changes to merge"
+            echo "has_changes=false" >> $GITHUB_OUTPUT
           else
-            echo "Pushing batch merge of PRs:$pr_numbers"
-            git push origin main
-            echo "Successfully merged all PRs in one push"
-            echo "merged=true" >> $GITHUB_OUTPUT
+            echo "✅ Merged PRs:$pr_numbers (not pushed yet)"
+            echo "has_changes=true" >> $GITHUB_OUTPUT
           fi
-        id: merge
       
-      - name: Close merged PRs
-        if: steps.gather.outputs.prs != ''
+      - name: Sync service listings to services.json
+        if: steps.merge.outputs.has_changes == 'true'
         run: |
-          IFS=',' read -ra pr_array <<< "${{ steps.gather.outputs.prs }}"
-          
-          for pr_info in "${pr_array[@]}"; do
-            pr_number=$(echo "$pr_info" | cut -d':' -f1)
-            
-            # Close the PR (it's already merged)
-            gh pr close "$pr_number" --comment "Auto-merged in batch deploy" || true
-          done
-      
-      - name: Sync to services.json
-        if: steps.merge.outputs.merged == 'true'
-        run: |
-          echo "Syncing approved service listings to services.json..."
+          echo "🔄 Syncing approved service listings to services.json..."
           
           node << 'EOF'
           const fs = require('fs');
           const path = require('path');
           
-          // Read existing services.json (with your food banks)
+          // Read existing services.json
           const servicesPath = 'data/services.json';
           let services = [];
           
           if (fs.existsSync(servicesPath)) {
             services = JSON.parse(fs.readFileSync(servicesPath, 'utf8'));
-            console.log(`Loaded ${services.length} existing services from services.json`);
+            console.log(`📁 Loaded ${services.length} existing services from services.json`);
           }
           
           // Track the highest existing ID number
@@ -137,16 +128,16 @@ jobs:
             }
           });
           
-          console.log(`Highest existing ID: fb${maxId}`);
+          console.log(`🔢 Highest existing ID: fb${maxId}`);
           
           // Get all approved service listing files from data/services
           const servicesDir = 'data/services';
           
           if (fs.existsSync(servicesDir)) {
             const files = fs.readdirSync(servicesDir)
-              .filter(file => file.endsWith('.json') && file !== 'services.json');
+              .filter(file => file.endsWith('.json'));
             
-            console.log(`Found ${files.length} service listing files`);
+            console.log(`📂 Found ${files.length} service listing files`);
             
             files.forEach(file => {
               const filePath = path.join(servicesDir, file);
@@ -161,7 +152,7 @@ jobs:
               );
               
               // If not using fb{N} format, assign next available fb ID
-              if (!id.startsWith('fb')) {
+              if (!id.match(/^fb\d+$/)) {
                 if (existingIndex === -1) {
                   maxId++;
                   id = `fb${maxId}`;
@@ -174,16 +165,16 @@ jobs:
               const serviceObj = {
                 id: id,
                 name: listing.name,
-                type: listing.type,
+                type: listing.type || 'food_bank',
                 address: listing.address,
                 location: {
-                  lat: listing.location.lat,
-                  lng: listing.location.lng
+                  lat: parseFloat(listing.location?.lat || listing.lat || 0),
+                  lng: parseFloat(listing.location?.lng || listing.lng || 0)
                 },
                 days: listing.days || [],
-                hours: listing.hours,
-                phone: listing.phone,
-                description: listing.description,
+                hours: listing.hours || '',
+                phone: listing.phone || '',
+                description: listing.description || '',
                 tags: listing.tags || []
               };
               
@@ -193,11 +184,11 @@ jobs:
               
               if (existingIndex >= 0) {
                 // Update existing service
-                console.log(`Updating existing service: ${listing.name} (${id})`);
+                console.log(`🔄 Updating existing service: ${listing.name} (${id})`);
                 services[existingIndex] = serviceObj;
               } else {
                 // Add new service
-                console.log(`Adding new service: ${listing.name} (${id})`);
+                console.log(`➕ Adding new service: ${listing.name} (${id})`);
                 services.push(serviceObj);
               }
             });
@@ -209,17 +200,57 @@ jobs:
           console.log(`✅ Updated services.json with ${services.length} total services`);
           EOF
       
-      - name: Commit services.json if changed
-        if: steps.merge.outputs.merged == 'true'
+      - name: Push all changes in ONE commit (Single Deploy)
+        if: steps.merge.outputs.has_changes == 'true'
         run: |
-          if git diff --quiet data/services.json; then
+          # Add services.json if it changed
+          git add data/services.json
+          
+          # Check if there are any changes to commit
+          if git diff --staged --quiet; then
             echo "No changes to services.json"
+            # Just push the merged PRs
+            git push origin main
+            echo "✅ Pushed merged PRs only"
           else
-            git add data/services.json
+            # Commit services.json update
             git commit -m "Auto-update: Sync approved service listings to services.json"
-            git push
-            echo "✅ services.json updated and deployed!"
+            # Push everything (merged PRs + services.json) in ONE push
+            git push origin main
+            echo "✅ Pushed merged PRs + services.json in ONE deployment!"
           fi
+      
+      - name: Close merged PRs
+        if: steps.merge.outputs.merged_prs != ''
+        run: |
+          merged_prs="${{ steps.merge.outputs.merged_prs }}"
+          
+          for pr_number in $merged_prs; do
+            echo "Closing PR #$pr_number"
+            gh pr close "$pr_number" --comment "✅ Auto-merged in batch deploy" || true
+          done
+      
+      - name: Summary
+        if: always()
+        run: |
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          echo "WORKFLOW SUMMARY"
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
+          
+          if [ "${{ steps.gather.outputs.pr_count }}" -eq 0 ]; then
+            echo "📭 No pending PRs found"
+          else
+            echo "✅ PRs found: ${{ steps.gather.outputs.pr_count }}"
+            
+            if [ "${{ steps.merge.outputs.has_changes }}" == "true" ]; then
+              echo "✅ Merged and synced in ONE deployment"
+              echo "Netlify building (1 build only)"
+            else
+              echo "No changes to deploy"
+            fi
+          fi
+          
+          echo "━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━"
       
       - name: No PRs to merge
         if: steps.gather.outputs.prs == ''
