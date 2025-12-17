@@ -1,428 +1,765 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Community Board - TogetherKGO</title>
-  <link rel="stylesheet" href="assets/styles.css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Community Board - TogetherKGO</title>
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <style>
+        /* Light Blue Color Scheme */
+        :root {
+            --primary-blue: #7DBFE8;
+            --dark-blue: #5BA3D0;
+            --light-blue: #E3F2FD;
+            --pale-blue: #F0F9FF;
+            --sky-blue: #BAE6FD;
+            --text-dark: #1F2937;
+            --text-light: #6B7280;
+            --white: #FFFFFF;
+            --green-border: #C8E6C9;
+        }
 
-  <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <style>
-    .community-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 20px;
-    }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    .community-header {
-      text-align: center;
-      margin-bottom: 40px;
-    }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            color: var(--text-dark);
+            line-height: 1.6;
+            background: var(--pale-blue);
+        }
 
-    .community-header h2 {
-      font-size: 2.5rem;
-      margin-bottom: 10px;
-    }
+        /* Navigation matching home page */
+        nav {
+            background: var(--white);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            padding: 1rem 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
 
-    .community-header p {
-      font-size: 1.1rem;
-      color: #666;
-    }
+        .nav-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
 
-    .submit-cta {
-      background: linear-gradient(135deg, #dcfce7 0%, #f0fdf4 100%);
-      padding: 24px;
-      border-radius: 12px;
-      margin-bottom: 40px;
-      text-align: center;
-    }
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            text-decoration: none;
+        }
 
-    .submit-cta h3 {
-      margin: 0 0 12px 0;
-    }
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+            margin-left: auto;
+        }
 
-    .posts-grid {
-      display: grid;
-      gap: 24px;
-      grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-    }
+        .nav-links a {
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 700;
+            transition: all 0.3s;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            background: var(--white);
+            border: 2px solid var(--green-border);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
 
-    .post-card {
-      background: white;
-      border: 1px solid #dcdcdc;
-      border-radius: 12px;
-      padding: 24px;
-      transition: all 0.3s;
-      position: relative;
-    }
+        .nav-links a:hover {
+            color: var(--primary-blue);
+            background: var(--white);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
 
-    .post-card:hover {
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      transform: translateY(-2px);
-    }
+        /* Header Section */
+        .page-header {
+            background: linear-gradient(135deg, var(--sky-blue) 0%, var(--light-blue) 100%);
+            padding: 3rem 2rem;
+            text-align: center;
+        }
 
-    .post-type-badge {
-      position: absolute;
-      top: 16px;
-      right: 16px;
-      padding: 6px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      text-transform: uppercase;
-    }
+        .page-header h1 {
+            font-size: 2.5rem;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
 
-    .post-type-urgent {
-      background: #fee2e2;
-      color: #991b1b;
-    }
+        .page-header p {
+            font-size: 1.15rem;
+            color: var(--text-light);
+            max-width: 700px;
+            margin: 0 auto;
+        }
 
-    .post-type-event {
-      background: #dbeafe;
-      color: #1e40af;
-    }
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
 
-    .post-type-food_available {
-      background: #dcfce7;
-      color: #166534;
-    }
+        /* Filter Section */
+        .filter-section {
+            background: var(--white);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+        }
 
-    .post-type-update {
-      background: #f3f4f6;
-      color: #374151;
-    }
+        .filter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 1rem;
+        }
 
-    .post-foodbank {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      margin-bottom: 12px;
-      color: #22c55e;
-      font-weight: 600;
-    }
+        .filter-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
 
-    .post-title {
-      font-size: 1.4rem;
-      font-weight: bold;
-      margin: 0 0 12px 0;
-      color: #000;
-    }
+        .filter-group select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid var(--light-blue);
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
 
-    .post-message {
-      color: #444;
-      line-height: 1.6;
-      margin-bottom: 16px;
-    }
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--primary-blue);
+        }
 
-    .post-meta {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding-top: 16px;
-      border-top: 1px solid #e5e5e5;
-      font-size: 14px;
-      color: #666;
-    }
+        /* Posts Grid */
+        .posts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
 
-    .post-date {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
+        /* Post Card */
+        .post-card {
+            background: var(--white);
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary-blue);
+        }
 
-    .post-contact {
-      background: #f8f8f8;
-      padding: 12px;
-      border-radius: 8px;
-      margin-top: 12px;
-      font-size: 14px;
-    }
+        .post-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+        }
 
-    .post-contact strong {
-      display: block;
-      margin-bottom: 4px;
-    }
+        .post-card.urgent {
+            border-left-color: #EF4444;
+            background: #FEF2F2;
+        }
 
-    .no-posts {
-      text-align: center;
-      padding: 60px 20px;
-      color: #888;
-    }
+        .post-card.event {
+            border-left-color: #F59E0B;
+            background: #FFFBEB;
+        }
 
-    .no-posts-icon {
-      font-size: 4rem;
-      margin-bottom: 20px;
-    }
+        .post-card.food_available {
+            border-left-color: #10B981;
+            background: #F0FDF4;
+        }
 
-    .filter-bar {
-      display: flex;
-      gap: 12px;
-      margin-bottom: 24px;
-      flex-wrap: wrap;
-      align-items: center;
-    }
+        .post-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: start;
+            margin-bottom: 1rem;
+        }
 
-    .filter-bar select {
-      padding: 10px 16px;
-      border: 1px solid #dcdcdc;
-      border-radius: 8px;
-      background: white;
-      cursor: pointer;
-    }
+        .post-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
 
-    .post-image {
-      width: 100%;
-      height: 200px;
-      object-fit: cover;
-      border-radius: 8px;
-      margin-bottom: 16px;
-    }
+        .post-type {
+            display: inline-block;
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
 
-    @media (max-width: 768px) {
-      .posts-grid {
-        grid-template-columns: 1fr;
-      }
+        .post-type.update {
+            background: var(--light-blue);
+            color: var(--dark-blue);
+        }
 
-      .community-header h2 {
-        font-size: 2rem;
-      }
-    }
-  </style>
+        .post-type.urgent {
+            background: #FEE2E2;
+            color: #DC2626;
+        }
+
+        .post-type.event {
+            background: #FEF3C7;
+            color: #D97706;
+        }
+
+        .post-type.food_available {
+            background: #D1FAE5;
+            color: #059669;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 1rem;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 1rem;
+        }
+
+        .post-location {
+            font-weight: 600;
+            color: var(--primary-blue);
+        }
+
+        .post-message {
+            color: var(--text-dark);
+            line-height: 1.7;
+            margin-bottom: 1rem;
+        }
+
+        .post-contact {
+            padding-top: 1rem;
+            border-top: 1px solid var(--light-blue);
+            font-size: 0.9rem;
+            color: var(--text-light);
+        }
+
+        /* No Posts Message */
+        .no-posts {
+            background: var(--white);
+            padding: 3rem;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .no-posts h3 {
+            font-size: 1.5rem;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            padding: 3rem;
+            color: var(--text-light);
+        }
+
+        /* Floating Language Button */
+        .floating-lang-btn {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 9999;
+            background: linear-gradient(135deg, #7DBFE8 0%, #5BA3D0 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 50px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+            font-weight: 700;
+            font-size: 16px;
+            border: none;
+            transition: all 0.3s;
+        }
+
+        .floating-lang-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+        }
+
+        .floating-lang-menu {
+            position: fixed;
+            bottom: 90px;
+            right: 30px;
+            z-index: 9998;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+            min-width: 250px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+
+        .floating-lang-menu.show {
+            display: block;
+            animation: slideUp 0.3s ease;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .floating-lang-menu a {
+            display: block;
+            padding: 12px 20px;
+            color: #1F2937;
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border-bottom: 1px solid #E5E7EB;
+        }
+
+        .floating-lang-menu a:hover {
+            background: #E3F2FD;
+            color: #7DBFE8;
+        }
+
+        .floating-lang-menu a:last-child {
+            border-bottom: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-links {
+                gap: 1rem;
+                font-size: 0.9rem;
+            }
+
+            .nav-links a {
+                padding: 0.5rem 1rem;
+            }
+
+            .page-header h1 {
+                font-size: 2rem;
+            }
+
+            .posts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
 </head>
-
 <body>
-  <header class="app-header">
-    <div class="branding">
-      <span class="logo">🍎</span>
-      <h1>TogetherKGO</h1>
-    </div>
-
-    <nav class="top-actions">
-      <a class="chip ghost" href="home.html">Home</a>
-      <a class="chip ghost" href="index.html">Food Resources</a>
-      <a class="chip" href="community.html">Community Board</a>
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">TogetherKGO</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="food-banks.html">Find Food Banks</a></li>
+                <li><a href="community.html">Community</a></li>
+                <li><a href="submit-listing.html">Submit Listing</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li class="language-dropdown">
+                    <a href="#" class="language-btn" onclick="toggleLanguageMenu(event)">
+                        🌐 Languages
+                    </a>
+                    <div class="language-menu" id="languageMenu">
+                        <a href="#" onclick="changeLanguage('en')">English</a>
+                        <a href="#" onclick="changeLanguage('ta')">தமிழ் (Tamil)</a>
+                        <a href="#" onclick="changeLanguage('bn')">বাংলা (Bengali)</a>
+                        <a href="#" onclick="changeLanguage('tl')">Tagalog (Filipino)</a>
+                        <a href="#" onclick="changeLanguage('gu')">ગુજરાતી (Gujarati)</a>
+                        <a href="#" onclick="changeLanguage('ur')">اردو (Urdu)</a>
+                        <a href="#" onclick="changeLanguage('fa')">فارسی (Persian/Farsi)</a>
+                        <a href="#" onclick="changeLanguage('es')">Español (Spanish)</a>
+                        <a href="#" onclick="changeLanguage('fr')">Français (French)</a>
+                        <a href="#" onclick="changeLanguage('hi')">हिन्दी (Hindi)</a>
+                        <a href="#" onclick="changeLanguage('ar')">العربية (Arabic)</a>
+                        <a href="#" onclick="changeLanguage('zh-CN')">中文 (Chinese)</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
     </nav>
-  </header>
 
-  <main class="community-container">
-    <div class="community-header">
-      <h2>📢 Community Board</h2>
-      <p>Real-time updates from food banks in the Kingston-Galloway-Orton Park area</p>
+    <!-- Page Header -->
+    <div class="page-header">
+        <h1>Community Board</h1>
+        <p>Stay updated with the latest news, events, and updates from food banks and community organizations in the KGO area.</p>
     </div>
 
-    <div class="submit-cta card">
-      <h3>🏦 Are you a food bank staff member?</h3>
-      <p>Share updates about your services, special events, or important notices with the community.</p>
-      <a href="community-submit.html" class="primary big-btn" style="display: inline-block; margin-top: 12px;">Submit Community Update</a>
-    </div>
-
-    <div class="filter-bar">
-      <label for="filterFoodBank" style="font-weight: 600;">Filter by:</label>
-      <select id="filterFoodBank" onchange="filterPosts()">
-        <option value="all">All Food Banks</option>
-        <option value="fb1">East Scarborough Storefront</option>
-        <option value="fb2">Scarborough Centre for Healthy Communities</option>
-        <option value="fb3">West Hill Community Support Program</option>
-        <option value="fb4">Boys & Girls Club of East Scarborough</option>
-      </select>
-
-      <select id="filterType" onchange="filterPosts()">
-        <option value="all">All Types</option>
-        <option value="update">General Updates</option>
-        <option value="event">Special Events</option>
-        <option value="urgent">Urgent Notices</option>
-        <option value="food_available">Food Available</option>
-      </select>
-    </div>
-
-    <div id="postsContainer" class="posts-grid">
-      <!-- Posts will be loaded here by JavaScript -->
-    </div>
-
-    <div id="noPosts" class="no-posts" style="display: none;">
-      <div class="no-posts-icon">📭</div>
-      <h3>No posts yet</h3>
-      <p>Check back soon for updates from local food banks!</p>
-    </div>
-  </main>
-
-  <footer class="app-footer">
-    <div class="footer-content">
-      <p>&copy; 2024 TogetherKGO. Supporting the Kingston-Galloway-Orton Park community.</p>
-    </div>
-  </footer>
-
-  <script>
-    // Food bank names mapping
-    const foodBankNames = {
-      'fb1': 'East Scarborough Storefront',
-      'fb2': 'Scarborough Centre for Healthy Communities',
-      'fb3': 'West Hill Community Support Program',
-      'fb4': 'Boys & Girls Club of East Scarborough'
-    };
-
-    let allPosts = [];
-
-    // Load posts from JSON files in data/posts/
-    async function loadPosts() {
-      try {
-        // Use GitHub API to list files in data/posts directory
-        const repoOwner = 'MicArianW';
-        const repoName = 'TogetherKGO-v1';
-        const branch = 'main';
-        const postsPath = 'data/posts';
-        
-        const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${postsPath}?ref=${branch}`;
-        
-        const response = await fetch(apiUrl);
-        
-        if (!response.ok) {
-          console.log('No posts found or error accessing posts folder');
-          displayPosts([]);
-          return;
-        }
-        
-        const files = await response.json();
-        
-        // Filter for JSON files only
-        const jsonFiles = files.filter(file => file.name.endsWith('.json'));
-        
-        if (jsonFiles.length === 0) {
-          console.log('No post files found');
-          displayPosts([]);
-          return;
-        }
-        
-        // Load each post file
-        const postPromises = jsonFiles.map(async (file) => {
-          try {
-            const postResponse = await fetch(file.download_url);
-            const post = await postResponse.json();
-            return post;
-          } catch (error) {
-            console.error(`Error loading post ${file.name}:`, error);
-            return null;
-          }
-        });
-        
-        const posts = await Promise.all(postPromises);
-        allPosts = posts.filter(post => post !== null);
-        
-        // Filter out expired posts
-        allPosts = allPosts.filter(post => {
-          if (!post.expiresDate) return true;
-          return new Date(post.expiresDate) > new Date();
-        });
-        
-        displayPosts(allPosts);
-        
-      } catch (error) {
-        console.error('Error loading posts:', error);
-        displayPosts([]);
-      }
-    }
-
-    function displayPosts(posts) {
-      const container = document.getElementById('postsContainer');
-      const noPosts = document.getElementById('noPosts');
-
-      if (posts.length === 0) {
-        container.innerHTML = '';
-        noPosts.style.display = 'block';
-        return;
-      }
-
-      noPosts.style.display = 'none';
-
-      // Sort by date (newest first)
-      posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-      container.innerHTML = posts.map(post => {
-        const postDate = new Date(post.date);
-        const formattedDate = postDate.toLocaleDateString('en-US', {
-          month: 'short',
-          day: 'numeric',
-          year: 'numeric'
-        });
-        const timeAgo = getTimeAgo(postDate);
-
-        return `
-          <div class="post-card" data-foodbank="${post.foodBankId}" data-type="${post.type}">
-            <span class="post-type-badge post-type-${post.type}">${post.type.replace('_', ' ')}</span>
-            
-            <div class="post-foodbank">
-              <span>🏦</span>
-              <span>${foodBankNames[post.foodBankId]}</span>
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Filters -->
+        <div class="filter-section">
+            <h2 style="margin-bottom: 1rem;">Filter Posts</h2>
+            <div class="filter-grid">
+                <div class="filter-group">
+                    <label for="filterOrganization">Organization</label>
+                    <select id="filterOrganization">
+                        <option value="">All Organizations</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterOrgType">Organization Type</label>
+                    <select id="filterOrgType">
+                        <option value="">All Types</option>
+                        <option value="food_bank">Food Banks</option>
+                        <option value="community_center">Community Centers</option>
+                        <option value="organization">Organizations</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label for="filterPostType">Post Type</label>
+                    <select id="filterPostType">
+                        <option value="">All Types</option>
+                        <option value="update">General Update</option>
+                        <option value="event">Special Event</option>
+                        <option value="urgent">Urgent Notice</option>
+                        <option value="food_available">Food Available</option>
+                    </select>
+                </div>
             </div>
+        </div>
 
-            ${post.image ? `<img src="${post.image}" alt="${post.title}" class="post-image" />` : ''}
+        <!-- Submit Community Update CTA -->
+        <div style="background: linear-gradient(135deg, #BAE6FD 0%, #E3F2FD 100%); padding: 24px; border-radius: 12px; margin-bottom: 2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="margin: 0 0 12px 0; color: #1F2937;">Have an update to share?</h3>
+            <p style="margin: 0 0 16px 0; color: #6B7280;">Share updates about your services, special events, or important notices with the community.</p>
+            <a href="community-submit.html" style="display: inline-block; background: #7DBFE8; color: white; padding: 12px 32px; border-radius: 50px; text-decoration: none; font-weight: 700; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onmouseover="this.style.background='#5BA3D0'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#7DBFE8'; this.style.transform='translateY(0)'">Submit Community Update</a>
+        </div>
 
-            <h3 class="post-title">${post.title}</h3>
-            
-            <div class="post-message">${post.message}</div>
+        <!-- Loading State -->
+        <div id="loading" class="loading">
+            <p>Loading community posts...</p>
+        </div>
 
-            ${post.contactInfo ? `
-              <div class="post-contact">
-                <strong>Contact for more info:</strong>
-                ${post.contactInfo}
-              </div>
-            ` : ''}
+        <!-- Posts Grid -->
+        <div id="postsGrid" class="posts-grid" style="display: none;"></div>
 
-            <div class="post-meta">
-              <div class="post-date">
-                <span>📅</span>
-                <span>${formattedDate} • ${timeAgo}</span>
-              </div>
-            </div>
-          </div>
-        `;
-      }).join('');
-    }
+        <!-- No Posts Message -->
+        <div id="noPosts" class="no-posts" style="display: none;">
+            <h3>No Posts Available</h3>
+            <p>Check back soon for updates from local food banks and community organizations.</p>
+        </div>
+    </div>
 
-    function filterPosts() {
-      const foodBankFilter = document.getElementById('filterFoodBank').value;
-      const typeFilter = document.getElementById('filterType').value;
+    <script>
+        // Food bank mapping
+        const FOOD_BANKS = {
+            'fb1': 'East Scarborough Storefront',
+            'fb2': 'Scarborough Centre for Healthy Communities',
+            'fb3': 'West Hill Community Support Program',
+            'fb4': 'Boys & Girls Club of East Scarborough'
+        };
 
-      let filtered = allPosts;
+        let allPosts = [];
+        let services = [];
 
-      if (foodBankFilter !== 'all') {
-        filtered = filtered.filter(post => post.foodBankId === foodBankFilter);
-      }
-
-      if (typeFilter !== 'all') {
-        filtered = filtered.filter(post => post.type === typeFilter);
-      }
-
-      displayPosts(filtered);
-    }
-
-    function getTimeAgo(date) {
-      const seconds = Math.floor((new Date() - date) / 1000);
-      
-      const intervals = {
-        year: 31536000,
-        month: 2592000,
-        week: 604800,
-        day: 86400,
-        hour: 3600,
-        minute: 60
-      };
-
-      for (const [unit, secondsInUnit] of Object.entries(intervals)) {
-        const interval = Math.floor(seconds / secondsInUnit);
-        if (interval >= 1) {
-          return `${interval} ${unit}${interval > 1 ? 's' : ''} ago`;
+        // Load services.json to get organization names
+        async function loadServices() {
+            try {
+                const response = await fetch('data/services.json');
+                services = await response.json();
+                
+                // Populate organization filter dropdown
+                const select = document.getElementById('filterOrganization');
+                services.forEach(service => {
+                    const option = document.createElement('option');
+                    option.value = service.id;
+                    option.textContent = service.name;
+                    select.appendChild(option);
+                });
+            } catch (error) {
+                console.error('Error loading services:', error);
+            }
         }
-      }
 
-      return 'Just now';
-    }
+        // Load posts from data/posts folder
+        async function loadPosts() {
+            try {
+                // Fetch all JSON files from data/posts
+                const response = await fetch('data/posts/');
+                const text = await response.text();
+                
+                // Parse directory listing to find JSON files
+                const parser = new DOMParser();
+                const doc = parser.parseFromString(text, 'text/html');
+                const links = Array.from(doc.querySelectorAll('a'))
+                    .map(a => a.getAttribute('href'))
+                    .filter(href => href && href.endsWith('.json'));
 
-    // Load posts on page load
-    document.addEventListener('DOMContentLoaded', loadPosts);
+                // Load each post
+                const postPromises = links.map(async (file) => {
+                    try {
+                        const res = await fetch(`data/posts/${file}`);
+                        return await res.json();
+                    } catch (err) {
+                        console.error(`Error loading ${file}:`, err);
+                        return null;
+                    }
+                });
 
-    // Reload posts every 5 minutes to check for new approved posts
-    setInterval(loadPosts, 5 * 60 * 1000);
-  </script>
+                allPosts = (await Promise.all(postPromises))
+                    .filter(post => post !== null)
+                    .filter(post => {
+                        // Filter out expired posts
+                        if (post.expiresDate) {
+                            return new Date(post.expiresDate) > new Date();
+                        }
+                        return true;
+                    })
+                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                displayPosts(allPosts);
+                document.getElementById('loading').style.display = 'none';
+            } catch (error) {
+                console.error('Error loading posts:', error);
+                document.getElementById('loading').style.display = 'none';
+                document.getElementById('noPosts').style.display = 'block';
+            }
+        }
+
+        // Display posts
+        function displayPosts(posts) {
+            const grid = document.getElementById('postsGrid');
+            const noPosts = document.getElementById('noPosts');
+
+            if (posts.length === 0) {
+                grid.style.display = 'none';
+                noPosts.style.display = 'block';
+                return;
+            }
+
+            grid.style.display = 'grid';
+            noPosts.style.display = 'none';
+            grid.innerHTML = '';
+
+            posts.forEach(post => {
+                const service = services.find(s => s.id === post.foodBankId);
+                const orgName = service ? service.name : (FOOD_BANKS[post.foodBankId] || 'Unknown Organization');
+                const orgType = service ? service.type : 'organization';
+                
+                const card = document.createElement('div');
+                card.className = `post-card ${post.type || 'update'}`;
+                card.dataset.orgType = orgType;
+                
+                const date = new Date(post.date).toLocaleDateString('en-US', {
+                    year: 'numeric',
+                    month: 'long',
+                    day: 'numeric'
+                });
+
+                card.innerHTML = `
+                    <div class="post-header">
+                        <div>
+                            <h3 class="post-title">${post.title}</h3>
+                            <div class="post-meta">
+                                <span class="post-location">${orgName}</span>
+                                <span>•</span>
+                                <span>${date}</span>
+                            </div>
+                        </div>
+                        <span class="post-type ${post.type || 'update'}">${getTypeLabel(post.type)}</span>
+                    </div>
+                    <p class="post-message">${post.message}</p>
+                    ${post.contactInfo ? `<div class="post-contact">📞 Contact: ${post.contactInfo}</div>` : ''}
+                `;
+
+                grid.appendChild(card);
+            });
+        }
+
+        function getTypeLabel(type) {
+            const labels = {
+                'update': 'Update',
+                'event': 'Event',
+                'urgent': 'Urgent',
+                'food_available': 'Food Available'
+            };
+            return labels[type] || 'Update';
+        }
+
+        // Filter posts
+        function filterPosts() {
+            const orgFilter = document.getElementById('filterOrganization').value;
+            const orgTypeFilter = document.getElementById('filterOrgType').value;
+            const postTypeFilter = document.getElementById('filterPostType').value;
+
+            let filtered = allPosts;
+
+            // Filter by organization
+            if (orgFilter) {
+                filtered = filtered.filter(post => post.foodBankId === orgFilter);
+            }
+
+            // Filter by organization type
+            if (orgTypeFilter) {
+                filtered = filtered.filter(post => {
+                    const service = services.find(s => s.id === post.foodBankId);
+                    return service && service.type === orgTypeFilter;
+                });
+            }
+
+            // Filter by post type
+            if (postTypeFilter) {
+                filtered = filtered.filter(post => post.type === postTypeFilter);
+            }
+
+            displayPosts(filtered);
+        }
+
+        // Event listeners
+        document.getElementById('filterOrganization').addEventListener('change', filterPosts);
+        document.getElementById('filterOrgType').addEventListener('change', filterPosts);
+        document.getElementById('filterPostType').addEventListener('change', filterPosts);
+
+        // Initialize
+        loadServices().then(loadPosts);
+    </script>
+    
+    <!-- Floating Language Button -->
+    <button class="floating-lang-btn" onclick="toggleFloatingLangMenuCommunity(event)">
+        🌐 Translate
+    </button>
+
+    <div class="floating-lang-menu" id="floatingLangMenuCommunity">
+        <a href="#" onclick="translatePageFloatingCommunity('en')">English</a>
+        <a href="#" onclick="translatePageFloatingCommunity('ta')">தமிழ் (Tamil)</a>
+        <a href="#" onclick="translatePageFloatingCommunity('bn')">বাংলা (Bengali)</a>
+        <a href="#" onclick="translatePageFloatingCommunity('tl')">Tagalog (Filipino)</a>
+        <a href="#" onclick="translatePageFloatingCommunity('gu')">ગુજરાતી (Gujarati)</a>
+        <a href="#" onclick="translatePageFloatingCommunity('ur')">اردو (Urdu)</a>
+        <a href="#" onclick="translatePageFloatingCommunity('fa')">فارسی (Persian/Farsi)</a>
+        <a href="#" onclick="translatePageFloatingCommunity('es')">Español (Spanish)</a>
+        <a href="#" onclick="translatePageFloatingCommunity('fr')">Français (French)</a>
+        <a href="#" onclick="translatePageFloatingCommunity('hi')">हिन्दी (Hindi)</a>
+        <a href="#" onclick="translatePageFloatingCommunity('ar')">العربية (Arabic)</a>
+        <a href="#" onclick="translatePageFloatingCommunity('zh-CN')">中文 (Chinese)</a>
+    </div>
+    
+    <!-- Translation Script -->
+    <script type="text/javascript">
+        // Toggle nav dropdown
+        function toggleLanguageMenu(event) {
+            event.preventDefault();
+            const menu = document.getElementById('languageMenu');
+            menu.classList.toggle('show');
+        }
+        
+        // Toggle floating menu
+        function toggleFloatingLangMenuCommunity(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('floatingLangMenuCommunity');
+            menu.classList.toggle('show');
+        }
+
+        // Close menus when clicking outside
+        document.addEventListener('click', function(event) {
+            const navMenu = document.getElementById('languageMenu');
+            const floatingMenu = document.getElementById('floatingLangMenuCommunity');
+            const floatingBtn = document.querySelector('.floating-lang-btn');
+            
+            if (navMenu && !event.target.closest('.language-dropdown')) {
+                navMenu.classList.remove('show');
+            }
+            
+            if (floatingMenu && !floatingMenu.contains(event.target) && event.target !== floatingBtn) {
+                floatingMenu.classList.remove('show');
+            }
+        });
+
+        // Change language from nav dropdown
+        function changeLanguage(langCode) {
+            event.preventDefault();
+            document.getElementById('languageMenu').classList.remove('show');
+            translateToLanguageCommunity(langCode);
+        }
+
+        // Change language from floating button
+        function translatePageFloatingCommunity(langCode) {
+            event.preventDefault();
+            document.getElementById('floatingLangMenuCommunity').classList.remove('show');
+            translateToLanguageCommunity(langCode);
+        }
+
+        // Translate page function
+        function translateToLanguageCommunity(langCode) {
+            // Save language preference
+            localStorage.setItem('preferredLanguage', langCode);
+            
+            if (langCode === 'en') {
+                // Return to English
+                window.location.href = window.location.pathname;
+            } else {
+                // Translate page
+                const currentUrl = window.location.href;
+                const cleanUrl = currentUrl.split('#')[0].split('?')[0];
+                const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${langCode}&u=${encodeURIComponent(cleanUrl)}`;
+                window.location.href = translateUrl;
+            }
+        }
+
+        // Auto-translate popup if user has language preference
+        window.addEventListener('load', function() {
+            const preferredLang = localStorage.getItem('preferredLanguage');
+            const isTranslated = window.location.href.includes('translate.google.com');
+            
+            if (preferredLang && preferredLang !== 'en' && !isTranslated) {
+                // Language name mapping
+                const langNames = {
+                    'ta': 'Tamil',
+                    'bn': 'Bengali',
+                    'tl': 'Tagalog',
+                    'gu': 'Gujarati',
+                    'ur': 'Urdu',
+                    'fa': 'Persian',
+                    'es': 'Spanish',
+                    'fr': 'French',
+                    'hi': 'Hindi',
+                    'ar': 'Arabic',
+                    'zh-CN': 'Chinese'
+                };
+                
+                const langName = langNames[preferredLang] || preferredLang;
+                
+                // Show auto-translate popup
+                const notification = document.createElement('div');
+                notification.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #7DBFE8; color: white; padding: 15px 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; font-weight: 600; display: flex; align-items: center; gap: 15px;';
+                notification.innerHTML = `
+                    <span>🌐 Translate to ${langName}?</span>
+                    <button onclick="translateToLanguageCommunity('${preferredLang}')" style="background: white; color: #7DBFE8; border: none; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-weight: 700;">Yes</button>
+                    <button onclick="this.parentElement.remove(); localStorage.removeItem('preferredLanguage');" style="background: transparent; color: white; border: 2px solid white; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-weight: 700;">No</button>
+                `;
+                document.body.appendChild(notification);
+                
+                // Auto-remove after 10 seconds
+                setTimeout(() => notification.remove(), 10000);
+            }
+        });
+    </script>
 </body>
 </html>
