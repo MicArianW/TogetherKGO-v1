@@ -222,12 +222,12 @@
       <div id="translationHelp" style="background: linear-gradient(135deg, #D1FAE5 0%, #A7F3D0 100%); padding: 18px 20px; text-align: center; border-bottom: 2px solid #10B981; display: none;">
         <div style="max-width: 900px; margin: 0 auto;">
           <div style="font-size: 16px; color: #065F46; margin-bottom: 8px; font-weight: bold;">
-            ✅ Translation Active - Map Stays in English
+            ✅ Translation Active - Map & Results Stay in English
           </div>
           
           <div style="font-size: 14px; color: #047857; line-height: 1.6;">
-            The page text, filters, and sidebar will translate to your language.<br>
-            The interactive map and food bank listings stay in English so everything works properly.
+            <strong>What's translated:</strong> Sidebar labels, filters, and buttons are in your language.<br>
+            <strong>What stays English:</strong> Map and food bank listings stay in English (so search and map work perfectly!).
           </div>
           
           <button onclick="document.getElementById('translationHelp').style.display='none'" style="margin-top: 10px; background: #10B981; border: none; color: white; padding: 6px 18px; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600;">Got it</button>
@@ -339,7 +339,7 @@
         <section class="list card">
           <h2>Food Resources in KGO Area</h2>
           <div id="resultCount" class="subtle"></div>
-          <ul id="results" class="notranslate" translate="no"></ul>
+          <ul id="results"></ul>
         </section>
       </section>
     </main>
@@ -470,21 +470,24 @@
         }
     }
     
-    /* Protect map and critical interactive elements from translation */
+    /* CRITICAL: Protect ONLY map and results from translation */
+    /* Sidebar, filters, and labels WILL translate */
     #map,
+    #map *,
     .leaflet-container,
+    .leaflet-container *,
     .mapboxgl-map,
+    .mapboxgl-map *,
     #results,
-    .result-card,
-    .tag,
-    .notranslate {
+    #results * {
         translate: no !important;
     }
     
-    /* Mark elements that should not be translated with notranslate class */
-    #map * {
+    .notranslate,
+    .notranslate * {
         translate: no !important;
     }
+    
     </style>
 
     <button class="floating-lang-btn" onclick="toggleFloatingLangMenu(event)">
@@ -570,13 +573,15 @@
             localStorage.setItem('preferredLanguage', langCode);
             
             if (langCode === 'en') {
-                // Remove preference and reload to English
+                // Remove preference and return to English
                 localStorage.removeItem('preferredLanguage');
-                // If on translated page, reload to original
+                // If on translated page, go back to original
                 if (window.location.href.includes('translate.google.com')) {
                     const urlMatch = window.location.href.match(/u=([^&]+)/);
                     if (urlMatch) {
                         window.location.href = decodeURIComponent(urlMatch[1]);
+                    } else {
+                        window.location.reload();
                     }
                 } else {
                     window.location.reload();
@@ -584,31 +589,12 @@
                 return;
             }
             
-            // Show banner explaining translation behavior
-            const banner = document.getElementById('translationHelp');
-            if (banner) {
-                banner.style.display = 'block';
-            }
-            
-            // Try to trigger browser's translation
-            // This sets the HTML lang attribute to trigger browser translate
-            document.documentElement.lang = langCode;
-            
-            // Create a meta tag to suggest translation
-            const meta = document.createElement('meta');
-            meta.httpEquiv = 'content-language';
-            meta.content = langCode;
-            document.head.appendChild(meta);
-            
-            // Show instructions for manual translation
-            alert(
-                `🌐 How to translate this page:\n\n` +
-                `1. Look for the translate icon (🌐) in your browser's address bar\n` +
-                `2. Click it and select your language\n\n` +
-                `The map and food bank listings will stay in English (so they work properly),\n` +
-                `but all other text will translate to ${getLanguageName(langCode)}.\n\n` +
-                `This keeps the interactive map fully functional!`
-            );
+            // Use Google Translate URL method
+            // The CSS and HTML attributes will protect the map and listings
+            const currentUrl = window.location.href;
+            const cleanUrl = currentUrl.split('#')[0].split('?')[0];
+            const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${langCode}&u=${encodeURIComponent(cleanUrl)}`;
+            window.location.href = translateUrl;
         }
         
         function getLanguageName(code) {
