@@ -15,24 +15,178 @@
     <!-- App scripts -->
     <script defer src="assets/i18n.js"></script>
     <script defer src="assets/app.js"></script>
+    
+    <style>
+      /* Navigation override to match home page */
+      .app-header {
+        background: #FFFFFF;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        padding: 1rem 2rem;
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      
+      .branding {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+      }
+      
+      .branding .logo {
+        font-size: 1.5rem;
+      }
+      
+      .branding h1 {
+        font-size: 1.25rem;
+        font-weight: bold;
+        color: #7DBFE8;
+        margin: 0;
+      }
+      
+      .top-actions {
+        display: flex;
+        gap: 1rem;
+        align-items: center;
+      }
+      
+      /* Style nav links like home page */
+      .top-actions a.chip.ghost,
+      .top-actions a.nav-link {
+        color: #1F2937;
+        text-decoration: none;
+        font-weight: 700;
+        transition: all 0.3s;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        background: #FFFFFF;
+        border: 2px solid #C8E6C9;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      
+      .top-actions a.chip.ghost:hover,
+      .top-actions a.nav-link:hover {
+        color: #7DBFE8;
+        border-color: #7DBFE8;
+        transform: translateY(-2px);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+      }
+      
+      /* Keep other buttons (language, share, etc.) with original chip style */
+      .top-actions button.chip {
+        padding: 0.5rem 1rem;
+        font-size: 0.9rem;
+      }
+      
+      /* Inline Language Dropdown for food-banks page */
+      .language-dropdown-inline {
+        position: relative;
+        display: inline-block;
+      }
+      
+      .language-btn-inline {
+        cursor: pointer;
+        user-select: none;
+      }
+      
+      .language-menu-inline {
+        display: none;
+        position: absolute;
+        top: 100%;
+        right: 0;
+        margin-top: 0.5rem;
+        background: var(--white);
+        border: 2px solid #C8E6C9;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+        min-width: 200px;
+        z-index: 1000;
+      }
+      
+      .language-menu-inline.show {
+        display: block;
+      }
+      
+      .language-menu-inline a {
+        display: block;
+        padding: 0.75rem 1.25rem;
+        color: var(--text-dark);
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.2s;
+        border: none;
+        box-shadow: none;
+        border-radius: 0;
+      }
+      
+      .language-menu-inline a:first-child {
+        border-radius: 6px 6px 0 0;
+      }
+      
+      .language-menu-inline a:last-child {
+        border-radius: 0 0 6px 6px;
+      }
+      
+      .language-menu-inline a:hover {
+        background: var(--light-blue);
+        color: var(--primary-blue);
+        transform: none;
+        box-shadow: none;
+      }
+      
+      @media (max-width: 1024px) {
+        .app-header {
+          flex-direction: column;
+          gap: 1rem;
+        }
+        
+        .top-actions {
+          flex-wrap: wrap;
+          justify-content: center;
+          gap: 0.5rem;
+        }
+        
+        .top-actions a.chip.ghost {
+          padding: 0.5rem 1rem;
+          font-size: 0.9rem;
+        }
+      }
+    </style>
   </head>
 
   <body>
     <header class="app-header">
       <div class="branding">
-        <span class="logo">🍎</span>
+        <a href="index.html" class="logo">TogetherKGO</a>
         <h1 data-i18n="title">TogetherKGO – Food Resources</h1>
       </div>
 
       <nav class="top-actions">
         <a class="chip ghost" href="index.html">Home</a>
-        <a class="chip ghost" href="community.html">Community Board</a>
-        <button id="lang-en" class="chip">EN</button>
-        <button id="lang-fr" class="chip">FR</button>
-        <button id="lang-ur" class="chip">اردو</button>
-        <button id="shareBtn" class="chip" data-i18n="share">Share</button>
-        <a class="chip ghost" href="README.html" target="_blank" data-i18n="help">Help</a>
-        <button class="chip" onclick="window.location.href='login.html'">Login</button>
+        <a class="chip ghost" href="food-banks.html">Find Food Banks</a>
+        <a class="chip ghost" href="community.html">Community</a>
+        <a class="chip ghost" href="submit-listing.html">Submit Listing</a>
+        <a class="chip ghost" href="resources.html">Resources</a>
+        <div class="language-dropdown-inline">
+          <button class="chip ghost language-btn-inline" onclick="toggleLanguageMenuInline(event)">🌐 Languages</button>
+          <div class="language-menu-inline" id="languageMenuInline">
+            <a href="#" onclick="changeLanguageInline('en')">English</a>
+            <a href="#" onclick="changeLanguageInline('ta')">தமிழ் (Tamil)</a>
+            <a href="#" onclick="changeLanguageInline('bn')">বাংলা (Bengali)</a>
+            <a href="#" onclick="changeLanguageInline('tl')">Tagalog (Filipino)</a>
+            <a href="#" onclick="changeLanguageInline('gu')">ગુજરાતી (Gujarati)</a>
+            <a href="#" onclick="changeLanguageInline('ur')">اردو (Urdu)</a>
+            <a href="#" onclick="changeLanguageInline('fa')">فارسی (Persian/Farsi)</a>
+            <a href="#" onclick="changeLanguageInline('es')">Español (Spanish)</a>
+            <a href="#" onclick="changeLanguageInline('fr')">Français (French)</a>
+            <a href="#" onclick="changeLanguageInline('hi')">हिन्दी (Hindi)</a>
+            <a href="#" onclick="changeLanguageInline('ar')">العربية (Arabic)</a>
+            <a href="#" onclick="changeLanguageInline('zh-CN')">中文 (Chinese)</a>
+          </div>
+        </div>
       </nav>
     </header>
 
@@ -144,6 +298,220 @@
 
       // Load Google Maps AFTER config.js and app.js
       window.addEventListener("DOMContentLoaded", loadGoogleMaps);
+    </script>
+
+    <!-- Floating Language Button -->
+    <style>
+    /* Floating Language Button */
+    .floating-lang-btn {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        z-index: 9999;
+        background: linear-gradient(135deg, #7DBFE8 0%, #5BA3D0 100%);
+        color: white;
+        padding: 15px 20px;
+        border-radius: 50px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 16px;
+        border: none;
+        transition: all 0.3s;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    .floating-lang-btn:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+    }
+
+    .floating-lang-menu {
+        position: fixed;
+        bottom: 90px;
+        right: 30px;
+        z-index: 9998;
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+        min-width: 250px;
+        max-height: 400px;
+        overflow-y: auto;
+        display: none;
+    }
+
+    .floating-lang-menu.show {
+        display: block;
+        animation: slideUp 0.3s ease;
+    }
+
+    @keyframes slideUp {
+        from {
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .floating-lang-menu a {
+        display: block;
+        padding: 12px 20px;
+        color: #1F2937;
+        text-decoration: none;
+        font-weight: 600;
+        transition: all 0.2s;
+        border-bottom: 1px solid #E5E7EB;
+    }
+
+    .floating-lang-menu a:hover {
+        background: #E3F2FD;
+        color: #7DBFE8;
+    }
+
+    .floating-lang-menu a:last-child {
+        border-bottom: none;
+    }
+
+    @media (max-width: 768px) {
+        .floating-lang-btn {
+            bottom: 20px;
+            right: 20px;
+            padding: 12px 16px;
+            font-size: 14px;
+        }
+        
+        .floating-lang-menu {
+            bottom: 70px;
+            right: 20px;
+            min-width: 200px;
+        }
+    }
+    </style>
+
+    <button class="floating-lang-btn" onclick="toggleFloatingLangMenu(event)">
+        🌐 Translate
+    </button>
+
+    <div class="floating-lang-menu" id="floatingLangMenu">
+        <a href="#" onclick="translatePageFloating('en')">English</a>
+        <a href="#" onclick="translatePageFloating('ta')">தமிழ் (Tamil)</a>
+        <a href="#" onclick="translatePageFloating('bn')">বাংলা (Bengali)</a>
+        <a href="#" onclick="translatePageFloating('tl')">Tagalog (Filipino)</a>
+        <a href="#" onclick="translatePageFloating('gu')">ગુજરાતી (Gujarati)</a>
+        <a href="#" onclick="translatePageFloating('ur')">اردو (Urdu)</a>
+        <a href="#" onclick="translatePageFloating('fa')">فارسی (Persian/Farsi)</a>
+        <a href="#" onclick="translatePageFloating('es')">Español (Spanish)</a>
+        <a href="#" onclick="translatePageFloating('fr')">Français (French)</a>
+        <a href="#" onclick="translatePageFloating('hi')">हिन्दी (Hindi)</a>
+        <a href="#" onclick="translatePageFloating('ar')">العربية (Arabic)</a>
+        <a href="#" onclick="translatePageFloating('zh-CN')">中文 (Chinese)</a>
+    </div>
+
+    <!-- Translation Script -->
+    <script type="text/javascript">
+        // Toggle inline language dropdown menu
+        function toggleLanguageMenuInline(event) {
+            event.preventDefault();
+            const menu = document.getElementById('languageMenuInline');
+            menu.classList.toggle('show');
+        }
+
+        // Toggle floating language menu
+        function toggleFloatingLangMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('floatingLangMenu');
+            menu.classList.toggle('show');
+        }
+
+        // Close dropdowns when clicking outside
+        document.addEventListener('click', function(event) {
+            const inlineMenu = document.getElementById('languageMenuInline');
+            const floatingMenu = document.getElementById('floatingLangMenu');
+            const inlineBtn = document.querySelector('.language-btn-inline');
+            const floatingBtn = document.querySelector('.floating-lang-btn');
+            
+            if (inlineMenu && !event.target.closest('.language-dropdown-inline')) {
+                inlineMenu.classList.remove('show');
+            }
+            
+            if (floatingMenu && !floatingMenu.contains(event.target) && event.target !== floatingBtn) {
+                floatingMenu.classList.remove('show');
+            }
+        });
+
+        // Change language from inline nav dropdown
+        function changeLanguageInline(langCode) {
+            event.preventDefault();
+            document.getElementById('languageMenuInline').classList.remove('show');
+            translateToLanguage(langCode);
+        }
+
+        // Change language from floating button
+        function translatePageFloating(langCode) {
+            event.preventDefault();
+            document.getElementById('floatingLangMenu').classList.remove('show');
+            translateToLanguage(langCode);
+        }
+
+        // Translate page function
+        function translateToLanguage(langCode) {
+            // Save language preference
+            localStorage.setItem('preferredLanguage', langCode);
+            
+            if (langCode === 'en') {
+                // Return to English
+                window.location.href = window.location.pathname;
+            } else {
+                // Translate page
+                const currentUrl = window.location.href;
+                const cleanUrl = currentUrl.split('#')[0].split('?')[0];
+                const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${langCode}&u=${encodeURIComponent(cleanUrl)}`;
+                window.location.href = translateUrl;
+            }
+        }
+
+        // Auto-translate popup if user has language preference
+        window.addEventListener('load', function() {
+            const preferredLang = localStorage.getItem('preferredLanguage');
+            const isTranslated = window.location.href.includes('translate.google.com');
+            
+            if (preferredLang && preferredLang !== 'en' && !isTranslated) {
+                // Language name mapping
+                const langNames = {
+                    'ta': 'Tamil',
+                    'bn': 'Bengali',
+                    'tl': 'Tagalog',
+                    'gu': 'Gujarati',
+                    'ur': 'Urdu',
+                    'fa': 'Persian',
+                    'es': 'Spanish',
+                    'fr': 'French',
+                    'hi': 'Hindi',
+                    'ar': 'Arabic',
+                    'zh-CN': 'Chinese'
+                };
+                
+                const langName = langNames[preferredLang] || preferredLang;
+                
+                // Show auto-translate popup
+                const notification = document.createElement('div');
+                notification.style.cssText = 'position: fixed; top: 20px; left: 50%; transform: translateX(-50%); background: #7DBFE8; color: white; padding: 15px 25px; border-radius: 12px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); z-index: 10000; font-weight: 600; display: flex; align-items: center; gap: 15px; animation: slideDown 0.3s ease;';
+                notification.innerHTML = `
+                    <span>🌐 Translate to ${langName}?</span>
+                    <button onclick="translateToLanguage('${preferredLang}')" style="background: white; color: #7DBFE8; border: none; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.2s;">Yes</button>
+                    <button onclick="this.parentElement.remove(); localStorage.removeItem('preferredLanguage');" style="background: transparent; color: white; border: 2px solid white; padding: 8px 20px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: all 0.2s;">No</button>
+                `;
+                document.body.appendChild(notification);
+                
+                // Auto-remove after 10 seconds
+                setTimeout(() => notification.remove(), 10000);
+            }
+        });
     </script>
 
   </body>
