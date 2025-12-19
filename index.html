@@ -574,10 +574,90 @@
                 right: 0;
             }
         }
+        
+        /* Mobile Menu Styles */
+        .mobile-menu-btn,
+        .mobile-food-banks-btn,
+        .mobile-lang-btn-home {
+            display: none;
+            background: var(--white);
+            border: 2px solid #C8E6C9;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .mobile-menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            position: relative;
+        }
+        
+        .mobile-menu-btn:hover,
+        .mobile-food-banks-btn:hover,
+        .mobile-lang-btn-home:hover {
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        .mobile-menu-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 0.5rem;
+            background: var(--white);
+            border: 2px solid #C8E6C9;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            min-width: 200px;
+            z-index: 10000;
+        }
+        
+        .mobile-menu-dropdown.show {
+            display: block;
+        }
+        
+        .mobile-menu-dropdown a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        
+        .mobile-menu-dropdown a:last-child {
+            border-bottom: none;
+        }
+        
+        .mobile-menu-dropdown a:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
 
         @media (max-width: 640px) {
             .nav-links {
-                display: none;
+                display: none !important;
+            }
+            
+            .mobile-menu-btn,
+            .mobile-food-banks-btn,
+            .mobile-lang-btn-home {
+                display: block;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
             }
 
             .hero-content {
@@ -595,7 +675,20 @@
     <nav>
         <div class="nav-container">
             <a href="index.html" class="logo">TogetherKGO</a>
-            <ul class="nav-links">
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; justify-content: flex-end;">
+                <div style="position: relative;">
+                    <button class="mobile-menu-btn" onclick="toggleMobileMenuDropdown(event)" aria-label="Menu" id="mobileMenuBtn">
+                        <span style="font-size: 1.2rem;">☰</span>
+                        <span>Menu</span>
+                    </button>
+                    <div class="mobile-menu-dropdown" id="mobileMenuDropdown">
+                        <a href="community.html">Community</a>
+                        <a href="resources.html">Resources</a>
+                    </div>
+                </div>
+                <button class="mobile-food-banks-btn" onclick="window.location.href='food-banks.html'" id="mobileFoodBanksBtn">Find Food Banks</button>
+                <button class="mobile-lang-btn-home" onclick="toggleLanguageMenu(event)" id="mobileLangBtn">🌐 Languages</button>
+                <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="food-banks.html">Find Food Banks</a></li>
                 <li><a href="community.html">Community</a></li>
@@ -620,6 +713,7 @@
                     </div>
                 </li>
             </ul>
+            </div>
         </div>
     </nav>
 
@@ -744,6 +838,49 @@
     <!-- Translation using Google Translate URL method -->
     <script type="text/javascript">
         // Toggle language dropdown menu
+        // Mobile menu dropdown toggle
+        function toggleMobileMenuDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('mobileMenuDropdown');
+            dropdown.classList.toggle('show');
+            
+            // Close language menu if open
+            const langMenu = document.getElementById('languageMenu');
+            if (langMenu) {
+                langMenu.classList.remove('show');
+            }
+        }
+        
+        // Show mobile buttons on small screens
+        function updateMobileButtons() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileFoodBanksBtn = document.getElementById('mobileFoodBanksBtn');
+            const mobileLangBtn = document.getElementById('mobileLangBtn');
+            
+            if (window.innerWidth <= 640) {
+                mobileMenuBtn.style.display = 'flex';
+                mobileFoodBanksBtn.style.display = 'block';
+                mobileLangBtn.style.display = 'block';
+            } else {
+                mobileMenuBtn.style.display = 'none';
+                mobileFoodBanksBtn.style.display = 'none';
+                mobileLangBtn.style.display = 'none';
+            }
+        }
+        
+        window.addEventListener('resize', updateMobileButtons);
+        window.addEventListener('load', updateMobileButtons);
+        
+        // Close mobile menu when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileDropdown = document.getElementById('mobileMenuDropdown');
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            
+            if (mobileDropdown && !mobileDropdown.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
+                mobileDropdown.classList.remove('show');
+            }
+        });
+        
         function toggleLanguageMenu(event) {
             event.preventDefault();
             const menu = document.getElementById('languageMenu');
