@@ -491,16 +491,11 @@
         <div class="nav-container">
             <a href="index.html" class="logo">TogetherKGO</a>
             <ul class="nav-links">
-                <li class="nav-dropdown-community">
-                    <a href="index.html">Home</a>
-                    <div class="nav-dropdown-menu-community" id="navDropdownMenuCommunity">
-                        <a href="community.html">Community Board</a>
-                        <a href="food-banks.html">Find Food Banks</a>
-                        <a href="community-submit.html">Submit Community Update</a>
-                        <a href="submit-listing.html">Submit Listing</a>
-                        <a href="resources.html">Resources</a>
-                    </div>
-                </li>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="food-banks.html">Find Food Banks</a></li>
+                <li><a href="community.html">Community</a></li>
+                <li><a href="community-submit.html">Submit Community Update</a></li>
+                <li><a href="resources.html">Resources</a></li>
                 <li class="language-dropdown">
                     <a href="#" class="language-btn" onclick="toggleLanguageMenu(event)">
                         🌐 Languages
@@ -619,6 +614,7 @@
 
         // Load posts from data/posts folder
         async function loadPosts() {
+            console.log('🔄 Starting to load posts...');
             try {
                 // Use GitHub API to list files in data/posts directory
                 const repoOwner = 'MicArianW';
@@ -627,23 +623,27 @@
                 const postsPath = 'data/posts';
                 
                 const apiUrl = `https://api.github.com/repos/${repoOwner}/${repoName}/contents/${postsPath}?ref=${branch}`;
+                console.log('📡 Fetching from:', apiUrl);
                 
                 const response = await fetch(apiUrl);
+                console.log('📥 Response status:', response.status);
                 
                 if (!response.ok) {
-                    console.log('No posts found or error accessing posts folder');
+                    console.log('❌ No posts found or error accessing posts folder');
                     displayPosts([]);
                     document.getElementById('loading').style.display = 'none';
                     return;
                 }
                 
                 const files = await response.json();
+                console.log('📁 Files found:', files.length);
                 
                 // Filter for JSON files only
                 const jsonFiles = files.filter(file => file.name.endsWith('.json'));
+                console.log('📄 JSON files:', jsonFiles.length, jsonFiles.map(f => f.name));
                 
                 if (jsonFiles.length === 0) {
-                    console.log('No post files found');
+                    console.log('❌ No post files found');
                     displayPosts([]);
                     document.getElementById('loading').style.display = 'none';
                     return;
@@ -652,31 +652,41 @@
                 // Load each post file
                 const postPromises = jsonFiles.map(async (file) => {
                     try {
+                        console.log('⬇️ Loading:', file.name);
                         const postResponse = await fetch(file.download_url);
                         const post = await postResponse.json();
+                        console.log('✅ Loaded post:', post.title);
                         return post;
                     } catch (error) {
-                        console.error(`Error loading post ${file.name}:`, error);
+                        console.error(`❌ Error loading post ${file.name}:`, error);
                         return null;
                     }
                 });
                 
                 allPosts = await Promise.all(postPromises);
                 allPosts = allPosts.filter(post => post !== null);
+                console.log('📦 Total posts loaded:', allPosts.length);
                 
                 // Filter out expired posts
+                const beforeExpiry = allPosts.length;
                 allPosts = allPosts.filter(post => {
                     if (!post.expiresDate) return true;
-                    return new Date(post.expiresDate) > new Date();
+                    const isValid = new Date(post.expiresDate) > new Date();
+                    if (!isValid) {
+                        console.log('⏰ Expired post:', post.title, 'expired on', post.expiresDate);
+                    }
+                    return isValid;
                 });
+                console.log('📋 Posts after expiry filter:', allPosts.length, '(removed:', beforeExpiry - allPosts.length + ')');
                 
                 // Sort by date
                 allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
+                console.log('🎨 Displaying', allPosts.length, 'posts');
                 displayPosts(allPosts);
                 document.getElementById('loading').style.display = 'none';
             } catch (error) {
-                console.error('Error loading posts:', error);
+                console.error('❌ Error loading posts:', error);
                 displayPosts([]);
                 document.getElementById('loading').style.display = 'none';
             }
@@ -684,20 +694,29 @@
 
         // Display posts
         function displayPosts(posts) {
+            console.log('🎨 displayPosts called with', posts.length, 'posts');
             const grid = document.getElementById('postsGrid');
             const noPosts = document.getElementById('noPosts');
 
+            if (!grid) {
+                console.error('❌ postsGrid element not found!');
+                return;
+            }
+
             if (posts.length === 0) {
+                console.log('📭 No posts to display');
                 grid.style.display = 'none';
                 noPosts.style.display = 'block';
                 return;
             }
 
+            console.log('✅ Rendering', posts.length, 'posts to grid');
             grid.style.display = 'grid';
             noPosts.style.display = 'none';
             grid.innerHTML = '';
 
-            posts.forEach(post => {
+            posts.forEach((post, index) => {
+                console.log(`  📌 Post ${index + 1}:`, post.title, '- Type:', post.type, '- Org:', post.foodBankId);
                 const service = services.find(s => s.id === post.foodBankId);
                 const orgName = service ? service.name : (FOOD_BANKS[post.foodBankId] || 'Unknown Organization');
                 const orgType = service ? service.type : 'organization';
@@ -730,6 +749,9 @@
 
                 grid.appendChild(card);
             });
+            
+            console.log('✅ Successfully rendered', grid.children.length, 'post cards');
+        }
         }
 
         function getTypeLabel(type) {
