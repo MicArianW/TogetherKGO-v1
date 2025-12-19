@@ -620,38 +620,43 @@
     <nav>
         <div class="nav-container">
             <a href="index.html" class="logo">TogetherKGO</a>
+            
+            <!-- Mobile Buttons (hidden on desktop) -->
             <div style="display: flex; gap: 0.75rem; align-items: center;">
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" style="display: none;" id="mobileMenuBtn">
                     <span style="font-size: 1.2rem;">☰</span>
                     <span>Menu</span>
                 </button>
                 <button class="mobile-lang-btn-community" onclick="toggleFloatingLangMenu(event)" style="display: none;" id="mobileLangBtn">🌐 Languages</button>
+            
+                <!-- Desktop Navigation (hidden on mobile) -->
                 <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="food-banks.html">Find Food Banks</a></li>
-                <li><a href="community.html">Community</a></li>
-                <li><a href="community-submit.html">Submit Community Update</a></li>
-                <li><a href="resources.html">Resources</a></li>
-                <li class="language-dropdown">
-                    <a href="#" class="language-btn" onclick="toggleLanguageMenu(event)">
-                        🌐 Languages
-                    </a>
-                    <div class="language-menu" id="languageMenu">
-                        <a href="#" onclick="changeLanguage('en')">English</a>
-                        <a href="#" onclick="changeLanguage('ta')">தமிழ் (Tamil)</a>
-                        <a href="#" onclick="changeLanguage('bn')">বাংলা (Bengali)</a>
-                        <a href="#" onclick="changeLanguage('tl')">Tagalog (Filipino)</a>
-                        <a href="#" onclick="changeLanguage('gu')">ગુજરાતી (Gujarati)</a>
-                        <a href="#" onclick="changeLanguage('ur')">اردو (Urdu)</a>
-                        <a href="#" onclick="changeLanguage('fa')">فارسی (Persian/Farsi)</a>
-                        <a href="#" onclick="changeLanguage('es')">Español (Spanish)</a>
-                        <a href="#" onclick="changeLanguage('fr')">Français (French)</a>
-                        <a href="#" onclick="changeLanguage('hi')">हिन्दी (Hindi)</a>
-                        <a href="#" onclick="changeLanguage('ar')">العربية (Arabic)</a>
-                        <a href="#" onclick="changeLanguage('zh-CN')">中文 (Chinese)</a>
-                    </div>
-                </li>
-            </ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="food-banks.html">Find Food Banks</a></li>
+                    <li><a href="community.html">Community</a></li>
+                    <li><a href="community-submit.html">Submit Community Update</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                    <li class="language-dropdown">
+                        <a href="#" class="language-btn" onclick="toggleLanguageMenu(event)">
+                            🌐 Languages
+                        </a>
+                        <div class="language-menu" id="languageMenu">
+                            <a href="#" onclick="changeLanguage('en')">English</a>
+                            <a href="#" onclick="changeLanguage('ta')">தமிழ் (Tamil)</a>
+                            <a href="#" onclick="changeLanguage('bn')">বাংলা (Bengali)</a>
+                            <a href="#" onclick="changeLanguage('tl')">Tagalog (Filipino)</a>
+                            <a href="#" onclick="changeLanguage('gu')">ગુજરાતી (Gujarati)</a>
+                            <a href="#" onclick="changeLanguage('ur')">اردو (Urdu)</a>
+                            <a href="#" onclick="changeLanguage('fa')">فارسی (Persian/Farsi)</a>
+                            <a href="#" onclick="changeLanguage('es')">Español (Spanish)</a>
+                            <a href="#" onclick="changeLanguage('fr')">Français (French)</a>
+                            <a href="#" onclick="changeLanguage('hi')">हिन्दी (Hindi)</a>
+                            <a href="#" onclick="changeLanguage('ar')">العربية (Arabic)</a>
+                            <a href="#" onclick="changeLanguage('zh-CN')">中文 (Chinese)</a>
+                        </div>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
     
@@ -670,7 +675,7 @@
             <li><a href="resources.html" onclick="closeMobileMenu()">Resources</a></li>
         </ul>
     </div>
-
+    
     <!-- Page Header -->
     <div class="page-header">
         <h1>Community Board</h1>
