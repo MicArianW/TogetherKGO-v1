@@ -909,7 +909,6 @@
             
             console.log('✅ Successfully rendered', grid.children.length, 'post cards');
         }
-        }
 
         function getTypeLabel(type) {
             const labels = {
@@ -956,7 +955,15 @@
         document.getElementById('filterPostType').addEventListener('change', filterPosts);
 
         // Initialize
-        loadServices().then(loadPosts);
+        console.log('🚀 ===== INITIALIZING COMMUNITY PAGE =====');
+        console.log('📍 About to call loadServices().then(loadPosts)');
+        loadServices().then(() => {
+            console.log('✅ loadServices completed, now calling loadPosts');
+            return loadPosts();
+        }).catch(error => {
+            console.error('❌ ERROR in initialization:', error);
+        });
+        console.log('📍 Initialization code executed');
     </script>
     
     <!-- Floating Language Button -->
