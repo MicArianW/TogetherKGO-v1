@@ -1,0 +1,24 @@
+{
+  "name": "ACSA Community Services",
+  "phone": "4162926912",
+  "hours": "Mon-Fri: 9am-5pm",
+  "address": "1911 Kennedy Rd Unit 105, Scarborough, ON M1P 2L9",
+  "location": {
+    "lat": 43.76745,
+    "lng": -79.28087
+  },
+  "days": [
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri"
+  ],
+  "tags": [
+    "family_support",
+    "food_bank",
+    "community_support"
+  ],
+  "type": "organization",
+  "description": "multi-service agency"
+}
