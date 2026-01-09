@@ -1,0 +1,24 @@
+{
+  "name": "5N2",
+  "phone": "416-551-0910",
+  "hours": "Mon-Fri: 9am-5pm",
+  "address": "705 Progress Ave Units 43 & 44, Scarborough, ON M1H 2X1",
+  "location": {
+    "lat": 43.77672,
+    "lng": -79.24603
+  },
+  "days": [
+    "Mon",
+    "Tue",
+    "Wed",
+    "Thu",
+    "Fri"
+  ],
+  "tags": [
+    "food_bank",
+    "community_support",
+    "food_security"
+  ],
+  "type": "organization",
+  "description": "Multi-service provider, Food Bank"
+}
