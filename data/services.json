@@ -149,56 +149,6 @@
   },
   {
     "id": "fb7",
-    "name": "5N2",
-    "type": "organization",
-    "address": "705 Progress Ave Units 43 & 44, Scarborough, ON M1H 2X1",
-    "location": {
-      "lat": 43.77672,
-      "lng": -79.24603
-    },
-    "days": [
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri"
-    ],
-    "hours": "Mon-Fri: 9am-5pm",
-    "phone": "416-551-0910",
-    "description": "Multi-service provider, Food Bank",
-    "tags": [
-      "food_bank",
-      "community_support",
-      "food_security"
-    ]
-  },
-  {
-    "id": "fb8",
-    "name": "ACSA Community Services",
-    "type": "organization",
-    "address": "1911 Kennedy Rd Unit 105, Scarborough, ON M1P 2L9",
-    "location": {
-      "lat": 43.76745,
-      "lng": -79.28087
-    },
-    "days": [
-      "Mon",
-      "Tue",
-      "Wed",
-      "Thu",
-      "Fri"
-    ],
-    "hours": "Mon-Fri: 9am-5pm",
-    "phone": "4162926912",
-    "description": "multi-service agency",
-    "tags": [
-      "family_support",
-      "food_bank",
-      "community_support"
-    ]
-  },
-  {
-    "id": "fb9",
     "name": "Feed Scarborough (Scarborough Food Security Intiative)",
     "type": "organization",
     "address": "3595 St Clair Ave E, Scarborough, ON M1K 1L8",
