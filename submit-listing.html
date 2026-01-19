@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Your Listing - TogetherKGO</title>
+    <link rel="stylesheet" href="assets/styles.css">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
         /* Color Scheme */
@@ -328,7 +329,28 @@
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <a href="home.html" class="logo">TogetherKGO</a>
+            <a href="index.html" class="logo">TogetherKGO</a>
+            
+            <!-- Mobile Buttons (NOW ADDED!) -->
+            <div class="mobile-buttons">
+                <!-- Menu Button -->
+                <button class="mobile-menu-btn" aria-label="Open menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <span>Menu</span>
+                </button>
+
+                <!-- Language Button -->
+                <button class="language-btn" aria-label="Change language">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                    </svg>
+                    <span>Languages</span>
+                </button>
+            </div>
+            
+            <!-- Desktop Navigation -->
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="food-banks.html">Find Food Banks</a></li>
@@ -547,6 +569,9 @@
         <p>&copy; 2025 TogetherKGO | Bringing the Kingston-Galloway-Orton community together.</p>
     </footer>
 
+    <!-- Load app.js which includes mobile navigation -->
+    <script src="assets/app.js"></script>
+    
     <script>
         // Form submission handling
         const form = document.getElementById('listingForm');
