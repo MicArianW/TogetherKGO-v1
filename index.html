@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TogetherKGO - Community Food Resources</title>
+    <link rel="stylesheet" href="assets/styles.css">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
         /* Very Light Blue Color Scheme - Soft and Airy */
@@ -91,56 +92,6 @@
         /* Language Dropdown */
         .language-dropdown {
             position: relative;
-        }
-
-        .language-btn {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .language-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
-            background: var(--white);
-            border: 2px solid #C8E6C9;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            min-width: 200px;
-            z-index: 1000;
-        }
-
-        .language-menu.show {
-            display: block;
-        }
-
-        .language-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-            border: none;
-            box-shadow: none;
-            border-radius: 0;
-        }
-
-        .language-menu a:first-child {
-            border-radius: 6px 6px 0 0;
-        }
-
-        .language-menu a:last-child {
-            border-radius: 0 0 6px 6px;
-        }
-
-        .language-menu a:hover {
-            background: var(--light-blue);
-            color: var(--primary-blue);
-            transform: none;
-            box-shadow: none;
         }
 
         /* Hide Google Translate branding */
@@ -569,95 +520,11 @@
             .cta-title {
                 font-size: 2rem;
             }
-            
-            .language-menu {
-                right: 0;
-            }
-        }
-        
-        /* Mobile Menu Styles */
-        .mobile-menu-btn,
-        .mobile-food-banks-btn,
-        .mobile-lang-btn-home {
-            display: none;
-            background: var(--white);
-            border: 2px solid #C8E6C9;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            cursor: pointer;
-            color: var(--text-dark);
-            font-weight: 700;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-        }
-        
-        .mobile-menu-btn {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            position: relative;
-        }
-        
-        .mobile-menu-btn:hover,
-        .mobile-food-banks-btn:hover,
-        .mobile-lang-btn-home:hover {
-            color: var(--primary-blue);
-            border-color: var(--primary-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .mobile-menu-dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            margin-top: 0.5rem;
-            background: var(--white);
-            border: 2px solid #C8E6C9;
-            border-radius: 8px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            min-width: 200px;
-            z-index: 10000;
-        }
-        
-        .mobile-menu-dropdown.show {
-            display: block;
-        }
-        
-        .mobile-menu-dropdown a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-            border-bottom: 1px solid #E5E7EB;
-        }
-        
-        .mobile-menu-dropdown a:last-child {
-            border-bottom: none;
-        }
-        
-        .mobile-menu-dropdown a:hover {
-            background: var(--light-blue);
-            color: var(--primary-blue);
         }
 
         @media (max-width: 640px) {
             .nav-links {
                 display: none !important;
-            }
-            
-            .mobile-menu-btn,
-            .mobile-food-banks-btn,
-            .mobile-lang-btn-home {
-                display: block;
-            }
-            
-            .mobile-menu-btn {
-                display: flex;
             }
 
             .hero-content {
@@ -675,45 +542,38 @@
     <nav>
         <div class="nav-container">
             <a href="index.html" class="logo">TogetherKGO</a>
-            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; justify-content: flex-end;">
-                <div style="position: relative;">
-                    <button class="mobile-menu-btn" onclick="toggleMobileMenuDropdown(event)" aria-label="Menu" id="mobileMenuBtn">
-                        <span style="font-size: 1.2rem;">☰</span>
-                        <span>Menu</span>
-                    </button>
-                    <div class="mobile-menu-dropdown" id="mobileMenuDropdown">
-                        <a href="community.html">Community</a>
-                        <a href="resources.html">Resources</a>
-                    </div>
-                </div>
-                <button class="mobile-food-banks-btn" onclick="window.location.href='food-banks.html'" id="mobileFoodBanksBtn">Find Food Banks</button>
-                <button class="mobile-lang-btn-home" onclick="toggleLanguageMenu(event)" id="mobileLangBtn">🌐 Languages</button>
-                <ul class="nav-links">
+            
+            <!-- Mobile Buttons (will be shown on mobile by CSS from styles.css) -->
+            <div class="mobile-buttons">
+                <!-- Menu Button -->
+                <button class="mobile-menu-btn" aria-label="Open menu">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
+                    </svg>
+                    <span>Menu</span>
+                </button>
+
+                <!-- Find Food Banks Button (visible on mobile) -->
+                <a href="food-banks.html" class="chip" style="text-decoration: none;">
+                    Find Food Banks
+                </a>
+
+                <!-- Language Button -->
+                <button class="language-btn" aria-label="Change language">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                    </svg>
+                    <span>Languages</span>
+                </button>
+            </div>
+            
+            <!-- Desktop Navigation -->
+            <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="food-banks.html">Find Food Banks</a></li>
                 <li><a href="community.html">Community</a></li>
                 <li><a href="resources.html">Resources</a></li>
-                <li class="language-dropdown">
-                    <a href="#" class="language-btn" onclick="toggleLanguageMenu(event)">
-                        🌐 Languages
-                    </a>
-                    <div class="language-menu" id="languageMenu">
-                        <a href="#" onclick="changeLanguage('en')">English</a>
-                        <a href="#" onclick="changeLanguage('ta')">தமிழ் (Tamil)</a>
-                        <a href="#" onclick="changeLanguage('bn')">বাংলা (Bengali)</a>
-                        <a href="#" onclick="changeLanguage('tl')">Tagalog (Filipino)</a>
-                        <a href="#" onclick="changeLanguage('gu')">ગુજરાતી (Gujarati)</a>
-                        <a href="#" onclick="changeLanguage('ur')">اردو (Urdu)</a>
-                        <a href="#" onclick="changeLanguage('fa')">فارسی (Persian/Farsi)</a>
-                        <a href="#" onclick="changeLanguage('es')">Español (Spanish)</a>
-                        <a href="#" onclick="changeLanguage('fr')">Français (French)</a>
-                        <a href="#" onclick="changeLanguage('hi')">हिन्दी (Hindi)</a>
-                        <a href="#" onclick="changeLanguage('ar')">العربية (Arabic)</a>
-                        <a href="#" onclick="changeLanguage('zh-CN')">中文 (Chinese)</a>
-                    </div>
-                </li>
             </ul>
-            </div>
         </div>
     </nav>
 
@@ -824,7 +684,7 @@
             </div>
             <div class="footer-section">
                 <h3>Contact</h3>
-                <p>Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="b0d9ded6dff0c4dfd7d5c4d8d5c2dbd7df9edfc2d7">[email&#160;protected]</a></p>
+                <p>Email: <a href="mailto:info@togetherkgo.org">info@togetherkgo.org</a></p>
                 <p>Phone: (416) XXX-XXXX</p>
                 <p>Serving the KGO community</p>
             </div>
@@ -834,95 +694,7 @@
         </div>
     </footer>
 
-    <!-- Netlify 
-    <!-- Translation using Google Translate URL method -->
-    <script type="text/javascript">
-        // Toggle language dropdown menu
-        // Mobile menu dropdown toggle
-        function toggleMobileMenuDropdown(event) {
-            event.stopPropagation();
-            const dropdown = document.getElementById('mobileMenuDropdown');
-            dropdown.classList.toggle('show');
-            
-            // Close language menu if open
-            const langMenu = document.getElementById('languageMenu');
-            if (langMenu) {
-                langMenu.classList.remove('show');
-            }
-        }
-        
-        // Show mobile buttons on small screens
-        function updateMobileButtons() {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileFoodBanksBtn = document.getElementById('mobileFoodBanksBtn');
-            const mobileLangBtn = document.getElementById('mobileLangBtn');
-            
-            if (window.innerWidth <= 640) {
-                mobileMenuBtn.style.display = 'flex';
-                mobileFoodBanksBtn.style.display = 'block';
-                mobileLangBtn.style.display = 'block';
-            } else {
-                mobileMenuBtn.style.display = 'none';
-                mobileFoodBanksBtn.style.display = 'none';
-                mobileLangBtn.style.display = 'none';
-            }
-        }
-        
-        window.addEventListener('resize', updateMobileButtons);
-        window.addEventListener('load', updateMobileButtons);
-        
-        // Close mobile menu when clicking outside
-        document.addEventListener('click', function(event) {
-            const mobileDropdown = document.getElementById('mobileMenuDropdown');
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            
-            if (mobileDropdown && !mobileDropdown.contains(event.target) && !mobileMenuBtn.contains(event.target)) {
-                mobileDropdown.classList.remove('show');
-            }
-        });
-        
-        function toggleLanguageMenu(event) {
-            event.preventDefault();
-            const menu = document.getElementById('languageMenu');
-            menu.classList.toggle('show');
-        }
-
-        // Close dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const dropdown = document.querySelector('.language-dropdown');
-            const menu = document.getElementById('languageMenu');
-            if (dropdown && !dropdown.contains(event.target)) {
-                menu.classList.remove('show');
-            }
-        });
-
-        // Change language using Google Translate URL method
-        function changeLanguage(langCode) {
-            event.preventDefault();
-            
-            // Close dropdown
-            document.getElementById('languageMenu').classList.remove('show');
-            
-            console.log('Translating to:', langCode);
-            
-            if (langCode === 'en') {
-                // Return to original English
-                window.location.href = window.location.pathname + window.location.hash;
-            } else {
-                // Get current page URL
-                const currentUrl = window.location.href;
-                
-                // Remove any existing translate parameters
-                const cleanUrl = currentUrl.split('#')[0].split('?')[0];
-                
-                // Create Google Translate URL
-                const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${langCode}&u=${encodeURIComponent(cleanUrl)}`;
-                
-                // Redirect to translated version
-                window.location.href = translateUrl;
-            }
-        }
-    </script>
-
+    <!-- Load the app.js file which now includes mobile navigation -->
+    <script src="assets/app.js"></script>
 </body>
 </html>
