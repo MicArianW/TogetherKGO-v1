@@ -226,7 +226,7 @@ window.__APP = (function () {
         [s.name, s.address, s.description, ...(s.tags || [])]
           .join(" ")
           .toLowerCase()
-          .replace(/_/g, ' '); // Replace underscores with spaces
+          .replace(/_/g, ' '); // Replace underscaces with spaces
       if (q && !text.includes(q)) return false;
 
       // Type filter
@@ -331,3 +331,291 @@ window.__APP = (function () {
 
   return { initMap };
 })();
+
+/* ===================================================================
+   MOBILE NAVIGATION FIX - Added for slide-out menu functionality
+   =================================================================== */
+
+// Mobile Navigation Controller
+class MobileNavigation {
+  constructor() {
+    this.overlay = null;
+    this.sidebar = null;
+    this.closeBtn = null;
+    this.languageBtn = null;
+    this.languageMenu = null;
+    this.isMenuOpen = false;
+    this.isLanguageOpen = false;
+    
+    this.init();
+  }
+
+  init() {
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', () => this.setup());
+    } else {
+      this.setup();
+    }
+  }
+
+  setup() {
+    this.createMobileMenu();
+    this.createLanguageDropdown();
+    this.attachEventListeners();
+    this.highlightCurrentPage();
+  }
+
+  createMobileMenu() {
+    // Check if mobile menu already exists
+    if (document.querySelector('.mobile-menu-overlay')) return;
+
+    // Create overlay
+    this.overlay = document.createElement('div');
+    this.overlay.className = 'mobile-menu-overlay';
+    
+    // Create sidebar
+    this.sidebar = document.createElement('div');
+    this.sidebar.className = 'mobile-menu-sidebar';
+    
+    // Get current page for navigation links
+    const currentPath = window.location.pathname;
+    const isHome = currentPath === '/' || currentPath.includes('index.html') || currentPath.includes('home.html');
+    
+    this.sidebar.innerHTML = `
+      <div class="mobile-menu-header">
+        <div class="mobile-menu-logo">TogetherKGO</div>
+        <button class="mobile-menu-close" aria-label="Close menu">×</button>
+      </div>
+      <nav>
+        <ul class="mobile-menu-nav">
+          <li><a href="${isHome ? '#' : 'index.html'}">Home</a></li>
+          <li><a href="food-banks.html">Find Food Banks</a></li>
+          <li><a href="community.html">Community Board</a></li>
+          <li><a href="resources.html">Resources</a></li>
+        </ul>
+      </nav>
+    `;
+    
+    // Append to body
+    document.body.appendChild(this.overlay);
+    document.body.appendChild(this.sidebar);
+    
+    // Store references
+    this.closeBtn = this.sidebar.querySelector('.mobile-menu-close');
+  }
+
+  createLanguageDropdown() {
+    // Find language button
+    this.languageBtn = document.querySelector('.language-btn');
+    
+    if (!this.languageBtn) return;
+
+    // Check if dropdown already exists
+    let languageContainer = this.languageBtn.closest('.language-dropdown');
+    if (!languageContainer) {
+      // Wrap language button in container
+      languageContainer = document.createElement('div');
+      languageContainer.className = 'language-dropdown';
+      this.languageBtn.parentNode.insertBefore(languageContainer, this.languageBtn);
+      languageContainer.appendChild(this.languageBtn);
+    }
+
+    // Check if dropdown menu already exists
+    this.languageMenu = languageContainer.querySelector('.language-dropdown-menu');
+    
+    if (!this.languageMenu) {
+      // Create dropdown menu
+      this.languageMenu = document.createElement('div');
+      this.languageMenu.className = 'language-dropdown-menu';
+      this.languageMenu.innerHTML = `
+        <ul>
+          <li><button data-lang="en">English</button></li>
+          <li><button data-lang="ta">தமிழ் (Tamil)</button></li>
+          <li><button data-lang="bn">বাংলা (Bengali)</button></li>
+          <li><button data-lang="tl">Tagalog (Filipino)</button></li>
+          <li><button data-lang="gu">ગુજરાતી (Gujarati)</button></li>
+          <li><button data-lang="ur">اردو (Urdu)</button></li>
+          <li><button data-lang="fa">فارسی (Persian/Farsi)</button></li>
+          <li><button data-lang="es">Español (Spanish)</button></li>
+          <li><button data-lang="fr">Français (French)</button></li>
+          <li><button data-lang="hi">हिन्दी (Hindi)</button></li>
+          <li><button data-lang="ar">العربية (Arabic)</button></li>
+          <li><button data-lang="zh">中文 (Chinese)</button></li>
+        </ul>
+      `;
+      languageContainer.appendChild(this.languageMenu);
+    }
+  }
+
+  attachEventListeners() {
+    // Find all menu buttons on the page
+    const menuButtons = document.querySelectorAll('.mobile-menu-btn, [data-mobile-menu]');
+    menuButtons.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        this.openMenu();
+      });
+    });
+
+    // Close button
+    if (this.closeBtn) {
+      this.closeBtn.addEventListener('click', () => this.closeMenu());
+    }
+
+    // Overlay click
+    if (this.overlay) {
+      this.overlay.addEventListener('click', () => this.closeMenu());
+    }
+
+    // Escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        if (this.isMenuOpen) this.closeMenu();
+        if (this.isLanguageOpen) this.closeLanguageMenu();
+      }
+    });
+
+    // Language button
+    if (this.languageBtn) {
+      this.languageBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.toggleLanguageMenu();
+      });
+    }
+
+    // Language selection
+    if (this.languageMenu) {
+      const languageButtons = this.languageMenu.querySelectorAll('button[data-lang]');
+      languageButtons.forEach(btn => {
+        btn.addEventListener('click', (e) => {
+          e.preventDefault();
+          const lang = btn.getAttribute('data-lang');
+          this.changeLanguage(lang);
+        });
+      });
+    }
+
+    // Close language menu when clicking outside
+    document.addEventListener('click', (e) => {
+      if (this.isLanguageOpen && 
+          this.languageMenu && 
+          !this.languageMenu.contains(e.target) && 
+          !this.languageBtn.contains(e.target)) {
+        this.closeLanguageMenu();
+      }
+    });
+
+    // Handle navigation links in mobile menu
+    const navLinks = this.sidebar?.querySelectorAll('.mobile-menu-nav a');
+    if (navLinks) {
+      navLinks.forEach(link => {
+        link.addEventListener('click', () => this.closeMenu());
+      });
+    }
+  }
+
+  openMenu() {
+    if (this.overlay && this.sidebar) {
+      this.isMenuOpen = true;
+      this.overlay.classList.add('active');
+      this.sidebar.classList.add('active');
+      document.body.classList.add('menu-open');
+    }
+  }
+
+  closeMenu() {
+    if (this.overlay && this.sidebar) {
+      this.isMenuOpen = false;
+      this.overlay.classList.remove('active');
+      this.sidebar.classList.remove('active');
+      document.body.classList.remove('menu-open');
+    }
+  }
+
+  toggleLanguageMenu() {
+    if (this.isLanguageOpen) {
+      this.closeLanguageMenu();
+    } else {
+      this.openLanguageMenu();
+    }
+  }
+
+  openLanguageMenu() {
+    if (this.languageMenu) {
+      this.isLanguageOpen = true;
+      this.languageMenu.classList.add('active');
+    }
+  }
+
+  closeLanguageMenu() {
+    if (this.languageMenu) {
+      this.isLanguageOpen = false;
+      this.languageMenu.classList.remove('active');
+    }
+  }
+
+  changeLanguage(langCode) {
+    console.log('Changing language to:', langCode);
+    
+    // Close the dropdown
+    this.closeLanguageMenu();
+    
+    // Check if i18n system exists (if you have one)
+    if (window.i18n && typeof window.i18n.changeLanguage === 'function') {
+      window.i18n.changeLanguage(langCode);
+    } else if (window.changeLanguage && typeof window.changeLanguage === 'function') {
+      window.changeLanguage(langCode);
+    } else {
+      // Store language preference
+      localStorage.setItem('preferredLanguage', langCode);
+      
+      // Show notification
+      this.showLanguageNotification(langCode);
+    }
+  }
+
+  showLanguageNotification(langCode) {
+    // Simple notification
+    const notification = document.createElement('div');
+    notification.style.cssText = `
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      background-color: #4ade80;
+      color: white;
+      padding: 12px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      z-index: 10000;
+      font-size: 14px;
+      font-weight: 500;
+    `;
+    notification.textContent = `Language changed to ${langCode.toUpperCase()}`;
+    document.body.appendChild(notification);
+
+    setTimeout(() => {
+      notification.style.opacity = '0';
+      notification.style.transition = 'opacity 0.3s';
+      setTimeout(() => notification.remove(), 300);
+    }, 2000);
+  }
+
+  highlightCurrentPage() {
+    const currentPath = window.location.pathname;
+    const navLinks = this.sidebar?.querySelectorAll('.mobile-menu-nav a');
+    
+    if (navLinks) {
+      navLinks.forEach(link => {
+        const href = link.getAttribute('href');
+        if (currentPath.includes(href) || 
+            (href === '#' && (currentPath === '/' || currentPath.includes('index.html')))) {
+          link.classList.add('active');
+        }
+      });
+    }
+  }
+}
+
+// Initialize mobile navigation when script loads
+const mobileNav = new MobileNavigation();
