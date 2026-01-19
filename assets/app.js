@@ -381,6 +381,22 @@ class MobileNavigation {
     const currentPath = window.location.pathname;
     const isHome = currentPath === '/' || currentPath.includes('index.html') || currentPath.includes('home.html');
     
+    // Check if we're on submit-listing page
+    const isSubmitPage = currentPath.includes('submit-listing');
+    
+    // Build navigation links based on page
+    let navLinks = `
+      <li><a href="${isHome ? '#' : 'index.html'}">Home</a></li>
+      <li><a href="food-banks.html">Find Food Banks</a></li>
+      <li><a href="community.html">Community Board</a></li>
+      <li><a href="resources.html">Resources</a></li>
+    `;
+    
+    // Add Languages link if on submit-listing page
+    if (isSubmitPage) {
+      navLinks += `<li><a href="#" class="mobile-menu-language-trigger">🌐 Languages</a></li>`;
+    }
+    
     this.sidebar.innerHTML = `
       <div class="mobile-menu-header">
         <div class="mobile-menu-logo">TogetherKGO</div>
@@ -388,12 +404,28 @@ class MobileNavigation {
       </div>
       <nav>
         <ul class="mobile-menu-nav">
-          <li><a href="${isHome ? '#' : 'index.html'}">Home</a></li>
-          <li><a href="food-banks.html">Find Food Banks</a></li>
-          <li><a href="community.html">Community Board</a></li>
-          <li><a href="resources.html">Resources</a></li>
+          ${navLinks}
         </ul>
       </nav>
+      ${isSubmitPage ? `
+      <div class="mobile-menu-languages" style="padding: 1rem; border-top: 1px solid #e5e7eb; display: none;">
+        <div style="font-weight: 600; margin-bottom: 0.5rem; color: #1f2937;">Select Language:</div>
+        <ul style="list-style: none;">
+          <li><a href="#" data-lang="en" style="display: block; padding: 0.5rem; color: #1f2937; text-decoration: none;">English</a></li>
+          <li><a href="#" data-lang="ta" style="display: block; padding: 0.5rem; color: #1f2937; text-decoration: none;">தமிழ் (Tamil)</a></li>
+          <li><a href="#" data-lang="bn" style="display: block; padding: 0.5rem; color: #1f2937; text-decoration: none;">বাংলা (Bengali)</a></li>
+          <li><a href="#" data-lang="tl" style="display: block; padding: 0.5rem; color: #1f2937; text-decoration: none;">Tagalog (Filipino)</a></li>
+          <li><a href="#" data-lang="gu" style="display: block; padding: 0.5rem; color: #1f2937; text-decoration: none;">ગુજરાતી (Gujarati)</a></li>
+          <li><a href="#" data-lang="ur" style="display: block; padding: 0.5rem; color: #1f2937; text-decoration: none;">اردو (Urdu)</a></li>
+          <li><a href="#" data-lang="fa" style="display: block; padding: 0.5rem; color: #1f2937; text-decoration: none;">فارسی (Persian/Farsi)</a></li>
+          <li><a href="#" data-lang="es" style="display: block; padding: 0.5rem; color: #1f2937; text-decoration: none;">Español (Spanish)</a></li>
+          <li><a href="#" data-lang="fr" style="display: block; padding: 0.5rem; color: #1f2937; text-decoration: none;">Français (French)</a></li>
+          <li><a href="#" data-lang="hi" style="display: block; padding: 0.5rem; color: #1f2937; text-decoration: none;">हिन्दी (Hindi)</a></li>
+          <li><a href="#" data-lang="ar" style="display: block; padding: 0.5rem; color: #1f2937; text-decoration: none;">العربية (Arabic)</a></li>
+          <li><a href="#" data-lang="zh" style="display: block; padding: 0.5rem; color: #1f2937; text-decoration: none;">中文 (Chinese)</a></li>
+        </ul>
+      </div>
+      ` : ''}
     `;
     
     // Append to body
@@ -507,10 +539,40 @@ class MobileNavigation {
     });
 
     // Handle navigation links in mobile menu
-    const navLinks = this.sidebar?.querySelectorAll('.mobile-menu-nav a');
+    const navLinks = this.sidebar?.querySelectorAll('.mobile-menu-nav a:not(.mobile-menu-language-trigger)');
     if (navLinks) {
       navLinks.forEach(link => {
         link.addEventListener('click', () => this.closeMenu());
+      });
+    }
+    
+    // Handle language trigger in mobile menu (submit-listing page)
+    const languageTrigger = this.sidebar?.querySelector('.mobile-menu-language-trigger');
+    if (languageTrigger) {
+      languageTrigger.addEventListener('click', (e) => {
+        e.preventDefault();
+        const languagesSection = this.sidebar.querySelector('.mobile-menu-languages');
+        if (languagesSection) {
+          // Toggle display
+          if (languagesSection.style.display === 'none' || languagesSection.style.display === '') {
+            languagesSection.style.display = 'block';
+          } else {
+            languagesSection.style.display = 'none';
+          }
+        }
+      });
+    }
+    
+    // Handle language selection in mobile menu
+    const mobileMenuLanguageLinks = this.sidebar?.querySelectorAll('.mobile-menu-languages a[data-lang]');
+    if (mobileMenuLanguageLinks) {
+      mobileMenuLanguageLinks.forEach(link => {
+        link.addEventListener('click', (e) => {
+          e.preventDefault();
+          const lang = link.getAttribute('data-lang');
+          this.changeLanguage(lang);
+          this.closeMenu();
+        });
       });
     }
   }
