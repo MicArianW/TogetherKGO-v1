@@ -449,6 +449,124 @@
             font-size: 0.95rem;
         }
 
+        /* Mobile Menu Styles */
+        .mobile-menu-btn,
+        .mobile-food-banks-btn,
+        .mobile-lang-btn-home {
+            display: none;
+            background: var(--white);
+            border: 2px solid #C8E6C9;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .mobile-menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .mobile-menu-btn:hover,
+        .mobile-food-banks-btn:hover,
+        .mobile-lang-btn-home:hover {
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Mobile Navigation Overlay */
+        .mobile-nav-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9998;
+        }
+        
+        .mobile-nav-overlay.show {
+            display: block;
+        }
+        
+        /* Mobile Navigation Menu */
+        .mobile-nav-menu {
+            position: fixed;
+            top: 0;
+            left: -100%;
+            width: 280px;
+            height: 100%;
+            background: var(--white);
+            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+            z-index: 9999;
+            transition: left 0.3s ease;
+            overflow-y: auto;
+        }
+        
+        .mobile-nav-menu.show {
+            left: 0;
+        }
+        
+        .mobile-nav-header {
+            padding: 1.5rem;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .mobile-close-btn {
+            background: none;
+            border: none;
+            font-size: 2rem;
+            color: var(--text-dark);
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        
+        .mobile-close-btn:hover {
+            background: var(--light-blue);
+        }
+        
+        .mobile-nav-links {
+            list-style: none;
+            padding: 0;
+        }
+        
+        .mobile-nav-links li {
+            border-bottom: 1px solid #E5E7EB;
+        }
+        
+        .mobile-nav-links a {
+            display: block;
+            padding: 1.25rem 1.5rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        
+        .mobile-nav-links a:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            padding-left: 2rem;
+        }
+
         /* Responsive Design */
         @media (max-width: 1200px) {
             .nav-links {
@@ -525,33 +643,7 @@
             }
         }
         
-        /* Mobile Menu Styles */
-        .mobile-menu-btn,
-        .mobile-food-banks-btn,
-        .mobile-lang-btn-home {
-            display: none;
-            background: var(--white);
-            border: 2px solid #C8E6C9;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            cursor: pointer;
-            color: var(--text-dark);
-            font-weight: 700;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-        }
-        
-        .mobile-menu-btn:hover,
-        .mobile-food-banks-btn:hover,
-        .mobile-lang-btn-home:hover {
-            color: var(--primary-blue);
-            border-color: var(--primary-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        @media (max-width: 640px) {
+        @media (max-width: 768px) {
             .nav-links {
                 display: none !important;
             }
@@ -564,8 +656,6 @@
             
             .mobile-menu-btn {
                 display: flex;
-                align-items: center;
-                gap: 0.5rem;
             }
 
             .hero-content {
@@ -577,8 +667,6 @@
             }
         }
     </style>
-    <!-- IMPORTANT: Load styles.css for the mobile slide-out menu styling -->
-    <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -586,15 +674,15 @@
         <div class="nav-container">
             <a href="index.html" class="logo">TogetherKGO</a>
             <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; justify-content: flex-end;">
-                <!-- MOBILE BUTTONS (Only show on mobile < 640px) -->
-                <button class="mobile-menu-btn" aria-label="Menu">
+                <!-- MOBILE BUTTONS (show on mobile ≤768px) -->
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" style="display: none;" id="mobileMenuBtn">
                     <span style="font-size: 1.2rem;">☰</span>
                     <span>Menu</span>
                 </button>
-                <button class="mobile-food-banks-btn" onclick="window.location.href='food-banks.html'">Find Food Banks</button>
-                <button class="mobile-lang-btn-home language-btn" aria-label="Languages">🌐 Languages</button>
+                <button class="mobile-food-banks-btn" onclick="window.location.href='food-banks.html'" id="mobileFoodBanksBtn" style="display: none;">Find Food Banks</button>
+                <button class="mobile-lang-btn-home" onclick="toggleLanguageMenu(event)" id="mobileLangBtn" style="display: none;">🌐 Languages</button>
                 
-                <!-- DESKTOP NAV (Only show on desktop > 640px) -->
+                <!-- DESKTOP NAV (show on desktop >768px) -->
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="food-banks.html">Find Food Banks</a></li>
@@ -623,6 +711,21 @@
             </div>
         </div>
     </nav>
+    
+    <!-- Mobile Navigation Menu (Slide-in from left) -->
+    <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
+    <div class="mobile-nav-menu" id="mobileNavMenu">
+        <div class="mobile-nav-header">
+            <a href="index.html" class="logo" style="color: var(--primary-blue); text-decoration: none; font-weight: bold; font-size: 1.5rem;">TogetherKGO</a>
+            <button class="mobile-close-btn" onclick="closeMobileMenu()" aria-label="Close">×</button>
+        </div>
+        <ul class="mobile-nav-links">
+            <li><a href="index.html" onclick="closeMobileMenu()">Home</a></li>
+            <li><a href="food-banks.html" onclick="closeMobileMenu()">Find Food Banks</a></li>
+            <li><a href="community.html" onclick="closeMobileMenu()">Community Board</a></li>
+            <li><a href="resources.html" onclick="closeMobileMenu()">Resources</a></li>
+        </ul>
+    </div>
 
     <!-- Hero Section -->
     <section class="hero">
@@ -731,7 +834,7 @@
             </div>
             <div class="footer-section">
                 <h3>Contact</h3>
-                <p>Email: <a href="/cdn-cgi/l/email-protection#ec85828a83ac98838b899884899e878b83c2839e8b"><span class="__cf_email__" data-cfemail="85ecebe3eac5f1eae2e0f1ede0f7eee2eaabeaf7e2">[email&#160;protected]</span></a></p>
+                <p>Email: <a href="mailto:info@togetherkgo.org">info@togetherkgo.org</a></p>
                 <p>Phone: (416) XXX-XXXX</p>
                 <p>Serving the KGO community</p>
             </div>
@@ -740,12 +843,47 @@
             <p>&copy; 2025 TogetherKGO | Bringing the Kingston-Galloway-Orton community together.</p>
         </div>
     </footer>
-
-    <!-- Load app.js for mobile navigation functionality -->
-    <script src="assets/app.js"></script>
     
-    <!-- Desktop Language dropdown toggle -->
+    <!-- JavaScript for Mobile Navigation and Language -->
     <script>
+        // Mobile menu functions
+        function toggleMobileMenu() {
+            const overlay = document.getElementById('mobileNavOverlay');
+            const menu = document.getElementById('mobileNavMenu');
+            overlay.classList.toggle('show');
+            menu.classList.toggle('show');
+            document.body.style.overflow = menu.classList.contains('show') ? 'hidden' : '';
+        }
+        
+        function closeMobileMenu() {
+            const overlay = document.getElementById('mobileNavOverlay');
+            const menu = document.getElementById('mobileNavMenu');
+            overlay.classList.remove('show');
+            menu.classList.remove('show');
+            document.body.style.overflow = '';
+        }
+        
+        // Show mobile buttons on small screens
+        function updateMobileButtons() {
+            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+            const mobileFoodBanksBtn = document.getElementById('mobileFoodBanksBtn');
+            const mobileLangBtn = document.getElementById('mobileLangBtn');
+            
+            if (window.innerWidth <= 768) {
+                mobileMenuBtn.style.display = 'flex';
+                mobileFoodBanksBtn.style.display = 'block';
+                mobileLangBtn.style.display = 'block';
+            } else {
+                mobileMenuBtn.style.display = 'none';
+                mobileFoodBanksBtn.style.display = 'none';
+                mobileLangBtn.style.display = 'none';
+            }
+        }
+        
+        window.addEventListener('resize', updateMobileButtons);
+        window.addEventListener('load', updateMobileButtons);
+        
+        // Desktop Language dropdown toggle
         function toggleLanguageMenu(event) {
             event.preventDefault();
             const menu = document.getElementById('languageMenu');
