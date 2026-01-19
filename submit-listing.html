@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Your Listing - TogetherKGO</title>
-    <link rel="stylesheet" href="assets/styles.css">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
         /* Color Scheme */
@@ -82,6 +81,43 @@
         .nav-links a:hover {
             color: var(--primary-blue);
             background: var(--white);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        /* Mobile Buttons - Hidden by default */
+        .mobile-buttons {
+            display: none;
+            gap: 0.75rem;
+            align-items: center;
+        }
+
+        .mobile-menu-btn,
+        .mobile-food-banks-btn,
+        .mobile-lang-btn {
+            background: var(--white);
+            border: 2px solid var(--green-border);
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+
+        .mobile-menu-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .mobile-menu-btn:hover,
+        .mobile-food-banks-btn:hover,
+        .mobile-lang-btn:hover {
+            color: var(--primary-blue);
             border-color: var(--primary-blue);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
@@ -311,10 +347,6 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            .nav-links {
-                display: none;
-            }
-
             .page-header h1 {
                 font-size: 2rem;
             }
@@ -323,7 +355,20 @@
                 padding: 2rem 1.5rem;
             }
         }
+
+        /* Mobile View - Show mobile buttons, hide desktop nav */
+        @media (max-width: 640px) {
+            .nav-links {
+                display: none !important;
+            }
+
+            .mobile-buttons {
+                display: flex !important;
+            }
+        }
     </style>
+    <!-- Load styles.css for mobile slide-out menu -->
+    <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
     <!-- Navigation -->
@@ -331,26 +376,15 @@
         <div class="nav-container">
             <a href="index.html" class="logo">TogetherKGO</a>
             
-            <!-- Mobile Buttons (NOW ADDED!) -->
+            <!-- Mobile Buttons (only visible on mobile < 640px) -->
             <div class="mobile-buttons">
-                <!-- Menu Button -->
-                <button class="mobile-menu-btn" aria-label="Open menu">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
+                <button class="mobile-menu-btn" aria-label="Menu">
+                    <span style="font-size: 1.2rem;">☰</span>
                     <span>Menu</span>
-                </button>
-
-                <!-- Language Button -->
-                <button class="language-btn" aria-label="Change language">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                    </svg>
-                    <span>Languages</span>
                 </button>
             </div>
             
-            <!-- Desktop Navigation -->
+            <!-- Desktop Navigation (only visible on desktop > 640px) -->
             <ul class="nav-links">
                 <li><a href="index.html">Home</a></li>
                 <li><a href="food-banks.html">Find Food Banks</a></li>
@@ -569,7 +603,7 @@
         <p>&copy; 2025 TogetherKGO | Bringing the Kingston-Galloway-Orton community together.</p>
     </footer>
 
-    <!-- Load app.js which includes mobile navigation -->
+    <!-- Load app.js for mobile navigation functionality -->
     <script src="assets/app.js"></script>
     
     <script>
