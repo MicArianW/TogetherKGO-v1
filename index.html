@@ -104,6 +104,8 @@
             border-radius: 8px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
             min-width: 200px;
+            max-height: 400px;
+            overflow-y: auto;
             z-index: 1000;
         }
 
@@ -121,6 +123,7 @@
             border: none;
             box-shadow: none;
             border-radius: 0;
+            border-bottom: 1px solid #E5E7EB;
         }
 
         .language-menu a:first-child {
@@ -129,6 +132,7 @@
 
         .language-menu a:last-child {
             border-radius: 0 0 6px 6px;
+            border-bottom: none;
         }
 
         .language-menu a:hover {
@@ -467,7 +471,6 @@
         }
         
         .mobile-menu-btn {
-            display: flex;
             align-items: center;
             gap: 0.5rem;
         }
@@ -566,6 +569,46 @@
             color: var(--primary-blue);
             padding-left: 2rem;
         }
+        
+        /* Mobile Language Dropdown */
+        .mobile-lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: var(--white);
+            border: 2px solid #C8E6C9;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            min-width: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 10000;
+        }
+        
+        .mobile-lang-dropdown.show {
+            display: block;
+        }
+        
+        .mobile-lang-dropdown a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        
+        .mobile-lang-dropdown a:last-child {
+            border-bottom: none;
+        }
+        
+        .mobile-lang-dropdown a:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
 
         /* Responsive Design */
         @media (max-width: 1200px) {
@@ -651,11 +694,11 @@
             .mobile-menu-btn,
             .mobile-food-banks-btn,
             .mobile-lang-btn-home {
-                display: block;
+                display: block !important;
             }
             
             .mobile-menu-btn {
-                display: flex;
+                display: flex !important;
             }
 
             .hero-content {
@@ -675,12 +718,28 @@
             <a href="index.html" class="logo">TogetherKGO</a>
             <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; justify-content: flex-end;">
                 <!-- MOBILE BUTTONS (show on mobile ≤768px) -->
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" style="display: none;" id="mobileMenuBtn">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu">
                     <span style="font-size: 1.2rem;">☰</span>
                     <span>Menu</span>
                 </button>
-                <button class="mobile-food-banks-btn" onclick="window.location.href='food-banks.html'" id="mobileFoodBanksBtn" style="display: none;">Find Food Banks</button>
-                <button class="mobile-lang-btn-home" onclick="toggleLanguageMenu(event)" id="mobileLangBtn" style="display: none;">🌐 Languages</button>
+                <button class="mobile-food-banks-btn" onclick="window.location.href='food-banks.html'">Find Food Banks</button>
+                <div style="position: relative;">
+                    <button class="mobile-lang-btn-home" onclick="toggleMobileLangMenu(event)">🌐 Languages</button>
+                    <div class="mobile-lang-dropdown" id="mobileLangMenu">
+                        <a href="#" onclick="changeLanguage('en')">English</a>
+                        <a href="#" onclick="changeLanguage('ta')">தமிழ் (Tamil)</a>
+                        <a href="#" onclick="changeLanguage('bn')">বাংলা (Bengali)</a>
+                        <a href="#" onclick="changeLanguage('tl')">Tagalog (Filipino)</a>
+                        <a href="#" onclick="changeLanguage('gu')">ગુજરાતી (Gujarati)</a>
+                        <a href="#" onclick="changeLanguage('ur')">اردو (Urdu)</a>
+                        <a href="#" onclick="changeLanguage('fa')">فارسی (Persian/Farsi)</a>
+                        <a href="#" onclick="changeLanguage('es')">Español (Spanish)</a>
+                        <a href="#" onclick="changeLanguage('fr')">Français (French)</a>
+                        <a href="#" onclick="changeLanguage('hi')">हिन्दी (Hindi)</a>
+                        <a href="#" onclick="changeLanguage('ar')">العربية (Arabic)</a>
+                        <a href="#" onclick="changeLanguage('zh-CN')">中文 (Chinese)</a>
+                    </div>
+                </div>
                 
                 <!-- DESKTOP NAV (show on desktop >768px) -->
                 <ul class="nav-links">
@@ -863,39 +922,35 @@
             document.body.style.overflow = '';
         }
         
-        // Show mobile buttons on small screens
-        function updateMobileButtons() {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileFoodBanksBtn = document.getElementById('mobileFoodBanksBtn');
-            const mobileLangBtn = document.getElementById('mobileLangBtn');
-            
-            if (window.innerWidth <= 768) {
-                mobileMenuBtn.style.display = 'flex';
-                mobileFoodBanksBtn.style.display = 'block';
-                mobileLangBtn.style.display = 'block';
-            } else {
-                mobileMenuBtn.style.display = 'none';
-                mobileFoodBanksBtn.style.display = 'none';
-                mobileLangBtn.style.display = 'none';
-            }
+        // Mobile language dropdown toggle
+        function toggleMobileLangMenu(event) {
+            event.stopPropagation();
+            const menu = document.getElementById('mobileLangMenu');
+            menu.classList.toggle('show');
         }
         
-        window.addEventListener('resize', updateMobileButtons);
-        window.addEventListener('load', updateMobileButtons);
-        
-        // Desktop Language dropdown toggle
+        // Desktop language dropdown toggle
         function toggleLanguageMenu(event) {
             event.preventDefault();
+            event.stopPropagation();
             const menu = document.getElementById('languageMenu');
             menu.classList.toggle('show');
         }
 
-        // Close dropdown when clicking outside
+        // Close dropdowns when clicking outside
         document.addEventListener('click', function(event) {
+            const mobileLangMenu = document.getElementById('mobileLangMenu');
+            const desktopLangMenu = document.getElementById('languageMenu');
+            
+            // Close mobile dropdown if clicking outside
+            if (mobileLangMenu && !event.target.closest('.mobile-lang-btn-home') && !mobileLangMenu.contains(event.target)) {
+                mobileLangMenu.classList.remove('show');
+            }
+            
+            // Close desktop dropdown if clicking outside
             const dropdown = document.querySelector('.language-dropdown');
-            const menu = document.getElementById('languageMenu');
-            if (dropdown && !dropdown.contains(event.target) && menu) {
-                menu.classList.remove('show');
+            if (dropdown && !dropdown.contains(event.target) && desktopLangMenu) {
+                desktopLangMenu.classList.remove('show');
             }
         });
 
@@ -903,9 +958,11 @@
         function changeLanguage(langCode) {
             console.log('Translating to:', langCode);
             
-            // Close dropdown
-            const menu = document.getElementById('languageMenu');
-            if (menu) menu.classList.remove('show');
+            // Close both dropdowns
+            const mobileLangMenu = document.getElementById('mobileLangMenu');
+            const desktopLangMenu = document.getElementById('languageMenu');
+            if (mobileLangMenu) mobileLangMenu.classList.remove('show');
+            if (desktopLangMenu) desktopLangMenu.classList.remove('show');
             
             if (langCode === 'en') {
                 window.location.href = window.location.pathname + window.location.hash;
