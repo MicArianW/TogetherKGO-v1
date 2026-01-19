@@ -578,11 +578,56 @@
             background: var(--light-blue);
             color: var(--primary-blue);
         }
+        
+        /* Mobile Language Dropdown */
+        .mobile-lang-dropdown {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: var(--white);
+            border: 2px solid #C8E6C9;
+            border-radius: 8px;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
+            min-width: 200px;
+            max-height: 400px;
+            overflow-y: auto;
+            z-index: 10000;
+        }
+        
+        .mobile-lang-dropdown.show {
+            display: block;
+        }
+        
+        .mobile-lang-dropdown a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border-bottom: 1px solid #E5E7EB;
+        }
+        
+        .mobile-lang-dropdown a:last-child {
+            border-bottom: none;
+        }
+        
+        .mobile-lang-dropdown a:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+        }
 
         /* Responsive */
         @media (max-width: 768px) {
+            .mobile-menu-btn,
+            .mobile-lang-btn-community {
+                display: block !important;
+            }
+            
             .mobile-menu-btn {
-                display: block;
+                display: flex !important;
             }
             
             .nav-links {
@@ -623,11 +668,27 @@
             
             <!-- Mobile Buttons (hidden on desktop) -->
             <div style="display: flex; gap: 0.75rem; align-items: center;">
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" style="display: none;" id="mobileMenuBtn">
+                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" id="mobileMenuBtn">
                     <span style="font-size: 1.2rem;">☰</span>
                     <span>Menu</span>
                 </button>
-                <button class="mobile-lang-btn-community" onclick="toggleFloatingLangMenu(event)" style="display: none;" id="mobileLangBtn">🌐 Languages</button>
+                <div style="position: relative;">
+                    <button class="mobile-lang-btn-community" onclick="toggleMobileLangDropdown(event)" id="mobileLangBtn">🌐 Languages</button>
+                    <div class="mobile-lang-dropdown" id="mobileLangDropdown">
+                        <a href="#" onclick="changeLanguage('en')">English</a>
+                        <a href="#" onclick="changeLanguage('ta')">தமிழ் (Tamil)</a>
+                        <a href="#" onclick="changeLanguage('bn')">বাংলা (Bengali)</a>
+                        <a href="#" onclick="changeLanguage('tl')">Tagalog (Filipino)</a>
+                        <a href="#" onclick="changeLanguage('gu')">ગુજરાતી (Gujarati)</a>
+                        <a href="#" onclick="changeLanguage('ur')">اردو (Urdu)</a>
+                        <a href="#" onclick="changeLanguage('fa')">فارسی (Persian/Farsi)</a>
+                        <a href="#" onclick="changeLanguage('es')">Español (Spanish)</a>
+                        <a href="#" onclick="changeLanguage('fr')">Français (French)</a>
+                        <a href="#" onclick="changeLanguage('hi')">हिन्दी (Hindi)</a>
+                        <a href="#" onclick="changeLanguage('ar')">العربية (Arabic)</a>
+                        <a href="#" onclick="changeLanguage('zh-CN')">中文 (Chinese)</a>
+                    </div>
+                </div>
             
                 <!-- Desktop Navigation (hidden on mobile) -->
                 <ul class="nav-links">
@@ -1013,21 +1074,22 @@
             document.body.style.overflow = '';
         }
         
-        // Show mobile buttons on small screens
-        function updateMobileButtons() {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileLangBtn = document.getElementById('mobileLangBtn');
-            if (window.innerWidth <= 768) {
-                mobileMenuBtn.style.display = 'flex';
-                mobileLangBtn.style.display = 'block';
-            } else {
-                mobileMenuBtn.style.display = 'none';
-                mobileLangBtn.style.display = 'none';
-            }
+        // Mobile language dropdown toggle
+        function toggleMobileLangDropdown(event) {
+            event.stopPropagation();
+            const dropdown = document.getElementById('mobileLangDropdown');
+            dropdown.classList.toggle('show');
         }
         
-        window.addEventListener('resize', updateMobileButtons);
-        window.addEventListener('load', updateMobileButtons);
+        // Close mobile language dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const mobileDropdown = document.getElementById('mobileLangDropdown');
+            const mobileLangBtn = document.getElementById('mobileLangBtn');
+            
+            if (mobileDropdown && !mobileDropdown.contains(event.target) && !mobileLangBtn.contains(event.target)) {
+                mobileDropdown.classList.remove('show');
+            }
+        });
         
         function toggleFloatingLangMenuCommunity(event) {
             event.stopPropagation();
@@ -1053,7 +1115,11 @@
         // Change language from nav dropdown
         function changeLanguage(langCode) {
             event.preventDefault();
-            document.getElementById('languageMenu').classList.remove('show');
+            // Close both desktop and mobile dropdowns
+            const langMenu = document.getElementById('languageMenu');
+            const mobileDropdown = document.getElementById('mobileLangDropdown');
+            if (langMenu) langMenu.classList.remove('show');
+            if (mobileDropdown) mobileDropdown.classList.remove('show');
             translateToLanguageCommunity(langCode);
         }
 
