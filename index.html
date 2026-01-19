@@ -600,6 +600,25 @@
                     <li><a href="food-banks.html">Find Food Banks</a></li>
                     <li><a href="community.html">Community Board</a></li>
                     <li><a href="resources.html">Resources</a></li>
+                    <li class="language-dropdown">
+                        <a href="#" class="language-btn" onclick="toggleLanguageMenu(event)">
+                            🌐 Languages
+                        </a>
+                        <div class="language-menu" id="languageMenu">
+                            <a href="#" onclick="changeLanguage('en')">English</a>
+                            <a href="#" onclick="changeLanguage('ta')">தமிழ் (Tamil)</a>
+                            <a href="#" onclick="changeLanguage('bn')">বাংলা (Bengali)</a>
+                            <a href="#" onclick="changeLanguage('tl')">Tagalog (Filipino)</a>
+                            <a href="#" onclick="changeLanguage('gu')">ગુજરાતી (Gujarati)</a>
+                            <a href="#" onclick="changeLanguage('ur')">اردو (Urdu)</a>
+                            <a href="#" onclick="changeLanguage('fa')">فارسی (Persian/Farsi)</a>
+                            <a href="#" onclick="changeLanguage('es')">Español (Spanish)</a>
+                            <a href="#" onclick="changeLanguage('fr')">Français (French)</a>
+                            <a href="#" onclick="changeLanguage('hi')">हिन्दी (Hindi)</a>
+                            <a href="#" onclick="changeLanguage('ar')">العربية (Arabic)</a>
+                            <a href="#" onclick="changeLanguage('zh-CN')">中文 (Chinese)</a>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>
@@ -712,7 +731,7 @@
             </div>
             <div class="footer-section">
                 <h3>Contact</h3>
-                <p>Email: <a href="mailto:info@togetherkgo.org">info@togetherkgo.org</a></p>
+                <p>Email: <a href="/cdn-cgi/l/email-protection#ec85828a83ac98838b899884899e878b83c2839e8b"><span class="__cf_email__" data-cfemail="85ecebe3eac5f1eae2e0f1ede0f7eee2eaabeaf7e2">[email&#160;protected]</span></a></p>
                 <p>Phone: (416) XXX-XXXX</p>
                 <p>Serving the KGO community</p>
             </div>
@@ -722,7 +741,43 @@
         </div>
     </footer>
 
-    <!-- Load app.js which includes the slide-out menu JavaScript -->
+    <!-- Load app.js for mobile navigation functionality -->
     <script src="assets/app.js"></script>
+    
+    <!-- Desktop Language dropdown toggle -->
+    <script>
+        function toggleLanguageMenu(event) {
+            event.preventDefault();
+            const menu = document.getElementById('languageMenu');
+            menu.classList.toggle('show');
+        }
+
+        // Close dropdown when clicking outside
+        document.addEventListener('click', function(event) {
+            const dropdown = document.querySelector('.language-dropdown');
+            const menu = document.getElementById('languageMenu');
+            if (dropdown && !dropdown.contains(event.target) && menu) {
+                menu.classList.remove('show');
+            }
+        });
+
+        // Change language function
+        function changeLanguage(langCode) {
+            console.log('Translating to:', langCode);
+            
+            // Close dropdown
+            const menu = document.getElementById('languageMenu');
+            if (menu) menu.classList.remove('show');
+            
+            if (langCode === 'en') {
+                window.location.href = window.location.pathname + window.location.hash;
+            } else {
+                const currentUrl = window.location.href;
+                const cleanUrl = currentUrl.split('#')[0].split('?')[0];
+                const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${langCode}&u=${encodeURIComponent(cleanUrl)}`;
+                window.location.href = translateUrl;
+            }
+        }
+    </script>
 </body>
 </html>
