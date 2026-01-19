@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TogetherKGO - Community Food Resources</title>
-    <link rel="stylesheet" href="assets/styles.css">
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
     <style>
         /* Very Light Blue Color Scheme - Soft and Airy */
@@ -89,9 +88,54 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
 
-        /* Language Dropdown */
+        /* Language Dropdown - Desktop */
         .language-dropdown {
             position: relative;
+        }
+
+        .language-menu {
+            display: none;
+            position: absolute;
+            top: 100%;
+            right: 0;
+            margin-top: 0.5rem;
+            background: var(--white);
+            border: 2px solid #C8E6C9;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+            min-width: 200px;
+            z-index: 1000;
+        }
+
+        .language-menu.show {
+            display: block;
+        }
+
+        .language-menu a {
+            display: block;
+            padding: 0.75rem 1.25rem;
+            color: var(--text-dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.2s;
+            border: none;
+            box-shadow: none;
+            border-radius: 0;
+        }
+
+        .language-menu a:first-child {
+            border-radius: 6px 6px 0 0;
+        }
+
+        .language-menu a:last-child {
+            border-radius: 0 0 6px 6px;
+        }
+
+        .language-menu a:hover {
+            background: var(--light-blue);
+            color: var(--primary-blue);
+            transform: none;
+            box-shadow: none;
         }
 
         /* Hide Google Translate branding */
@@ -103,15 +147,7 @@
             top: 0px !important;
         }
 
-        .goog-te-gadget {
-            color: transparent !important;
-        }
-
-        .goog-te-gadget .goog-te-combo {
-            margin: 0 !important;
-        }
-
-        /* Hero Section - Very Light Blue */
+        /* Hero Section */
         .hero {
             background: linear-gradient(135deg, var(--sky-blue) 0%, var(--light-blue) 100%);
             display: grid;
@@ -121,7 +157,6 @@
             overflow: hidden;
         }
 
-        /* Decorative wave border at bottom */
         .hero::after {
             content: '';
             position: absolute;
@@ -141,15 +176,6 @@
             position: relative;
             z-index: 2;
             max-width: 700px;
-        }
-
-        .hero-label {
-            font-family: 'Brush Script MT', cursive, 'Segoe Script', cursive;
-            font-size: 3rem;
-            color: var(--primary-blue);
-            margin-bottom: 1rem;
-            font-weight: normal;
-            font-style: italic;
         }
 
         .hero-title {
@@ -209,21 +235,6 @@
             height: 100%;
             object-fit: cover;
             object-position: center;
-        }
-
-        /* Vertical text on left edge */
-        .hero-vertical-text {
-            position: absolute;
-            left: 20px;
-            top: 50%;
-            transform: translateY(-50%) rotate(-90deg);
-            transform-origin: center;
-            font-size: 1rem;
-            color: var(--primary-blue);
-            font-weight: 600;
-            letter-spacing: 3px;
-            white-space: nowrap;
-            text-transform: uppercase;
         }
 
         /* Features Section */
@@ -295,7 +306,7 @@
             font-size: 1.05rem;
         }
 
-        /* Community Impact Section */
+        /* Impact Section */
         .impact {
             padding: 5rem 2rem;
             background: var(--pale-blue);
@@ -489,10 +500,6 @@
                 max-width: 100%;
             }
 
-            .hero-label {
-                font-size: 2rem;
-            }
-
             .hero-title {
                 font-size: 3.5rem;
             }
@@ -509,10 +516,6 @@
                 min-height: 400px;
             }
 
-            .hero-vertical-text {
-                display: none;
-            }
-
             .section-title {
                 font-size: 2rem;
             }
@@ -521,10 +524,48 @@
                 font-size: 2rem;
             }
         }
+        
+        /* Mobile Menu Styles */
+        .mobile-menu-btn,
+        .mobile-food-banks-btn,
+        .mobile-lang-btn-home {
+            display: none;
+            background: var(--white);
+            border: 2px solid #C8E6C9;
+            border-radius: 8px;
+            padding: 0.5rem 1rem;
+            font-size: 1rem;
+            cursor: pointer;
+            color: var(--text-dark);
+            font-weight: 700;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .mobile-menu-btn:hover,
+        .mobile-food-banks-btn:hover,
+        .mobile-lang-btn-home:hover {
+            color: var(--primary-blue);
+            border-color: var(--primary-blue);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
 
         @media (max-width: 640px) {
             .nav-links {
                 display: none !important;
+            }
+            
+            .mobile-menu-btn,
+            .mobile-food-banks-btn,
+            .mobile-lang-btn-home {
+                display: block;
+            }
+            
+            .mobile-menu-btn {
+                display: flex;
+                align-items: center;
+                gap: 0.5rem;
             }
 
             .hero-content {
@@ -532,52 +573,39 @@
             }
 
             .hero-title {
-                font-size: 2rem;
+                font-size: 2.5rem;
             }
         }
     </style>
+    <!-- IMPORTANT: Load styles.css for the mobile slide-out menu styling -->
+    <link rel="stylesheet" href="assets/styles.css">
 </head>
 <body>
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
             <a href="index.html" class="logo">TogetherKGO</a>
-            
-            <!-- Mobile Buttons (will be shown on mobile by CSS from styles.css) -->
-            <div class="mobile-buttons">
-                <!-- Menu Button -->
-                <button class="mobile-menu-btn" aria-label="Open menu">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
+            <div style="display: flex; gap: 0.75rem; align-items: center; flex-wrap: wrap; justify-content: flex-end;">
+                <!-- MOBILE BUTTONS (Only show on mobile < 640px) -->
+                <button class="mobile-menu-btn" aria-label="Menu">
+                    <span style="font-size: 1.2rem;">☰</span>
                     <span>Menu</span>
                 </button>
-
-                <!-- Find Food Banks Button (visible on mobile) -->
-                <a href="food-banks.html" class="chip" style="text-decoration: none;">
-                    Find Food Banks
-                </a>
-
-                <!-- Language Button -->
-                <button class="language-btn" aria-label="Change language">
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
-                    </svg>
-                    <span>Languages</span>
-                </button>
+                <button class="mobile-food-banks-btn" onclick="window.location.href='food-banks.html'">Find Food Banks</button>
+                <button class="mobile-lang-btn-home language-btn" aria-label="Languages">🌐 Languages</button>
+                
+                <!-- DESKTOP NAV (Only show on desktop > 640px) -->
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="food-banks.html">Find Food Banks</a></li>
+                    <li><a href="community.html">Community Board</a></li>
+                    <li><a href="resources.html">Resources</a></li>
+                </ul>
             </div>
-            
-            <!-- Desktop Navigation -->
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="food-banks.html">Find Food Banks</a></li>
-                <li><a href="community.html">Community</a></li>
-                <li><a href="resources.html">Resources</a></li>
-            </ul>
         </div>
     </nav>
 
-    <!-- Hero Section - Very Light Blue -->
+    <!-- Hero Section -->
     <section class="hero">
         <div class="hero-content">
             <h1 class="hero-title">
@@ -694,7 +722,7 @@
         </div>
     </footer>
 
-    <!-- Load the app.js file which now includes mobile navigation -->
+    <!-- Load app.js which includes the slide-out menu JavaScript -->
     <script src="assets/app.js"></script>
 </body>
 </html>
