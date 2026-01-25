@@ -49,20 +49,25 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: nowrap;
         }
 
         .logo {
-            font-size: 1.5rem;
+            font-size: 2rem;
             font-weight: bold;
             color: var(--primary-blue);
             text-decoration: none;
+            flex-shrink: 0;
+            margin-right: 2rem;
         }
 
         .nav-links {
             display: flex;
-            gap: 2rem;
+            gap: 1rem;
             list-style: none;
             margin-left: auto;
+            flex-wrap: wrap;
+            justify-content: flex-end;
         }
 
         .nav-links a {
@@ -83,6 +88,49 @@
             border-color: var(--primary-blue);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+        
+        /* Hide Google Translate branding and banner */
+        .goog-te-banner-frame.skiptranslate {
+            display: none !important;
+        }
+        
+        .goog-te-banner-frame {
+            display: none !important;
+        }
+        
+        #goog-gt-tt {
+            display: none !important;
+        }
+        
+        .goog-te-balloon-frame {
+            display: none !important;
+        }
+        
+        .goog-tooltip {
+            display: none !important;
+        }
+        
+        .goog-tooltip:hover {
+            display: none !important;
+        }
+        
+        .goog-text-highlight {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+        
+        /* Hide the top notification bar */
+        div[style*="position: fixed"][style*="z-index: 2147483647"] {
+            display: none !important;
+        }
+        
+        iframe.goog-te-banner-frame {
+            display: none !important;
+        }
+        
+        .goog-te-spinner-pos {
+            display: none !important;
         }
 
         /* Home Dropdown with Hover */
@@ -465,7 +513,12 @@
         }
         
         /* Mobile Menu Styles */
-        .mobile-menu-btn {
+        .mobile-buttons-wrapper {
+            display: none; /* Hidden on desktop by default */
+        }
+        
+        .mobile-menu-btn,
+        .mobile-lang-btn-community {
             display: none;
             background: var(--white);
             border: 2px solid #C8E6C9;
@@ -477,32 +530,14 @@
             font-weight: 700;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             transition: all 0.3s;
-            display: flex;
+        }
+        
+        .mobile-menu-btn {
             align-items: center;
             gap: 0.5rem;
         }
         
-        .mobile-menu-btn:hover {
-            color: var(--primary-blue);
-            border-color: var(--primary-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .mobile-lang-btn-community {
-            background: var(--white);
-            border: 2px solid #C8E6C9;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            cursor: pointer;
-            color: var(--text-dark);
-            font-weight: 700;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-            position: static !important;
-        }
-        
+        .mobile-menu-btn:hover,
         .mobile-lang-btn-community:hover {
             color: var(--primary-blue);
             border-color: var(--primary-blue);
@@ -620,7 +655,55 @@
         }
 
         /* Responsive */
+        @media (max-width: 1200px) {
+            .nav-links {
+                gap: 0.75rem;
+            }
+            
+            .nav-links a {
+                padding: 0.6rem 1.2rem;
+                font-size: 0.95rem;
+            }
+        }
+
+        @media (max-width: 968px) {
+            .nav-container {
+                flex-wrap: wrap;
+            }
+            
+            .logo {
+                flex: 0 0 auto;
+            }
+            
+            .nav-links {
+                flex: 1 1 100%;
+                justify-content: center;
+                gap: 0.5rem;
+                margin-top: 1rem;
+            }
+            
+            .nav-links a {
+                padding: 0.5rem 0.9rem;
+                font-size: 0.9rem;
+            }
+        }
+        
         @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+                margin-right: 0;
+            }
+            
+            .mobile-buttons-wrapper {
+                display: flex !important; /* Show on mobile */
+            }
+            
             .mobile-menu-btn,
             .mobile-lang-btn-community {
                 display: block !important;
@@ -641,14 +724,6 @@
             .mobile-nav-menu {
                 display: block;
             }
-            .nav-links {
-                gap: 1rem;
-                font-size: 0.9rem;
-            }
-
-            .nav-links a {
-                padding: 0.5rem 1rem;
-            }
 
             .page-header h1 {
                 font-size: 2rem;
@@ -667,7 +742,7 @@
             <a href="index.html" class="logo">TogetherKGO</a>
             
             <!-- Mobile Buttons (hidden on desktop) -->
-            <div style="display: flex; gap: 0.75rem; align-items: center;">
+            <div class="mobile-buttons-wrapper" style="display: flex; gap: 0.75rem; align-items: center;">
                 <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" id="mobileMenuBtn">
                     <span style="font-size: 1.2rem;">☰</span>
                     <span>Menu</span>
