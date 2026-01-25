@@ -142,13 +142,52 @@
             box-shadow: none;
         }
 
-        /* Hide Google Translate branding */
+        /* Hide Google Translate branding and banner */
         .goog-te-banner-frame.skiptranslate {
             display: none !important;
         }
-
+        
         body {
             top: 0px !important;
+        }
+        
+        .goog-te-banner-frame {
+            display: none !important;
+        }
+        
+        #goog-gt-tt {
+            display: none !important;
+        }
+        
+        .goog-te-balloon-frame {
+            display: none !important;
+        }
+        
+        .goog-tooltip {
+            display: none !important;
+        }
+        
+        .goog-tooltip:hover {
+            display: none !important;
+        }
+        
+        .goog-text-highlight {
+            background-color: transparent !important;
+            box-shadow: none !important;
+        }
+        
+        /* Hide the top notification bar */
+        div[style*="position: fixed"][style*="z-index: 2147483647"] {
+            display: none !important;
+        }
+        
+        /* Additional Google Translate elements to hide */
+        iframe.goog-te-banner-frame {
+            display: none !important;
+        }
+        
+        .goog-te-spinner-pos {
+            display: none !important;
         }
 
         /* Hero Section */
@@ -455,7 +494,6 @@
 
         /* Mobile Menu Styles */
         .mobile-menu-btn,
-        .mobile-food-banks-btn,
         .mobile-lang-btn-home {
             display: none;
             background: var(--white);
@@ -476,7 +514,6 @@
         }
         
         .mobile-menu-btn:hover,
-        .mobile-food-banks-btn:hover,
         .mobile-lang-btn-home:hover {
             color: var(--primary-blue);
             border-color: var(--primary-blue);
@@ -687,12 +724,22 @@
         }
         
         @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 1rem;
+            }
+            
+            .logo {
+                font-size: 1.5rem;
+                margin-right: 0;
+            }
+            
             .nav-links {
                 display: none !important;
             }
             
             .mobile-menu-btn,
-            .mobile-food-banks-btn,
             .mobile-lang-btn-home {
                 display: block !important;
             }
@@ -722,7 +769,6 @@
                     <span style="font-size: 1.2rem;">☰</span>
                     <span>Menu</span>
                 </button>
-                <button class="mobile-food-banks-btn" onclick="window.location.href='food-banks.html'">Find Food Banks</button>
                 <div style="position: relative;">
                     <button class="mobile-lang-btn-home" onclick="toggleMobileLangMenu(event)">🌐 Languages</button>
                     <div class="mobile-lang-dropdown" id="mobileLangMenu">
@@ -893,7 +939,7 @@
             </div>
             <div class="footer-section">
                 <h3>Contact</h3>
-                <p>Email: <a href="mailto:info@togetherkgo.org">info@togetherkgo.org</a></p>
+                <p>Email: <a href="/cdn-cgi/l/email-protection#0a63646c654a7e656d6f7e626f78616d652465786d"><span class="__cf_email__" data-cfemail="6f060109002f1b00080a1b070a1d04080041001d08">[email&#160;protected]</span></a></p>
                 <p>Phone: (416) XXX-XXXX</p>
                 <p>Serving the KGO community</p>
             </div>
@@ -904,7 +950,7 @@
     </footer>
     
     <!-- JavaScript for Mobile Navigation and Language -->
-    <script>
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
         // Mobile menu functions
         function toggleMobileMenu() {
             const overlay = document.getElementById('mobileNavOverlay');
