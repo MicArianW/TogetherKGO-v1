@@ -758,6 +758,71 @@
             }
         }
     </style>
+    <script>
+        // AGGRESSIVE Google Translate Banner Removal
+        (function() {
+            'use strict';
+            
+            function removeGoogleTranslateUI() {
+                // Remove all Google Translate iframes
+                const iframes = document.querySelectorAll('iframe.goog-te-banner-frame, iframe.skiptranslate, iframe[id^="goog-gt-"]');
+                iframes.forEach(iframe => iframe.remove());
+                
+                // Remove top banner divs
+                const banners = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate, #goog-gt-tt');
+                banners.forEach(banner => banner.remove());
+                
+                // Reset body styling
+                document.body.style.top = '0px';
+                document.body.style.position = 'static';
+                
+                // Remove high z-index fixed elements
+                const fixedElements = document.querySelectorAll('div[style*="position: fixed"]');
+                fixedElements.forEach(el => {
+                    const zIndex = window.getComputedStyle(el).zIndex;
+                    if (zIndex > 1000000) el.remove();
+                });
+            }
+            
+            // Run multiple times
+            removeGoogleTranslateUI();
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', removeGoogleTranslateUI);
+            }
+            window.addEventListener('load', removeGoogleTranslateUI);
+            
+            // Watch for new elements
+            const observer = new MutationObserver(function(mutations) {
+                mutations.forEach(function(mutation) {
+                    mutation.addedNodes.forEach(function(node) {
+                        if (node.nodeType === 1) {
+                            if (node.classList && (
+                                node.classList.contains('goog-te-banner-frame') ||
+                                node.classList.contains('skiptranslate') ||
+                                node.id === 'goog-gt-tt'
+                            )) {
+                                node.remove();
+                            }
+                            if (node.tagName === 'IFRAME' && 
+                                (node.className.includes('goog-te') || node.id.includes('goog-gt'))) {
+                                node.remove();
+                            }
+                        }
+                    });
+                });
+            });
+            
+            observer.observe(document.body, { childList: true, subtree: true });
+            
+            // Continuous removal for first 5 seconds
+            let checkCount = 0;
+            const interval = setInterval(function() {
+                removeGoogleTranslateUI();
+                checkCount++;
+                if (checkCount > 50) clearInterval(interval);
+            }, 100);
+        })();
+    </script>
 </head>
 <body>
     <!-- Navigation -->
@@ -1001,6 +1066,31 @@
             }
         });
 
+        // Clear Google Translate cookies
+        function clearGoogleTranslateCookies() {
+            // Clear all Google Translate related cookies
+            const cookies = document.cookie.split(';');
+            cookies.forEach(cookie => {
+                const name = cookie.split('=')[0].trim();
+                if (name.includes('googtrans') || name.includes('_ga') || name.includes('_gid')) {
+                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.translate.google.com;';
+                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname + ';';
+                }
+            });
+        }
+        
+        // Force English on page load (unless we're actively translating)
+        window.addEventListener('load', function() {
+            // Check if we're on a translated page
+            const isTranslated = window.location.href.includes('translate.google.com');
+            
+            if (!isTranslated) {
+                // Clear cookies to force English
+                clearGoogleTranslateCookies();
+            }
+        });
+        
         // Change language function
         function changeLanguage(langCode) {
             console.log('Translating to:', langCode);
@@ -1012,11 +1102,23 @@
             if (desktopLangMenu) desktopLangMenu.classList.remove('show');
             
             if (langCode === 'en') {
-                window.location.href = window.location.pathname + window.location.hash;
+                // Clear all Google Translate cookies
+                clearGoogleTranslateCookies();
+                
+                // Force reload to original page (without translate.google.com)
+                const currentPath = window.location.pathname;
+                window.location.href = window.location.origin + currentPath;
             } else {
+                // Clear cookies first
+                clearGoogleTranslateCookies();
+                
+                // Then redirect to translated version
                 const currentUrl = window.location.href;
                 const cleanUrl = currentUrl.split('#')[0].split('?')[0];
-                const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${langCode}&u=${encodeURIComponent(cleanUrl)}`;
+                // Remove translate.google.com if already present
+                const originalUrl = cleanUrl.replace(/https?:\/\/translate\.google\.com\/translate\?.*?u=/, '').replace(/%2F/g, '/').replace(/%3A/g, ':');
+                const baseUrl = originalUrl.includes('http') ? originalUrl : cleanUrl;
+                const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${langCode}&u=${encodeURIComponent(baseUrl)}`;
                 window.location.href = translateUrl;
             }
         }
