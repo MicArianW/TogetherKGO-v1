@@ -90,46 +90,51 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
         }
         
-        /* Hide Google Translate branding and banner */
-        .goog-te-banner-frame.skiptranslate {
+        /* Hide Google Translate branding and banner - COMPREHENSIVE */
+        .goog-te-banner-frame,
+        .goog-te-banner-frame.skiptranslate,
+        #goog-gt-tt,
+        .goog-te-balloon-frame,
+        .goog-tooltip,
+        .goog-te-spinner-pos,
+        .goog-te-ftab,
+        .goog-te-menu-value span,
+        div#goog-gt-,
+        .goog-te-gadget,
+        .goog-te-combo {
+            display: none !important;
+            visibility: hidden !important;
+            opacity: 0 !important;
+            height: 0 !important;
+            max-height: 0 !important;
+            overflow: hidden !important;
+        }
+        
+        /* Hide the white notification bar at top */
+        body > .skiptranslate {
             display: none !important;
         }
         
-        .goog-te-banner-frame {
+        /* Hide top frame */
+        body > iframe.goog-te-banner-frame {
             display: none !important;
         }
         
-        #goog-gt-tt {
-            display: none !important;
+        /* Prevent body shifting */
+        body {
+            top: 0px !important;
+            position: static !important;
         }
         
-        .goog-te-balloon-frame {
-            display: none !important;
-        }
-        
-        .goog-tooltip {
-            display: none !important;
-        }
-        
-        .goog-tooltip:hover {
-            display: none !important;
-        }
-        
+        /* Hide tooltips and highlights */
         .goog-text-highlight {
             background-color: transparent !important;
             box-shadow: none !important;
         }
         
-        /* Hide the top notification bar */
-        div[style*="position: fixed"][style*="z-index: 2147483647"] {
-            display: none !important;
-        }
-        
-        iframe.goog-te-banner-frame {
-            display: none !important;
-        }
-        
-        .goog-te-spinner-pos {
+        /* Hide any fixed position divs from Google */
+        div[style*="position: fixed"][style*="z-index: 2147483647"],
+        div[style*="position: fixed"][style*="z-index: 999999"] {
             display: none !important;
         }
 
@@ -691,8 +696,9 @@
         @media (max-width: 768px) {
             .nav-container {
                 flex-direction: column;
-                align-items: flex-start;
+                align-items: center; /* Center everything on mobile */
                 gap: 1rem;
+                text-align: center;
             }
             
             .logo {
