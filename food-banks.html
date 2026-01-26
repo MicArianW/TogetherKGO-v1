@@ -438,16 +438,18 @@
             </div>
           </div>
 
-          <!-- RADIUS FEATURE COMMENTED OUT
+          <!-- RADIUS FEATURE COMMENTED OUT (UI Hidden, but field kept for JavaScript compatibility)
           <div>
             <label class="label" for="radius">Search Radius</label>
-            <select id="radius">
-              <option value="99999">All Locations</option>
+          -->
+            <select id="radius" style="display: none;">
+              <option value="99999" selected>All Locations</option>
               <option value="1000">Within 1 km</option>
               <option value="2000">Within 2 km</option>
               <option value="3000">Within 3 km</option>
               <option value="5000">Within 5 km</option>
             </select>
+          <!-- 
           </div>
           -->
 
