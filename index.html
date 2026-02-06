@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -839,7 +840,15 @@
                 });
             });
             
-            observer.observe(document.body, { childList: true, subtree: true });
+            function startObserver() {
+                if (!document.body) return;
+                observer.observe(document.body, { childList: true, subtree: true });
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', startObserver);
+            } else {
+                startObserver();
+            }
             
             // Continuous removal for first 5 seconds
             let checkCount = 0;
@@ -852,6 +861,7 @@
     </script>
 </head>
 <body>
+    <div id="google_translate_element" style="display:none;"></div>
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
@@ -1092,42 +1102,41 @@
         });
 
         // Google Translate Widget Functions
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en', autoDisplay: false },
+                'google_translate_element'
+            );
+        }
+
+        function setGoogTransCookie(lang) {
+            const value = `/en/${lang}`;
+            document.cookie = `googtrans=${value}; path=/`;
+            document.cookie = `googtrans=${value}; path=/; domain=${location.hostname}`;
+        }
+
         function changeLanguage(langCode) {
             console.log('Changing language to:', langCode);
-            
+
             // Close both dropdowns
             const mobileLangMenu = document.getElementById('mobileLangMenu');
             const desktopLangMenu = document.getElementById('languageMenu');
             if (mobileLangMenu) mobileLangMenu.classList.remove('show');
             if (desktopLangMenu) desktopLangMenu.classList.remove('show');
-            
+
             if (langCode === 'en') {
-                // Return to English - FIX: Just reload the original page
+                // Reset to English
                 clearGoogleTranslateCookies();
-                // Get the original page URL (without translate.google.com)
-                const currentPath = window.location.pathname;
-                window.location.href = window.location.origin + currentPath;
+                setGoogTransCookie('en');
             } else {
-                // Translate to selected language using URL redirect (THIS WORKS!)
-                clearGoogleTranslateCookies();
-                
-                // Get clean URL
-                const currentUrl = window.location.href;
-                const cleanUrl = currentUrl.split('#')[0].split('?')[0];
-                
-                // Remove translate.google.com if already present
-                const originalUrl = cleanUrl.replace(/https?:\/\/translate\.google\.com\/translate\?.*?u=/, '')
-                    .replace(/%2F/g, '/')
-                    .replace(/%3A/g, ':');
-                
-                const baseUrl = originalUrl.includes('http') ? originalUrl : cleanUrl;
-                
-                // Redirect to Google Translate
-                const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${langCode}&u=${encodeURIComponent(baseUrl)}`;
-                window.location.href = translateUrl;
+                // Translate in-page (no redirect to translate.google.com)
+                setGoogTransCookie(langCode);
             }
+
+            // Reload so translation applies cleanly without breaking the page
+            window.location.reload();
         }
-        
+
         // Clear Google Translate cookies
         function clearGoogleTranslateCookies() {
             const cookies = document.cookie.split(';');
@@ -1140,17 +1149,7 @@
                 }
             });
         }
-        
-        // FIX: Force English on every page load (unless actively on translated page)
-        window.addEventListener('load', function() {
-            // Check if we're on translate.google.com (actively translating)
-            const isTranslated = window.location.href.includes('translate.google.com');
-            
-            if (!isTranslated) {
-                // We're on the original site - force English by clearing cookies
-                clearGoogleTranslateCookies();
-            }
-        });
     </script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
