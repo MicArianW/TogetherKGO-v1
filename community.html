@@ -912,6 +912,15 @@
         <p>Stay updated with the latest news, events, and updates from food banks and community organizations in the KGO area.</p>
     </div>
 
+    <!-- Submit Community Update CTA -->
+    <div class="container" style="margin-bottom: 2rem;">
+        <div style="background: linear-gradient(135deg, #BAE6FD 0%, #E3F2FD 100%); padding: 24px; border-radius: 12px; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
+            <h3 style="margin: 0 0 12px 0; color: #1F2937;">Have an update to share?</h3>
+            <p style="margin: 0 0 16px 0; color: #6B7280;">Share updates about your services, special events, or important notices with the community.</p>
+            <a href="community-submit.html" style="display: inline-block; background: #BAE6FD; color: #1F2937; padding: 12px 32px; border-radius: 50px; text-decoration: none; font-weight: 700; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.15);" onmouseover="this.style.background='#7DBFE8'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#BAE6FD'; this.style.transform='translateY(0)'">Submit Community Update</a>
+        </div>
+    </div>
+
     <!-- Main Container -->
     <div class="container">
         <!-- Filters -->
@@ -1301,14 +1310,26 @@
         }
         
         // Trigger Google Translate widget
-        function triggerTranslation(langCode) {
+        function triggerTranslation(langCode, attempt = 0) {
             const selectElement = document.querySelector('.goog-te-combo');
+            
             if (selectElement) {
+                console.log('Widget found! Translating to:', langCode);
                 selectElement.value = langCode;
                 selectElement.dispatchEvent(new Event('change'));
+                
+                // Also trigger using native event
+                const event = new Event('change', { bubbles: true });
+                selectElement.dispatchEvent(event);
             } else {
-                // Widget not ready, wait and try again
-                setTimeout(() => triggerTranslation(langCode), 500);
+                // Widget not ready, wait and try again (max 10 attempts = 5 seconds)
+                if (attempt < 10) {
+                    console.log('Widget not ready, retrying...', attempt + 1);
+                    setTimeout(() => triggerTranslation(langCode, attempt + 1), 500);
+                } else {
+                    console.error('Google Translate widget failed to load');
+                    alert('Translation is loading. Please try again in a moment.');
+                }
             }
         }
         
