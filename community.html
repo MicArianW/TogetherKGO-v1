@@ -66,7 +66,7 @@
             gap: 1rem;
             list-style: none;
             margin-left: auto;
-            flex-wrap: wrap;
+            flex-wrap: nowrap;
             justify-content: flex-end;
         }
 
@@ -670,6 +670,17 @@
                 font-size: 0.95rem;
             }
         }
+        
+        @media (max-width: 1000px) {
+            .nav-links {
+                gap: 0.6rem;
+            }
+            
+            .nav-links a {
+                padding: 0.5rem 1rem;
+                font-size: 0.9rem;
+            }
+        }
 
         @media (max-width: 968px) {
             .nav-container {
@@ -805,8 +816,24 @@
             }, 100);
         })();
     </script>
+    
+    <!-- Google Translate Widget Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,ta,bn,tl,gu,ur,fa,es,fr,hi,ar,zh-CN',
+                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+    </script>
+    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
+    <!-- Hidden Google Translate Widget -->
+    <div id="google_translate_element" style="display:none;"></div>
+    
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
@@ -818,48 +845,30 @@
                     <span style="font-size: 1.2rem;">☰</span>
                     <span>Menu</span>
                 </button>
-                <div style="position: relative;">
-                    <button class="mobile-lang-btn-community" onclick="toggleMobileLangDropdown(event)" id="mobileLangBtn">🌐 Languages</button>
-                    <div class="mobile-lang-dropdown" id="mobileLangDropdown">
-                        <a href="#" onclick="changeLanguage('en')">English</a>
-                        <a href="#" onclick="changeLanguage('ta')">தமிழ் (Tamil)</a>
-                        <a href="#" onclick="changeLanguage('bn')">বাংলা (Bengali)</a>
-                        <a href="#" onclick="changeLanguage('tl')">Tagalog (Filipino)</a>
-                        <a href="#" onclick="changeLanguage('gu')">ગુજરાતી (Gujarati)</a>
-                        <a href="#" onclick="changeLanguage('ur')">اردو (Urdu)</a>
-                        <a href="#" onclick="changeLanguage('fa')">فارسی (Persian/Farsi)</a>
-                        <a href="#" onclick="changeLanguage('es')">Español (Spanish)</a>
-                        <a href="#" onclick="changeLanguage('fr')">Français (French)</a>
-                        <a href="#" onclick="changeLanguage('hi')">हिन्दी (Hindi)</a>
-                        <a href="#" onclick="changeLanguage('ar')">العربية (Arabic)</a>
-                        <a href="#" onclick="changeLanguage('zh-CN')">中文 (Chinese)</a>
-                    </div>
-                </div>
             
                 <!-- Desktop Navigation (hidden on mobile) -->
                 <ul class="nav-links">
                     <li><a href="index.html">Home</a></li>
                     <li><a href="food-banks.html">Find Food Banks</a></li>
-                    <li><a href="community.html">Community</a></li>
-                    <li><a href="community-submit.html">Submit Community Update</a></li>
+                    <li><a href="community.html">Community Board</a></li>
                     <li><a href="resources.html">Resources</a></li>
                     <li class="language-dropdown">
                         <a href="#" class="language-btn" onclick="toggleLanguageMenu(event)">
                             🌐 Languages
                         </a>
                         <div class="language-menu" id="languageMenu">
-                            <a href="#" onclick="changeLanguage('en')">English</a>
-                            <a href="#" onclick="changeLanguage('ta')">தமிழ் (Tamil)</a>
-                            <a href="#" onclick="changeLanguage('bn')">বাংলা (Bengali)</a>
-                            <a href="#" onclick="changeLanguage('tl')">Tagalog (Filipino)</a>
-                            <a href="#" onclick="changeLanguage('gu')">ગુજરાતી (Gujarati)</a>
-                            <a href="#" onclick="changeLanguage('ur')">اردو (Urdu)</a>
-                            <a href="#" onclick="changeLanguage('fa')">فارسی (Persian/Farsi)</a>
-                            <a href="#" onclick="changeLanguage('es')">Español (Spanish)</a>
-                            <a href="#" onclick="changeLanguage('fr')">Français (French)</a>
-                            <a href="#" onclick="changeLanguage('hi')">हिन्दी (Hindi)</a>
-                            <a href="#" onclick="changeLanguage('ar')">العربية (Arabic)</a>
-                            <a href="#" onclick="changeLanguage('zh-CN')">中文 (Chinese)</a>
+                            <a href="#" onclick="changeLanguage('en'); return false;">English</a>
+                            <a href="#" onclick="changeLanguage('ta'); return false;">தமிழ் (Tamil)</a>
+                            <a href="#" onclick="changeLanguage('bn'); return false;">বাংলা (Bengali)</a>
+                            <a href="#" onclick="changeLanguage('tl'); return false;">Tagalog (Filipino)</a>
+                            <a href="#" onclick="changeLanguage('gu'); return false;">ગુજરાતી (Gujarati)</a>
+                            <a href="#" onclick="changeLanguage('ur'); return false;">اردو (Urdu)</a>
+                            <a href="#" onclick="changeLanguage('fa'); return false;">فارسی (Persian/Farsi)</a>
+                            <a href="#" onclick="changeLanguage('es'); return false;">Español (Spanish)</a>
+                            <a href="#" onclick="changeLanguage('fr'); return false;">Français (French)</a>
+                            <a href="#" onclick="changeLanguage('hi'); return false;">हिन्दी (Hindi)</a>
+                            <a href="#" onclick="changeLanguage('ar'); return false;">العربية (Arabic)</a>
+                            <a href="#" onclick="changeLanguage('zh-CN'); return false;">中文 (Chinese)</a>
                         </div>
                     </li>
                 </ul>
@@ -877,9 +886,23 @@
         <ul class="mobile-nav-links">
             <li><a href="index.html" onclick="closeMobileMenu()">Home</a></li>
             <li><a href="food-banks.html" onclick="closeMobileMenu()">Find Food Banks</a></li>
-            <li><a href="community.html" onclick="closeMobileMenu()">Community</a></li>
-            <li><a href="community-submit.html" onclick="closeMobileMenu()">Submit Community Update</a></li>
+            <li><a href="community.html" onclick="closeMobileMenu()">Community Board</a></li>
             <li><a href="resources.html" onclick="closeMobileMenu()">Resources</a></li>
+            <li style="border-top: 2px solid #E5E7EB; margin-top: 1rem; padding-top: 1rem;">
+                <div style="padding: 0 1.5rem 0.5rem; font-weight: 700; color: var(--primary-blue); font-size: 0.9rem;">🌐 TRANSLATE PAGE</div>
+            </li>
+            <li><a href="#" onclick="changeLanguage('en'); closeMobileMenu(); return false;">English</a></li>
+            <li><a href="#" onclick="changeLanguage('ta'); closeMobileMenu(); return false;">தமிழ் (Tamil)</a></li>
+            <li><a href="#" onclick="changeLanguage('bn'); closeMobileMenu(); return false;">বাংলা (Bengali)</a></li>
+            <li><a href="#" onclick="changeLanguage('tl'); closeMobileMenu(); return false;">Tagalog</a></li>
+            <li><a href="#" onclick="changeLanguage('gu'); closeMobileMenu(); return false;">ગુજરાતી (Gujarati)</a></li>
+            <li><a href="#" onclick="changeLanguage('ur'); closeMobileMenu(); return false;">اردو (Urdu)</a></li>
+            <li><a href="#" onclick="changeLanguage('fa'); closeMobileMenu(); return false;">فارسی (Farsi)</a></li>
+            <li><a href="#" onclick="changeLanguage('es'); closeMobileMenu(); return false;">Español (Spanish)</a></li>
+            <li><a href="#" onclick="changeLanguage('fr'); closeMobileMenu(); return false;">Français (French)</a></li>
+            <li><a href="#" onclick="changeLanguage('hi'); closeMobileMenu(); return false;">हिन्दी (Hindi)</a></li>
+            <li><a href="#" onclick="changeLanguage('ar'); closeMobileMenu(); return false;">العربية (Arabic)</a></li>
+            <li><a href="#" onclick="changeLanguage('zh-CN'); closeMobileMenu(); return false;">中文 (Chinese)</a></li>
         </ul>
     </div>
     
@@ -921,13 +944,6 @@
                     </select>
                 </div>
             </div>
-        </div>
-
-        <!-- Submit Community Update CTA -->
-        <div style="background: linear-gradient(135deg, #BAE6FD 0%, #E3F2FD 100%); padding: 24px; border-radius: 12px; margin-bottom: 2rem; text-align: center; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
-            <h3 style="margin: 0 0 12px 0; color: #1F2937;">Have an update to share?</h3>
-            <p style="margin: 0 0 16px 0; color: #6B7280;">Share updates about your services, special events, or important notices with the community.</p>
-            <a href="community-submit.html" style="display: inline-block; background: #7DBFE8; color: white; padding: 12px 32px; border-radius: 50px; text-decoration: none; font-weight: 700; transition: all 0.3s; box-shadow: 0 2px 8px rgba(0,0,0,0.2);" onmouseover="this.style.background='#5BA3D0'; this.style.transform='translateY(-2px)'" onmouseout="this.style.background='#7DBFE8'; this.style.transform='translateY(0)'">Submit Community Update</a>
         </div>
 
         <!-- Loading State -->
@@ -1258,68 +1274,88 @@
             }
         });
 
-        // Change language from nav dropdown
+        // Google Translate Widget Functions
         function changeLanguage(langCode) {
-            event.preventDefault();
-            // Close both desktop and mobile dropdowns
+            console.log('Translating to:', langCode);
+            
+            // Close all dropdowns
             const langMenu = document.getElementById('languageMenu');
             const mobileDropdown = document.getElementById('mobileLangDropdown');
+            const floatingMenu = document.getElementById('floatingLangMenuCommunity');
             if (langMenu) langMenu.classList.remove('show');
             if (mobileDropdown) mobileDropdown.classList.remove('show');
-            translateToLanguageCommunity(langCode);
-        }
-
-        // Change language from floating button
-        function translatePageFloatingCommunity(langCode) {
-            event.preventDefault();
-            document.getElementById('floatingLangMenuCommunity').classList.remove('show');
-            translateToLanguageCommunity(langCode);
-        }
-
-        // Clear Google Translate cookies
-        function clearGoogleTranslateCookies() {
-            const cookies = document.cookie.split(';');
-            cookies.forEach(cookie => {
-                const name = cookie.split('=')[0].trim();
-                if (name.includes('googtrans') || name.includes('_ga') || name.includes('_gid')) {
-                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.translate.google.com;';
-                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname + ';';
-                }
-            });
+            if (floatingMenu) floatingMenu.classList.remove('show');
+            
+            if (langCode === 'en') {
+                // Return to English
+                restoreEnglish();
+            } else {
+                // Translate to selected language
+                triggerTranslation(langCode);
+            }
         }
         
-        // Force English on page load
+        // For floating button compatibility
+        function translatePageFloatingCommunity(langCode) {
+            changeLanguage(langCode);
+        }
+        
+        // Trigger Google Translate widget
+        function triggerTranslation(langCode) {
+            const selectElement = document.querySelector('.goog-te-combo');
+            if (selectElement) {
+                selectElement.value = langCode;
+                selectElement.dispatchEvent(new Event('change'));
+            } else {
+                // Widget not ready, wait and try again
+                setTimeout(() => triggerTranslation(langCode), 500);
+            }
+        }
+        
+        // Restore English
+        function restoreEnglish() {
+            const selectElement = document.querySelector('.goog-te-combo');
+            if (selectElement) {
+                selectElement.value = '';
+                selectElement.dispatchEvent(new Event('change'));
+            }
+            
+            // Clear translation cookies
+            document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+            document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname;
+            
+            // Reload page to ensure clean English
+            setTimeout(() => {
+                const hash = window.location.hash;
+                if (hash.includes('googtrans')) {
+                    window.location.hash = '';
+                    window.location.reload();
+                }
+            }, 100);
+        }
+        
+        // Force English on page load (unless actively translating this page)
         window.addEventListener('load', function() {
-            const isTranslated = window.location.href.includes('translate.google.com');
-            if (!isTranslated) {
-                clearGoogleTranslateCookies();
-                localStorage.removeItem('preferredLanguage');
+            // Check if there's an active translation cookie/hash
+            const hash = window.location.hash;
+            const cookie = document.cookie;
+            const isCurrentlyTranslating = hash.includes('googtrans') || cookie.includes('googtrans');
+            
+            if (!isCurrentlyTranslating) {
+                // Clear any lingering translation
+                document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname;
+                
+                // Reset widget to English
+                setTimeout(() => {
+                    const selectElement = document.querySelector('.goog-te-combo');
+                    if (selectElement && selectElement.value !== '') {
+                        selectElement.value = '';
+                        selectElement.dispatchEvent(new Event('change'));
+                    }
+                }, 500);
             }
         });
-        
-        // Translate page function
-        function translateToLanguageCommunity(langCode) {
-            if (langCode === 'en') {
-                // Clear cookies and localStorage
-                clearGoogleTranslateCookies();
-                localStorage.removeItem('preferredLanguage');
-                // Return to English
-                window.location.href = window.location.origin + window.location.pathname;
-            } else {
-                // Clear cookies first
-                clearGoogleTranslateCookies();
-                // Translate page
-                const currentUrl = window.location.href;
-                const cleanUrl = currentUrl.split('#')[0].split('?')[0];
-                const originalUrl = cleanUrl.replace(/https?:\/\/translate\.google\.com\/translate\?.*?u=/, '').replace(/%2F/g, '/').replace(/%3A/g, ':');
-                const baseUrl = originalUrl.includes('http') ? originalUrl : cleanUrl;
-                const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${langCode}&u=${encodeURIComponent(baseUrl)}`;
-                window.location.href = translateUrl;
-            }
-        }
-
-        // REMOVED: Auto-translate popup (forces English on every page load)
     </script>
 </body>
 </html>
