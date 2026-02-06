@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -805,7 +806,15 @@
                 });
             });
             
-            observer.observe(document.body, { childList: true, subtree: true });
+            function startObserver() {
+    if (!document.body) return;
+    observer.observe(document.body, { childList: true, subtree: true });
+}
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startObserver);
+} else {
+    startObserver();
+}
             
             // Continuous removal for first 5 seconds
             let checkCount = 0;
@@ -818,6 +827,7 @@
     </script>
 </head>
 <body>
+    <div id="google_translate_element" style="display:none;"></div>
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
@@ -1268,23 +1278,38 @@
         });
 
         // Translation Functions (URL Redirect Method - WORKS!)
-        function changeLanguage(langCode) {
-            console.log('Changing language to:', langCode);
-            
-            // Close all dropdowns
-            const langMenu = document.getElementById('languageMenu');
-            const mobileDropdown = document.getElementById('mobileLangDropdown');
-            const floatingMenu = document.getElementById('floatingLangMenuCommunity');
-            if (langMenu) langMenu.classList.remove('show');
-            if (mobileDropdown) mobileDropdown.classList.remove('show');
-            if (floatingMenu) floatingMenu.classList.remove('show');
-            
-            if (langCode === 'en') {
-                // Return to English - FIX: Just reload the original page
-                clearGoogleTranslateCookies();
-                const currentPath = window.location.pathname;
-                window.location.href = window.location.origin + currentPath;
-            } else {
+        function googleTranslateElementInit() {
+    new google.translate.TranslateElement(
+        { pageLanguage: 'en', autoDisplay: false },
+        'google_translate_element'
+    );
+}
+
+function setGoogTransCookie(lang) {
+    const value = `/en/${lang}`;
+    document.cookie = `googtrans=${value}; path=/`;
+    document.cookie = `googtrans=${value}; path=/; domain=${location.hostname}`;
+}
+
+function changeLanguage(langCode) {
+    console.log('Changing language to:', langCode);
+
+    const langMenu = document.getElementById('languageMenu');
+    const mobileDropdown = document.getElementById('mobileLangDropdown');
+    const floatingMenu = document.getElementById('floatingLangMenuCommunity');
+
+    if (langMenu) langMenu.classList.remove('show');
+    if (mobileDropdown) mobileDropdown.classList.remove('show');
+    if (floatingMenu) floatingMenu.classList.remove('show');
+
+    if (langCode === 'en') {
+        setGoogTransCookie('en');
+    } else {
+        setGoogTransCookie(langCode);
+    }
+
+    window.location.reload();
+} else {
                 // Translate to selected language using URL redirect (THIS WORKS!)
                 clearGoogleTranslateCookies();
                 
@@ -1318,12 +1343,14 @@
         }
         
         // FIX: Force English on every page load (unless actively on translated page)
-        window.addEventListener('load', function() {
+        // Removed force-English block
+// window.addEventListener('load', function() {
             const isTranslated = window.location.href.includes('translate.google.com');
             if (!isTranslated) {
                 clearGoogleTranslateCookies();
             }
         });
     </script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
