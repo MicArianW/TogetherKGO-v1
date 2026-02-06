@@ -816,24 +816,8 @@
             }, 100);
         })();
     </script>
-    
-    <!-- Google Translate Widget Script -->
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,ta,bn,tl,gu,ur,fa,es,fr,hi,ar,zh-CN',
-                layout: google.translate.TranslateElement.InlineLayout.SIMPLE,
-                autoDisplay: false
-            }, 'google_translate_element');
-        }
-    </script>
-    <script type="text/javascript" src="//translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </head>
 <body>
-    <!-- Hidden Google Translate Widget -->
-    <div id="google_translate_element" style="display:none;"></div>
-    
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
@@ -1283,9 +1267,9 @@
             }
         });
 
-        // Google Translate Widget Functions
+        // Translation Functions (URL Redirect Method - WORKS!)
         function changeLanguage(langCode) {
-            console.log('Translating to:', langCode);
+            console.log('Changing language to:', langCode);
             
             // Close all dropdowns
             const langMenu = document.getElementById('languageMenu');
@@ -1296,11 +1280,22 @@
             if (floatingMenu) floatingMenu.classList.remove('show');
             
             if (langCode === 'en') {
-                // Return to English
-                restoreEnglish();
+                // Return to English - FIX: Just reload the original page
+                clearGoogleTranslateCookies();
+                const currentPath = window.location.pathname;
+                window.location.href = window.location.origin + currentPath;
             } else {
-                // Translate to selected language
-                triggerTranslation(langCode);
+                // Translate to selected language using URL redirect (THIS WORKS!)
+                clearGoogleTranslateCookies();
+                
+                const currentUrl = window.location.href;
+                const cleanUrl = currentUrl.split('#')[0].split('?')[0];
+                const originalUrl = cleanUrl.replace(/https?:\/\/translate\.google\.com\/translate\?.*?u=/, '')
+                    .replace(/%2F/g, '/')
+                    .replace(/%3A/g, ':');
+                const baseUrl = originalUrl.includes('http') ? originalUrl : cleanUrl;
+                const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${langCode}&u=${encodeURIComponent(baseUrl)}`;
+                window.location.href = translateUrl;
             }
         }
         
@@ -1309,72 +1304,24 @@
             changeLanguage(langCode);
         }
         
-        // Trigger Google Translate widget
-        function triggerTranslation(langCode, attempt = 0) {
-            const selectElement = document.querySelector('.goog-te-combo');
-            
-            if (selectElement) {
-                console.log('Widget found! Translating to:', langCode);
-                selectElement.value = langCode;
-                selectElement.dispatchEvent(new Event('change'));
-                
-                // Also trigger using native event
-                const event = new Event('change', { bubbles: true });
-                selectElement.dispatchEvent(event);
-            } else {
-                // Widget not ready, wait and try again (max 10 attempts = 5 seconds)
-                if (attempt < 10) {
-                    console.log('Widget not ready, retrying...', attempt + 1);
-                    setTimeout(() => triggerTranslation(langCode, attempt + 1), 500);
-                } else {
-                    console.error('Google Translate widget failed to load');
-                    alert('Translation is loading. Please try again in a moment.');
+        // Clear Google Translate cookies
+        function clearGoogleTranslateCookies() {
+            const cookies = document.cookie.split(';');
+            cookies.forEach(cookie => {
+                const name = cookie.split('=')[0].trim();
+                if (name.includes('googtrans') || name.includes('_ga') || name.includes('_gid')) {
+                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.translate.google.com;';
+                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname + ';';
                 }
-            }
+            });
         }
         
-        // Restore English
-        function restoreEnglish() {
-            const selectElement = document.querySelector('.goog-te-combo');
-            if (selectElement) {
-                selectElement.value = '';
-                selectElement.dispatchEvent(new Event('change'));
-            }
-            
-            // Clear translation cookies
-            document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-            document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname;
-            
-            // Reload page to ensure clean English
-            setTimeout(() => {
-                const hash = window.location.hash;
-                if (hash.includes('googtrans')) {
-                    window.location.hash = '';
-                    window.location.reload();
-                }
-            }, 100);
-        }
-        
-        // Force English on page load (unless actively translating this page)
+        // FIX: Force English on every page load (unless actively on translated page)
         window.addEventListener('load', function() {
-            // Check if there's an active translation cookie/hash
-            const hash = window.location.hash;
-            const cookie = document.cookie;
-            const isCurrentlyTranslating = hash.includes('googtrans') || cookie.includes('googtrans');
-            
-            if (!isCurrentlyTranslating) {
-                // Clear any lingering translation
-                document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-                document.cookie = 'googtrans=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname;
-                
-                // Reset widget to English
-                setTimeout(() => {
-                    const selectElement = document.querySelector('.goog-te-combo');
-                    if (selectElement && selectElement.value !== '') {
-                        selectElement.value = '';
-                        selectElement.dispatchEvent(new Event('change'));
-                    }
-                }, 500);
+            const isTranslated = window.location.href.includes('translate.google.com');
+            if (!isTranslated) {
+                clearGoogleTranslateCookies();
             }
         });
     </script>
