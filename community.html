@@ -807,14 +807,14 @@
             });
             
             function startObserver() {
-    if (!document.body) return;
-    observer.observe(document.body, { childList: true, subtree: true });
-}
-if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', startObserver);
-} else {
-    startObserver();
-}
+                if (!document.body) return;
+                observer.observe(document.body, { childList: true, subtree: true });
+            }
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', startObserver);
+            } else {
+                startObserver();
+            }
             
             // Continuous removal for first 5 seconds
             let checkCount = 0;
@@ -1279,56 +1279,41 @@ if (document.readyState === 'loading') {
 
         // Translation Functions (URL Redirect Method - WORKS!)
         function googleTranslateElementInit() {
-    new google.translate.TranslateElement(
-        { pageLanguage: 'en', autoDisplay: false },
-        'google_translate_element'
-    );
-}
-
-function setGoogTransCookie(lang) {
-    const value = `/en/${lang}`;
-    document.cookie = `googtrans=${value}; path=/`;
-    document.cookie = `googtrans=${value}; path=/; domain=${location.hostname}`;
-}
-
-// Translation Functions (IN-PAGE, NO REDIRECT)
-function changeLanguage(langCode) {
-    console.log('Changing language to:', langCode);
-
-    // Close all dropdowns (keep existing behavior)
-    const langMenu = document.getElementById('languageMenu');
-    const mobileDropdown = document.getElementById('mobileLangDropdown');
-    const floatingMenu = document.getElementById('floatingLangMenuCommunity');
-    if (langMenu) langMenu.classList.remove('show');
-    if (mobileDropdown) mobileDropdown.classList.remove('show');
-    if (floatingMenu) floatingMenu.classList.remove('show');
-
-    if (langCode === 'en') {
-        // Reset to English
-        if (typeof clearGoogleTranslateCookies === 'function') {
-            clearGoogleTranslateCookies();
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en', autoDisplay: false },
+                'google_translate_element'
+            );
         }
-        setGoogTransCookie('en');
-    } else {
-        setGoogTransCookie(langCode);
-    }
 
-    // Reload so translation applies cleanly without breaking the page
-    window.location.reload();
-}
-else {
-                // Translate to selected language using URL redirect (THIS WORKS!)
-                clearGoogleTranslateCookies();
-                
-                const currentUrl = window.location.href;
-                const cleanUrl = currentUrl.split('#')[0].split('?')[0];
-                const originalUrl = cleanUrl.replace(/https?:\/\/translate\.google\.com\/translate\?.*?u=/, '')
-                    .replace(/%2F/g, '/')
-                    .replace(/%3A/g, ':');
-                const baseUrl = originalUrl.includes('http') ? originalUrl : cleanUrl;
-                const translateUrl = `https://translate.google.com/translate?sl=auto&tl=${langCode}&u=${encodeURIComponent(baseUrl)}`;
-                window.location.href = translateUrl;
+        function setGoogTransCookie(lang) {
+            const value = `/en/${lang}`;
+            document.cookie = `googtrans=${value}; path=/`;
+            document.cookie = `googtrans=${value}; path=/; domain=${location.hostname}`;
+        }
+
+        // Translation Functions (IN-PAGE, NO REDIRECT)
+        function changeLanguage(langCode) {
+            console.log('Changing language to:', langCode);
+
+            // Close all dropdowns
+            const langMenu = document.getElementById('languageMenu');
+            const mobileDropdown = document.getElementById('mobileLangDropdown');
+            const floatingMenu = document.getElementById('floatingLangMenuCommunity');
+            if (langMenu) langMenu.classList.remove('show');
+            if (mobileDropdown) mobileDropdown.classList.remove('show');
+            if (floatingMenu) floatingMenu.classList.remove('show');
+
+            if (langCode === 'en') {
+                if (typeof clearGoogleTranslateCookies === 'function') {
+                    clearGoogleTranslateCookies();
+                }
+                setGoogTransCookie('en');
+            } else {
+                setGoogTransCookie(langCode);
             }
+
+            // Reload so translation applies cleanly without breaking the page
+            window.location.reload();
         }
         
         // For floating button compatibility
@@ -1348,7 +1333,9 @@ else {
                 }
             });
         }
-</script>
+        
+
+    </script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
