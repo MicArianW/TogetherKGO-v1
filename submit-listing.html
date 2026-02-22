@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Submit Your Listing - TogetherKGO</title>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <link rel="stylesheet" href="components/navbar.css">
     <style>
         /* Color Scheme */
         :root {
@@ -33,168 +34,6 @@
             background: var(--pale-blue);
         }
 
-        /* Navigation */
-        nav {
-            background: var(--white);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .logo {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--primary-blue);
-            text-decoration: none;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 2rem;
-            list-style: none;
-            margin-left: auto;
-        }
-
-        .nav-links a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            background: var(--white);
-            border: 2px solid var(--green-border);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-blue);
-            background: var(--white);
-            border-color: var(--primary-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Mobile Button */
-        .mobile-menu-btn {
-            display: none;
-            background: var(--white);
-            border: 2px solid var(--green-border);
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            cursor: pointer;
-            color: var(--text-dark);
-            font-weight: 700;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .mobile-menu-btn:hover {
-            color: var(--primary-blue);
-            border-color: var(--primary-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        /* Mobile Navigation Overlay */
-        .mobile-nav-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 9998;
-        }
-        
-        .mobile-nav-overlay.show {
-            display: block;
-        }
-        
-        /* Mobile Navigation Menu */
-        .mobile-nav-menu {
-            position: fixed;
-            top: 0;
-            left: -100%;
-            width: 280px;
-            height: 100%;
-            background: var(--white);
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            z-index: 9999;
-            transition: left 0.3s ease;
-            overflow-y: auto;
-        }
-        
-        .mobile-nav-menu.show {
-            left: 0;
-        }
-        
-        .mobile-nav-header {
-            padding: 1.5rem;
-            border-bottom: 1px solid #E5E7EB;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .mobile-close-btn {
-            background: none;
-            border: none;
-            font-size: 2rem;
-            color: var(--text-dark);
-            cursor: pointer;
-            padding: 0;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border-radius: 50%;
-            transition: background 0.2s;
-        }
-        
-        .mobile-close-btn:hover {
-            background: var(--light-blue);
-        }
-        
-        .mobile-nav-links {
-            list-style: none;
-            padding: 0;
-        }
-        
-        .mobile-nav-links li {
-            border-bottom: 1px solid #E5E7EB;
-        }
-        
-        .mobile-nav-links a {
-            display: block;
-            padding: 1.25rem 1.5rem;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        
-        .mobile-nav-links a:hover {
-            background: var(--light-blue);
-            color: var(--primary-blue);
-            padding-left: 2rem;
-        }
 
         /* Main Container */
         .main-container {
@@ -451,41 +290,18 @@
     </style>
 </head>
 <body>
+    <div id="google_translate_element" style="display:none;"></div>
     <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <a href="index.html" class="logo">TogetherKGO</a>
-            
-            <!-- Mobile Button (only visible on mobile ≤768px) -->
-            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" style="display: none;" id="mobileMenuBtn">
-                <span style="font-size: 1.2rem;">☰</span>
-                <span>Menu</span>
-            </button>
-            
-            <!-- Desktop Navigation (only visible on desktop >768px) -->
-            <ul class="nav-links">
-                <li><a href="index.html">Home</a></li>
-                <li><a href="food-banks.html">Find Food Banks</a></li>
-                <li><a href="community.html">Community Board</a></li>
-                <li><a href="resources.html">Resources</a></li>
-            </ul>
-        </div>
-    </nav>
-    
-    <!-- Mobile Navigation Menu (Slide-in from left) -->
-    <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
-    <div class="mobile-nav-menu" id="mobileNavMenu">
-        <div class="mobile-nav-header">
-            <a href="index.html" class="logo" style="color: var(--primary-blue); text-decoration: none; font-weight: bold; font-size: 1.5rem;">TogetherKGO</a>
-            <button class="mobile-close-btn" onclick="closeMobileMenu()" aria-label="Close">×</button>
-        </div>
-        <ul class="mobile-nav-links">
-            <li><a href="index.html" onclick="closeMobileMenu()">Home</a></li>
-            <li><a href="food-banks.html" onclick="closeMobileMenu()">Find Food Banks</a></li>
-            <li><a href="community.html" onclick="closeMobileMenu()">Community Board</a></li>
-            <li><a href="resources.html" onclick="closeMobileMenu()">Resources</a></li>
-        </ul>
-    </div>
+    <div id="navbar"></div>
+
+    <script>
+        fetch("components/navbar.html")
+        .then(response => response.text())
+        .then(data => {
+        document.getElementById("navbar").innerHTML = data;
+        })
+        .catch(error => console.error("Error loading navbar:", error));
+    </script>
 
     <!-- Main Content -->
     <div class="main-container">
@@ -761,5 +577,7 @@
             });
         });
     </script>
+    <script src="components/translation.js"></script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
 </body>
 </html>

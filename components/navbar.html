@@ -1,0 +1,78 @@
+<!-- Navbar Component -->
+<nav>
+    <div class="nav-container">
+        <a href="index.html" class="logo">TogetherKGO</a>
+        
+        <div class="mobile-buttons-wrapper" style="display: flex; gap: 0.75rem; align-items: center;">
+            <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" id="mobileMenuBtn">
+                <span style="font-size: 1.2rem;">☰</span>
+                <span>Menu</span>
+            </button>
+        
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="find-services.html">Find Services</a></li>
+                <li><a href="community.html">Community Board</a></li>
+                <li><a href="resources.html">Resources</a></li>
+                <li class="language-dropdown">
+                    <a href="#" class="language-btn" onclick="toggleLanguageMenu(event)">
+                        🌐 Languages
+                    </a>
+                    <div class="language-menu" id="languageMenu">
+                        <a href="#" onclick="changeLanguage('en'); return false;">English</a>
+                        <a href="#" onclick="changeLanguage('ta'); return false;">தமிழ்</a>
+                        <a href="#" onclick="changeLanguage('bn'); return false;">বাংলা</a>
+                        <a href="#" onclick="changeLanguage('tl'); return false;">Tagalog</a>
+                        <a href="#" onclick="changeLanguage('gu'); return false;">ગુજરાતી</a>
+                        <a href="#" onclick="changeLanguage('ur'); return false;">اردو</a>
+                        <a href="#" onclick="changeLanguage('fa'); return false;">فارسی</a>
+                        <a href="#" onclick="changeLanguage('es'); return false;">Español</a>
+                        <a href="#" onclick="changeLanguage('fr'); return false;">Français</a>
+                        <a href="#" onclick="changeLanguage('hi'); return false;">हिन्दी</a>
+                        <a href="#" onclick="changeLanguage('ar'); return false;">العربية</a>
+                        <a href="#" onclick="changeLanguage('zh-CN'); return false;">中文</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- Mobile Navigation Overlay -->
+<div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
+
+<!-- Mobile Navigation Menu -->
+<div class="mobile-nav-menu" id="mobileNavMenu">
+    <div class="mobile-nav-header">
+        <a href="index.html" class="logo" style="color: var(--primary-blue); text-decoration: none; font-weight: bold; font-size: 1.5rem;">
+            TogetherKGO
+        </a>
+        <button class="mobile-close-btn" onclick="closeMobileMenu()" aria-label="Close">×</button>
+    </div>
+
+    <ul class="mobile-nav-links">
+        <li><a href="index.html" onclick="closeMobileMenu()">Home</a></li>
+        <li><a href="find-services.html" onclick="closeMobileMenu()">Find Services</a></li>
+        <li><a href="community.html" onclick="closeMobileMenu()">Community Board</a></li>
+        <li><a href="resources.html" onclick="closeMobileMenu()">Resources</a></li>
+
+        <!-- Translation Section -->
+        <li style="border-top: 2px solid #E5E7EB; margin-top: 1rem; padding-top: 1rem;">
+            <div style="padding: 0 1.5rem 0.5rem; font-weight: 700; color: var(--primary-blue); font-size: 0.9rem;">
+                🌐 TRANSLATE PAGE
+            </div>
+        </li>
+        <li><a href="#" onclick="changeLanguage('en'); closeMobileMenu(); return false;">English</a></li>
+        <li><a href="#" onclick="changeLanguage('ta'); closeMobileMenu(); return false;">தமிழ் (Tamil)</a></li>
+        <li><a href="#" onclick="changeLanguage('bn'); closeMobileMenu(); return false;">বাংলা (Bengali)</a></li>
+        <li><a href="#" onclick="changeLanguage('tl'); closeMobileMenu(); return false;">Tagalog</a></li>
+        <li><a href="#" onclick="changeLanguage('gu'); closeMobileMenu(); return false;">ગુજરાતી (Gujarati)</a></li>
+        <li><a href="#" onclick="changeLanguage('ur'); closeMobileMenu(); return false;">اردو (Urdu)</a></li>
+        <li><a href="#" onclick="changeLanguage('fa'); closeMobileMenu(); return false;">فارسی (Farsi)</a></li>
+        <li><a href="#" onclick="changeLanguage('es'); closeMobileMenu(); return false;">Español (Spanish)</a></li>
+        <li><a href="#" onclick="changeLanguage('fr'); closeMobileMenu(); return false;">Français (French)</a></li>
+        <li><a href="#" onclick="changeLanguage('hi'); closeMobileMenu(); return false;">हिन्दी (Hindi)</a></li>
+        <li><a href="#" onclick="changeLanguage('ar'); closeMobileMenu(); return false;">العربية (Arabic)</a></li>
+        <li><a href="#" onclick="changeLanguage('zh-CN'); closeMobileMenu(); return false;">中文 (Chinese)</a></li>
+    </ul>
+</div>
