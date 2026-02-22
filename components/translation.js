@@ -76,10 +76,21 @@ function changeLanguage(langCode) {
     const mobileDropdown = document.getElementById('mobileLangDropdown');
     const floatingMenu = document.getElementById('floatingLangMenuCommunity');
 
+    // Close all menus
     if (langMenu) langMenu.classList.remove('show');
     if (mobileDropdown) mobileDropdown.classList.remove('show');
     if (floatingMenu) floatingMenu.classList.remove('show');
 
+    // Pages where translation is NOT supported
+    const unsupportedPages = ['/find-services.html']; // <-- put your page path(s) here
+
+    if (unsupportedPages.includes(window.location.pathname)) {
+        // Show message instead of translating
+        showTranslationNotSupported();
+        return; // Exit function early
+    }
+
+    // Proceed with translation normally
     if (langCode === 'en') {
         if (typeof clearGoogleTranslateCookies === 'function') {
             clearGoogleTranslateCookies();
@@ -108,4 +119,19 @@ function clearGoogleTranslateCookies() {
             document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname + ';';
         }
     });
+}
+
+// Function to show "Translation Not Supported" message
+function showTranslationNotSupported() {
+    const message = `
+Translation is not supported on this page.
+
+The interactive map requires the page to remain in English to function properly.
+
+For translated content, please visit:
+• Home page
+• Community page
+• Resources page
+`;
+    alert(message);
 }

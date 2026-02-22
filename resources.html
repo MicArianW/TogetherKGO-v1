@@ -1,1 +1,39 @@
 
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TogetherKGO – Food Resources</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="components/navbar.css"/>
+
+    <!-- Load config FIRST (this contains API KEY) -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="config.js"></script>
+
+  </head>
+
+  <body>
+    <!-- Navigation -->
+  <div id="navbar"></div>
+
+  <script>
+    fetch("components/navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    })
+    .catch(error => console.error("Error loading navbar:", error));
+  </script>
+
+  <p> This page is under construction! </p>
+
+    
+    <script src="components/translation.js"></script>
+    <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
+  </body>
+</html>

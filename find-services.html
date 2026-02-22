@@ -7,6 +7,7 @@
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="components/navbar.css"/>
 
     <!-- Load config FIRST (this contains API KEY) -->
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
@@ -15,391 +16,13 @@
     <!-- App scripts -->
     <script defer src="assets/i18n.js"></script>
     <script defer src="assets/app.js"></script>
-    
-    <style>
-      /* Navigation override to match home page */
-      .app-header {
-        background: #FFFFFF;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        padding: 1rem 2rem;
-        position: sticky;
-        top: 0;
-        z-index: 100;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      
-      .branding {
-        display: flex;
-        align-items: center;
-        gap: 1rem;
-      }
-      
-      .branding .logo {
-        font-size: 1.5rem;
-        color: #7DBFE8;
-        text-decoration: none;
-        font-weight: bold;
-      }
-      
-      .top-actions {
-        display: flex;
-        gap: 1rem;
-        align-items: center;
-      }
-      
-      /* Style nav links like home page */
-      .top-actions a.chip.ghost,
-      .top-actions button.chip.ghost,
-      .top-actions a.nav-link {
-        color: #1F2937;
-        text-decoration: none;
-        font-weight: 700;
-        transition: all 0.3s;
-        padding: 0.75rem 1.5rem;
-        border-radius: 8px;
-        background: #FFFFFF;
-        border: 2px solid #C8E6C9;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        cursor: pointer;
-        font-family: inherit;
-        font-size: 1rem;
-      }
-      
-      .top-actions a.chip.ghost:hover,
-      .top-actions button.chip.ghost:hover,
-      .top-actions a.nav-link:hover {
-        color: #7DBFE8;
-        border-color: #7DBFE8;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      }
-      
-      /* Inline Language Dropdown for food-banks page */
-      /* Home Dropdown with Hover */
-      .nav-dropdown-home-inline {
-        position: relative;
-        display: inline-block;
-      }
-      
-      /* Mobile Menu Styles */
-      .mobile-menu-btn {
-        display: none;
-        background: #FFFFFF;
-        border: 2px solid #C8E6C9;
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
-        cursor: pointer;
-        color: #1F2937;
-        font-weight: 700;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s;
-        display: flex;
-        align-items: center;
-        gap: 0.5rem;
-      }
-      
-      .mobile-menu-btn:hover {
-        color: #7DBFE8;
-        border-color: #7DBFE8;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      }
-      
-      .mobile-lang-btn {
-        background: #FFFFFF;
-        border: 2px solid #C8E6C9;
-        border-radius: 8px;
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
-        cursor: pointer;
-        color: #1F2937;
-        font-weight: 700;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        transition: all 0.3s;
-      }
-      
-      .mobile-lang-btn:hover {
-        color: #7DBFE8;
-        border-color: #7DBFE8;
-        transform: translateY(-2px);
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-      }
-      
-      .mobile-nav-overlay {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5);
-        z-index: 9998;
-      }
-      
-      .mobile-nav-menu {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: -300px;
-        width: 280px;
-        height: 100%;
-        background: #FFFFFF;
-        z-index: 9999;
-        transition: left 0.3s ease;
-        box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-        overflow-y: auto;
-      }
-      
-      .mobile-nav-menu.show {
-        left: 0;
-      }
-      
-      .mobile-nav-header {
-        padding: 1.5rem;
-        border-bottom: 2px solid #C8E6C9;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      
-      .mobile-nav-header .logo {
-        font-size: 1.5rem;
-        color: #7DBFE8;
-        font-weight: bold;
-        text-decoration: none;
-      }
-      
-      .mobile-close-btn {
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: #1F2937;
-      }
-      
-      .mobile-nav-links {
-        list-style: none;
-        padding: 0;
-        margin: 0;
-      }
-      
-      .mobile-nav-links li {
-        border-bottom: 1px solid #E5E7EB;
-      }
-      
-      .mobile-nav-links a {
-        display: block;
-        padding: 1rem 1.5rem;
-        color: #1F2937;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.2s;
-      }
-      
-      .mobile-nav-links a:hover {
-        background: #E3F2FD;
-        color: #7DBFE8;
-      }
-      
-      @media (max-width: 768px) {
-        .mobile-menu-btn {
-          display: block;
-        }
-        
-        .top-actions {
-          display: none !important;
-        }
-        
-        .mobile-nav-overlay.show {
-          display: block;
-        }
-        
-        .mobile-nav-menu {
-          display: block;
-        }
-        
-        .app-header {
-          padding: 1rem;
-        }
-      }
-      
-      .nav-dropdown-home-inline {
-        position: relative;
-        display: inline-block;
-      }
-      
-      .nav-dropdown-menu-home-inline {
-        display: none;
-        position: absolute;
-        top: 100%;
-        left: 0;
-        margin-top: 0.5rem;
-        background: #FFFFFF;
-        border: 2px solid #C8E6C9;
-        border-radius: 8px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        min-width: 200px;
-        z-index: 10000;
-        opacity: 0;
-        transform: translateY(-10px);
-        transition: opacity 0.3s ease, transform 0.3s ease;
-        pointer-events: none;
-      }
-      
-      /* Show dropdown on hover */
-      .nav-dropdown-home-inline:hover .nav-dropdown-menu-home-inline {
-        display: block;
-        opacity: 1;
-        transform: translateY(0);
-        pointer-events: all;
-      }
-      
-      .nav-dropdown-menu-home-inline a {
-        display: block;
-        padding: 0.75rem 1.25rem;
-        color: #1F2937;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.2s;
-        border: none;
-        box-shadow: none;
-        border-radius: 0;
-        background: #FFFFFF;
-      }
-      
-      .nav-dropdown-menu-home-inline a:first-child {
-        border-radius: 6px 6px 0 0;
-      }
-      
-      .nav-dropdown-menu-home-inline a:last-child {
-        border-radius: 0 0 6px 6px;
-      }
-      
-      .nav-dropdown-menu-home-inline a:hover {
-        background: #E3F2FD;
-        color: #7DBFE8;
-        transform: none;
-        box-shadow: none;
-      }
-
-      /* Inline Language Dropdown for food-banks page */
-      .language-dropdown-inline {
-        position: relative;
-        display: inline-block;
-      }
-      
-      .language-btn-inline {
-        cursor: pointer;
-        user-select: none;
-      }
-      
-      .language-menu-inline {
-        display: none;
-        position: absolute;
-        top: 100%;
-        right: 0;
-        margin-top: 0.5rem;
-        background: #FFFFFF;
-        border: 2px solid #C8E6C9;
-        border-radius: 8px;
-        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-        min-width: 200px;
-        z-index: 10000;
-        max-height: 400px;
-        overflow-y: auto;
-      }
-      
-      .language-menu-inline.show {
-        display: block;
-      }
-      
-      .language-menu-inline a {
-        display: block;
-        padding: 0.75rem 1.25rem;
-        color: #1F2937;
-        text-decoration: none;
-        font-weight: 600;
-        transition: all 0.2s;
-        border: none;
-        box-shadow: none;
-        border-radius: 0;
-        background: #FFFFFF;
-      }
-      
-      .language-menu-inline a:first-child {
-        border-radius: 6px 6px 0 0;
-      }
-      
-      .language-menu-inline a:last-child {
-        border-radius: 0 0 6px 6px;
-      }
-      
-      .language-menu-inline a:hover {
-        background: #E3F2FD;
-        color: #7DBFE8;
-        transform: none;
-        box-shadow: none;
-      }
-      
-      @media (max-width: 1024px) {
-        .app-header {
-          flex-direction: column;
-          gap: 1rem;
-        }
-        
-        .top-actions {
-          flex-wrap: wrap;
-          justify-content: center;
-          gap: 0.5rem;
-        }
-        
-        .top-actions a.chip.ghost {
-          padding: 0.5rem 1rem;
-          font-size: 0.9rem;
-        }
-      }
-    </style>
   </head>
 
   <body>
-    <header class="app-header">
-      <div class="branding">
-        <a href="index.html" class="logo">TogetherKGO</a>
-      </div>
+    <!-- Navigation -->
+  <div id="navbar"></div>
 
-      <div style="display: flex; gap: 0.75rem; align-items: center;">
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" style="display: none;" id="mobileMenuBtn">
-          <span style="font-size: 1.2rem;">☰</span>
-          <span>Menu</span>
-        </button>
-        <button class="mobile-lang-btn" onclick="showTranslationNotSupported()" style="display: none;" id="mobileLangBtn">🌐 Languages</button>
-        <nav class="top-actions">
-        <a class="chip ghost" href="index.html">Home</a>
-        <a class="chip ghost" href="find-services.html">Find Services</a>
-        <a class="chip ghost" href="community.html">Community Board</a>
-        <a class="chip ghost" href="resources.html">Resources</a>
-        <button class="chip ghost" onclick="showTranslationNotSupported()">🌐 Languages</button>
-      </nav>
-      </div>
-    </header>
-    
-    <!-- Mobile Navigation Menu -->
-    <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
-    <div class="mobile-nav-menu" id="mobileNavMenu">
-      <div class="mobile-nav-header">
-        <a href="index.html" class="logo">TogetherKGO</a>
-        <button class="mobile-close-btn" onclick="closeMobileMenu()" aria-label="Close">×</button>
-      </div>
-      <ul class="mobile-nav-links">
-        <li><a href="index.html" onclick="closeMobileMenu()">Home</a></li>
-        <li><a href="find-services.html" onclick="closeMobileMenu()">Find Services</a></li>
-        <li><a href="community.html" onclick="closeMobileMenu()">Community</a></li>
-        <li><a href="resources.html" onclick="closeMobileMenu()">Resources</a></li>
-      </ul>
-    </div>
+
 
     <main class="layout">
       <aside class="sidebar">
@@ -461,11 +84,11 @@
 
         <section class="card info-card">
           <h3>About Food Resources</h3>
-          <p class="subtle">Find food banks and community support services in the Kingston-Galloway-Orton Park area. All services are free and open to community members in need.</p>
+          <p class="subtle">Find food and community support services in the Kingston-Galloway-Orton Park area. All services are free and open to community members in need.</p>
           
           <div class="quick-contact" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E5E7EB;">
             <strong>Want to contribute?</strong>
-            <p class="subtle small">Click the 'Submit a Listing' button below to contribute. We ask that submissions be in accordance with our <a href="assets/ToS.pdf" target="_blank" style="color: #7DBFE8; text-decoration: underline;">Terms of Service</a> and <a href="assets/Community-guidelines.pdf" target="_blank" style="color: #7DBFE8; text-decoration: underline;">community guidelines</a>. Note that submissions are first moderated, then added to a scheduled update that occurs bi-weekly on <strong>Mondays and Thursdays</strong>.</p>
+            <p class="subtle small">Click the 'Submit a Listing' button below to contribute. We ask that submissions be in accordance with our <a href="assets/ToS.pdf" target="_blank" style="color: #7DBFE8; text-decoration: underline;">Terms of Service</a> and <a href="assets/Community-guidelines.pdf" target="_blank" style="color: #7DBFE8; text-decoration: underline;">community guidelines</a>. Note that submissions are first moderated, then added to a scheduled update that occurs bi-weekly on <strong>Mondays and Thursdays.</strong></p>
           </div>
           
           <div class="quick-contact">
@@ -550,46 +173,16 @@
     
     </style>
 
-    <!-- Translation Script -->
-    <script type="text/javascript">
-        // Mobile menu functions
-        function toggleMobileMenu() {
-            const overlay = document.getElementById('mobileNavOverlay');
-            const menu = document.getElementById('mobileNavMenu');
-            overlay.classList.toggle('show');
-            menu.classList.toggle('show');
-            document.body.style.overflow = menu.classList.contains('show') ? 'hidden' : '';
-        }
-        
-        function closeMobileMenu() {
-            const overlay = document.getElementById('mobileNavOverlay');
-            const menu = document.getElementById('mobileNavMenu');
-            overlay.classList.remove('show');
-            menu.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-        
-        // Show mobile buttons on small screens
-        function updateMobileButtons() {
-            const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-            const mobileLangBtn = document.getElementById('mobileLangBtn');
-            if (window.innerWidth <= 768) {
-                mobileMenuBtn.style.display = 'flex';
-                mobileLangBtn.style.display = 'block';
-            } else {
-                mobileMenuBtn.style.display = 'none';
-                mobileLangBtn.style.display = 'none';
-            }
-        }
-        
-        window.addEventListener('resize', updateMobileButtons);
-        window.addEventListener('load', updateMobileButtons);
-        
-        // Show not supported message
-        function showTranslationNotSupported() {
-            alert('Translation is not supported on this page.\n\nThe interactive map requires the page to remain in English to function properly.\n\nFor translated content, please visit:\n• Home page\n• Community page\n• Resources page');
-        }
-    </script>
+
+      <script>
+    fetch("components/navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    })
+    .catch(error => console.error("Error loading navbar:", error));
+  </script>
+    <script src="components/translation.js"></script>
 
   </body>
 </html>

@@ -261,3 +261,17 @@ div[style*="position: fixed"][style*="z-index: 2147483647"],
 div[style*="position: fixed"][style*="z-index: 999999"] {
     display: none !important;
 }
+
+/* ===============================
+   COLOR VARIABLES - This gives the blue text on together tko
+================================= */
+:root {
+  --primary-blue: #7DBFE8;
+  --dark-blue: #5BA3D0;
+  --light-blue: #E3F2FD;
+  --pale-blue: #F0F9FF;
+  --sky-blue: #BAE6FD;
+  --text-dark: #1F2937;
+  --text-light: #6B7280;
+  --white: #FFFFFF;
+}
