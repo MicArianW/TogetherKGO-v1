@@ -5,544 +5,230 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Submit Community Update - TogetherKGO</title>
   <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-  <style>
-    /* Light Blue Color Scheme */
-    :root {
-      --primary-blue: #7DBFE8;
-      --dark-blue: #5BA3D0;
-      --light-blue: #E3F2FD;
-      --pale-blue: #F0F9FF;
-      --sky-blue: #BAE6FD;
-      --text-dark: #1F2937;
-      --text-light: #6B7280;
-      --white: #FFFFFF;
-      --green-border: #C8E6C9;
-    }
+  <link rel="stylesheet" href="components/navbar.css">
+<style>
 
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+/* ===============================
+   GLOBAL RESET
+================================= */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-    body {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-      color: var(--text-dark);
-      line-height: 1.6;
-      background: var(--pale-blue);
-    }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  color: var(--text-dark);
+  line-height: 1.6;
+  background: var(--pale-blue);
+}
 
-    /* Navigation matching other pages */
-    nav {
-      background: var(--white);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-      padding: 1rem 0;
-      position: sticky;
-      top: 0;
-      z-index: 100;
-    }
+/* ===============================
+   PAGE HEADER
+================================= */
+.page-header {
+  background: linear-gradient(135deg, var(--sky-blue) 0%, var(--light-blue) 100%);
+  padding: 3rem 2rem;
+  text-align: center;
+}
 
-    .nav-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      padding: 0 2rem;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
+.page-header h1 {
+  font-size: 2.5rem;
+  color: var(--text-dark);
+  margin-bottom: 1rem;
+}
 
-    .logo {
-      font-size: 2rem;
-      font-weight: bold;
-      color: var(--primary-blue);
-      text-decoration: none;
-      flex-shrink: 0;
-      margin-right: 2rem;
-    }
+.page-header p {
+  font-size: 1.15rem;
+  color: var(--text-light);
+  max-width: 700px;
+  margin: 0 auto;
+}
 
-    .nav-links {
-      display: flex;
-      gap: 1rem;
-      list-style: none;
-      margin-left: auto;
-      flex-wrap: nowrap;
-      justify-content: flex-end;
-    }
+/* ===============================
+   MAIN CONTAINER / FORM
+================================= */
+.submission-form {
+  max-width: 800px;
+  margin: 3rem auto;
+  padding: 0 2rem;
+}
 
-    .nav-links a {
-      color: var(--text-dark);
-      text-decoration: none;
-      font-weight: 700;
-      transition: all 0.3s;
-      padding: 0.75rem 1.5rem;
-      border-radius: 8px;
-      background: var(--white);
-      border: 2px solid var(--green-border);
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
+.form-card {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  margin-bottom: 2rem;
+}
 
-    .nav-links a:hover {
-      color: var(--primary-blue);
-      background: var(--white);
-      border-color: var(--primary-blue);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
+.form-group {
+  margin-bottom: 1.5rem;
+}
 
-    /* Navigation Dropdown */
-    .nav-dropdown {
-      position: relative;
-    }
+.form-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+}
 
-    .dropdown-toggle {
-      cursor: pointer;
-      user-select: none;
-    }
+.required {
+  color: #EF4444;
+}
 
-    .nav-dropdown-menu {
-      display: none;
-      position: absolute;
-      top: 100%;
-      left: 0;
-      margin-top: 0.5rem;
-      background: var(--white);
-      border: 2px solid var(--green-border);
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-      min-width: 200px;
-      z-index: 1000;
-      opacity: 0;
-      transform: translateY(-10px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
-      pointer-events: none;
-    }
+.form-group input,
+.form-group textarea,
+.form-group select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--light-blue);
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.3s;
+}
 
-    /* Show dropdown on hover */
-    .nav-dropdown:hover .nav-dropdown-menu {
-      display: block;
-      opacity: 1;
-      transform: translateY(0);
-      pointer-events: all;
-    }
+.form-group input:focus,
+.form-group textarea:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(125, 191, 232, 0.1);
+}
 
-    .nav-dropdown-menu a {
-      display: block;
-      padding: 0.75rem 1.25rem;
-      color: var(--text-dark);
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.2s;
-      border: none;
-      box-shadow: none;
-      border-radius: 0;
-      margin: 0;
-    }
+.form-group textarea {
+  min-height: 150px;
+  resize: vertical;
+}
 
-    .nav-dropdown-menu a:first-child {
-      border-radius: 6px 6px 0 0;
-    }
+.form-hint {
+  font-size: 0.875rem;
+  color: var(--text-light);
+  margin-top: 0.25rem;
+}
 
-    .nav-dropdown-menu a:last-child {
-      border-radius: 0 0 6px 6px;
-    }
+.submit-btn {
+  background: var(--primary-blue);
+  color: white;
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  width: 100%;
+  transition: all 0.3s;
+  box-shadow: 0 4px 12px rgba(125, 191, 232, 0.3);
+}
 
-    .nav-dropdown-menu a:hover {
-      background: var(--light-blue);
-      color: var(--primary-blue);
-      transform: none;
-      box-shadow: none;
-    }
+.submit-btn:hover {
+  background: var(--dark-blue);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(125, 191, 232, 0.4);
+}
 
-    /* Page Header */
-    .page-header {
-      background: linear-gradient(135deg, var(--sky-blue) 0%, var(--light-blue) 100%);
-      padding: 3rem 2rem;
-      text-align: center;
-    }
+/* ===============================
+   INFO BOX
+================================= */
+.info-box {
+  background: var(--white);
+  border-left: 4px solid var(--primary-blue);
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
 
-    .page-header h1 {
-      font-size: 2.5rem;
-      color: var(--text-dark);
-      margin-bottom: 1rem;
-    }
+.info-box strong {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: var(--text-dark);
+  font-size: 1.1rem;
+}
 
-    .page-header p {
-      font-size: 1.15rem;
-      color: var(--text-light);
-      max-width: 700px;
-      margin: 0 auto;
-    }
+.info-box p {
+  color: var(--text-light);
+  margin: 0;
+}
 
-    /* Main Container */
-    .submission-form {
-      max-width: 800px;
-      margin: 3rem auto;
-      padding: 0 2rem;
-    }
+/* ===============================
+   SUCCESS MESSAGE
+================================= */
+.success-message {
+  background: #D1FAE5;
+  border: 2px solid #10B981;
+  padding: 1rem 1.5rem;
+  border-radius: 8px;
+  margin-bottom: 2rem;
+  display: none;
+  color: #065F46;
+}
 
-    /* Info Box */
-    .info-box {
-      background: var(--white);
-      border-left: 4px solid var(--primary-blue);
-      padding: 1.5rem;
-      margin-bottom: 2rem;
-      border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
+.success-message strong {
+  display: block;
+  margin-bottom: 0.5rem;
+}
 
-    .info-box strong {
-      display: block;
-      margin-bottom: 0.5rem;
-      color: var(--text-dark);
-      font-size: 1.1rem;
-    }
+/* ===============================
+   NEXT STEPS
+================================= */
+.next-steps {
+  background: var(--white);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
 
-    .info-box p {
-      color: var(--text-light);
-      margin: 0;
-    }
+.next-steps h4 {
+  margin-top: 0;
+  margin-bottom: 1rem;
+  color: var(--text-dark);
+  font-size: 1.25rem;
+}
 
-    /* Form Card */
-    .form-card {
-      background: var(--white);
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-      margin-bottom: 2rem;
-    }
+.next-steps ol {
+  padding-left: 1.5rem;
+  line-height: 1.8;
+  color: var(--text-light);
+}
 
-    /* Form Groups */
-    .form-group {
-      margin-bottom: 1.5rem;
-    }
+.next-steps li {
+  margin-bottom: 0.5rem;
+}
 
-    .form-group label {
-      display: block;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: var(--text-dark);
-    }
+/* ===============================
+   RESPONSIVE
+================================= */
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 2rem;
+  }
 
-    .required {
-      color: #EF4444;
-    }
+  .submission-form {
+    padding: 0 1rem;
+  }
 
-    .form-group input,
-    .form-group textarea,
-    .form-group select {
-      width: 100%;
-      padding: 0.75rem;
-      border: 2px solid var(--light-blue);
-      border-radius: 8px;
-      font-size: 1rem;
-      font-family: inherit;
-      transition: all 0.3s;
-    }
-
-    .form-group input:focus,
-    .form-group textarea:focus,
-    .form-group select:focus {
-      outline: none;
-      border-color: var(--primary-blue);
-      box-shadow: 0 0 0 3px rgba(125, 191, 232, 0.1);
-    }
-
-    .form-group textarea {
-      min-height: 150px;
-      resize: vertical;
-    }
-
-    .form-hint {
-      font-size: 0.875rem;
-      color: var(--text-light);
-      margin-top: 0.25rem;
-    }
-
-    /* Submit Button */
-    .submit-btn {
-      background: var(--primary-blue);
-      color: white;
-      padding: 1rem 2rem;
-      border: none;
-      border-radius: 50px;
-      font-size: 1rem;
-      font-weight: 700;
-      cursor: pointer;
-      width: 100%;
-      transition: all 0.3s;
-      box-shadow: 0 4px 12px rgba(125, 191, 232, 0.3);
-    }
-
-    .submit-btn:hover {
-      background: var(--dark-blue);
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(125, 191, 232, 0.4);
-    }
-
-    /* Success Message */
-    .success-message {
-      background: #D1FAE5;
-      border: 2px solid #10B981;
-      padding: 1rem 1.5rem;
-      border-radius: 8px;
-      margin-bottom: 2rem;
-      display: none;
-      color: #065F46;
-    }
-
-    .success-message strong {
-      display: block;
-      margin-bottom: 0.5rem;
-    }
-
-    /* What Happens Next */
-    .next-steps {
-      background: var(--white);
-      padding: 2rem;
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .next-steps h4 {
-      margin-top: 0;
-      margin-bottom: 1rem;
-      color: var(--text-dark);
-      font-size: 1.25rem;
-    }
-
-    .next-steps ol {
-      padding-left: 1.5rem;
-      line-height: 1.8;
-      color: var(--text-light);
-    }
-
-    .next-steps li {
-      margin-bottom: 0.5rem;
-    }
-    
-    /* Mobile Menu Styles */
-    .mobile-menu-btn {
-      display: none;
-      background: var(--white);
-      border: 2px solid #C8E6C9;
-      border-radius: 8px;
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      cursor: pointer;
-      color: var(--text-dark);
-      font-weight: 700;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .mobile-menu-btn:hover {
-      color: var(--primary-blue);
-      border-color: var(--primary-blue);
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-    }
-    
-    .mobile-nav-overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 9998;
-    }
-    
-    .mobile-nav-menu {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: -300px;
-      width: 280px;
-      height: 100%;
-      background: var(--white);
-      z-index: 9999;
-      transition: left 0.3s ease;
-      box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-      overflow-y: auto;
-    }
-    
-    .mobile-nav-menu.show {
-      left: 0;
-    }
-    
-    .mobile-nav-header {
-      padding: 1.5rem;
-      border-bottom: 2px solid #C8E6C9;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    
-    .mobile-close-btn {
-      background: none;
-      border: none;
-      font-size: 1.5rem;
-      cursor: pointer;
-      color: var(--text-dark);
-    }
-    
-    .mobile-nav-links {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-    
-    .mobile-nav-links li {
-      border-bottom: 1px solid #E5E7EB;
-    }
-    
-    .mobile-nav-links a {
-      display: block;
-      padding: 1rem 1.5rem;
-      color: var(--text-dark);
-      text-decoration: none;
-      font-weight: 600;
-      transition: all 0.2s;
-    }
-    
-    .mobile-nav-links a:hover {
-      background: var(--light-blue);
-      color: var(--primary-blue);
-    }
-
-    /* Responsive */
-    @media (max-width: 1200px) {
-      .nav-links {
-        gap: 0.75rem;
-      }
-      
-      .nav-links a {
-        padding: 0.6rem 1.2rem;
-        font-size: 0.95rem;
-      }
-    }
-    
-    @media (max-width: 1050px) {
-      .nav-links {
-        gap: 0.6rem;
-      }
-      
-      .nav-links a {
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
-      }
-    }
-    
-    @media (max-width: 950px) {
-      .nav-links {
-        gap: 0.5rem;
-      }
-      
-      .nav-links a {
-        padding: 0.5rem 0.9rem;
-        font-size: 0.88rem;
-      }
-    }
-    
-    @media (max-width: 850px) {
-      .nav-links {
-        gap: 0.4rem;
-      }
-      
-      .nav-links a {
-        padding: 0.4rem 0.7rem;
-        font-size: 0.85rem;
-      }
-    }
-    
-    @media (max-width: 768px) {
-      .mobile-menu-btn {
-        display: block;
-      }
-      
-      .nav-links {
-        display: none !important;
-      }
-      
-      .mobile-nav-overlay.show {
-        display: block;
-      }
-      
-      .mobile-nav-menu {
-        display: block;
-      }
-      .nav-container {
-        flex-direction: column;
-        gap: 1rem;
-      }
-
-      .logo {
-        margin-right: 0;
-      }
-
-      .nav-links {
-        justify-content: center;
-        gap: 0.5rem;
-      }
-
-      .nav-links a {
-        padding: 0.5rem 1rem;
-        font-size: 0.9rem;
-      }
-
-      .page-header h1 {
-        font-size: 2rem;
-      }
-
-      .submission-form {
-        padding: 0 1rem;
-      }
-
-      .form-card {
-        padding: 1.5rem;
-      }
-    }
-  </style>
+  .form-card {
+    padding: 1.5rem;
+  }
+}
+</style>
 </head>
 
 <body>
   <!-- Navigation -->
-  <nav>
-    <div class="nav-container">
-      <a href="index.html" class="logo">TogetherKGO</a>
-      <div style="display: flex; gap: 0.75rem; align-items: center;">
-        <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" style="display: none;" id="mobileMenuBtn">
-          <span style="font-size: 1.2rem;">☰</span>
-          <span>Menu</span>
-        </button>
-        <ul class="nav-links">
-        <li><a href="index.html">Home</a></li>
-        <li><a href="food-banks.html">Find Food Banks</a></li>
-        <li><a href="community.html">Community Board</a></li>
-        <li><a href="resources.html">Resources</a></li>
-      </ul>
-      </div>
-    </div>
-  </nav>
-  
-  <!-- Mobile Navigation Menu -->
-  <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
-  <div class="mobile-nav-menu" id="mobileNavMenu">
-    <div class="mobile-nav-header">
-      <a href="index.html" class="logo">TogetherKGO</a>
-      <button class="mobile-close-btn" onclick="closeMobileMenu()" aria-label="Close">×</button>
-    </div>
-    <ul class="mobile-nav-links">
-      <li><a href="index.html" onclick="closeMobileMenu()">Home</a></li>
-      <li><a href="food-banks.html" onclick="closeMobileMenu()">Find Food Banks</a></li>
-      <li><a href="community.html" onclick="closeMobileMenu()">Community Board</a></li>
-      <li><a href="resources.html" onclick="closeMobileMenu()">Resources</a></li>
-    </ul>
-  </div>
+  <div id="navbar"></div>
+
+  <script>
+    fetch("components/navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    })
+    .catch(error => console.error("Error loading navbar:", error));
+  </script>
 
   <!-- Page Header -->
   <div class="page-header">
@@ -690,36 +376,7 @@
     }
   </script>
   
-  <script>
-    // Mobile menu functions
-    function toggleMobileMenu() {
-      const overlay = document.getElementById('mobileNavOverlay');
-      const menu = document.getElementById('mobileNavMenu');
-      overlay.classList.toggle('show');
-      menu.classList.toggle('show');
-      document.body.style.overflow = menu.classList.contains('show') ? 'hidden' : '';
-    }
-    
-    function closeMobileMenu() {
-      const overlay = document.getElementById('mobileNavOverlay');
-      const menu = document.getElementById('mobileNavMenu');
-      overlay.classList.remove('show');
-      menu.classList.remove('show');
-      document.body.style.overflow = '';
-    }
-    
-    // Show mobile menu button on small screens
-    function updateMobileButtons() {
-      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-      if (window.innerWidth <= 768) {
-        mobileMenuBtn.style.display = 'flex';
-      } else {
-        mobileMenuBtn.style.display = 'none';
-      }
-    }
-    
-    window.addEventListener('resize', updateMobileButtons);
-    window.addEventListener('load', updateMobileButtons);
-  </script>
+<script src="components/translation.js"></script>
+<script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script> 
 </body>
 </html>

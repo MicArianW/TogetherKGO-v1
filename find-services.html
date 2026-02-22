@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TogetherKGO – Food Resources</title>
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="components/navbar.css"/>
+
+    <!-- Load config FIRST (this contains API KEY) -->
+    <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+    <script src="config.js"></script>
+
+    <!-- App scripts -->
+    <script defer src="assets/i18n.js"></script>
+    <script defer src="assets/app.js"></script>
+  </head>
+
+  <body>
+    <!-- Navigation -->
+  <div id="navbar"></div>
+
+
+
+    <main class="layout">
+      <aside class="sidebar">
+        <section class="card">
+          <h2 data-i18n="search_filters">Search & Filters</h2>
+
+          <label class="label" for="q" data-i18n="search_label">Search by name, keywords</label>
+          <input id="q" type="search" placeholder="food bank, community support…" />
+
+          <div class="grid2">
+            <div>
+              <label class="label" for="type">Type</label>
+              <select id="type">
+                <option value="">Any</option>
+                <option value="food_bank">Food Bank</option>
+                <option value="organization">Organization</option>
+                <option value="community_meal">Community Meal</option>
+                <option value="pantry">Pantry</option>
+                <option value="market">Market</option>
+                <option value="delivery">Delivery</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="label" for="openDay">Day Open</label>
+              <select id="openDay">
+                <option value="">Any</option>
+                <option value="Mon">Monday</option>
+                <option value="Tue">Tuesday</option>
+                <option value="Wed">Wednesday</option>
+                <option value="Thu">Thursday</option>
+                <option value="Fri">Friday</option>
+                <option value="Sat">Saturday</option>
+                <option value="Sun">Sunday</option>
+              </select>
+            </div>
+          </div>
+
+          <!-- RADIUS FEATURE COMMENTED OUT (UI Hidden, but field kept for JavaScript compatibility)
+          <div>
+            <label class="label" for="radius">Search Radius</label>
+          -->
+            <select id="radius" style="display: none;">
+              <option value="99999" selected>All Locations</option>
+              <option value="1000">Within 1 km</option>
+              <option value="2000">Within 2 km</option>
+              <option value="3000">Within 3 km</option>
+              <option value="5000">Within 5 km</option>
+            </select>
+          <!-- 
+          </div>
+          -->
+
+          <div class="actions">
+            <button id="applyBtn" class="primary">Apply Filters</button>
+            <button id="resetBtn" class="ghost">Reset</button>
+          </div>
+        </section>
+
+        <section class="card info-card">
+          <h3>About Food Resources</h3>
+          <p class="subtle">Find food and community support services in the Kingston-Galloway-Orton Park area. All services are free and open to community members in need.</p>
+          
+          <div class="quick-contact" style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E5E7EB;">
+            <strong>Want to contribute?</strong>
+            <p class="subtle small">Click the 'Submit a Listing' button below to contribute. We ask that submissions be in accordance with our <a href="assets/ToS.pdf" target="_blank" style="color: #7DBFE8; text-decoration: underline;">Terms of Service</a> and <a href="assets/Community-guidelines.pdf" target="_blank" style="color: #7DBFE8; text-decoration: underline;">community guidelines</a>. Note that submissions are first moderated, then added to a scheduled update that occurs bi-weekly on <strong>Mondays and Thursdays.</strong></p>
+          </div>
+          
+          <div class="quick-contact">
+            <strong>Need Help?</strong>
+            <p class="subtle small">Contact any of the listed organizations directly for assistance or visit them during their operating hours.</p>
+          </div>
+          
+          <div style="margin-top: 1.5rem; padding-top: 1.5rem; border-top: 1px solid #E5E7EB;">
+            <a href="submit-listing.html" style="display: block; text-align: center; color: #1F2937; text-decoration: none; font-weight: 700; transition: all 0.3s; padding: 0.75rem 1.5rem; border-radius: 8px; background: #FFFFFF; border: 2px solid #C8E6C9; box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); cursor: pointer; font-family: inherit; font-size: 1rem;" onmouseover="this.style.color='#7DBFE8'; this.style.borderColor='#7DBFE8'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 8px rgba(0, 0, 0, 0.15)';" onmouseout="this.style.color='#1F2937'; this.style.borderColor='#C8E6C9'; this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 4px rgba(0, 0, 0, 0.1)';">
+              Submit a Listing
+            </a>
+            <p class="subtle small" style="margin-top: 0.75rem; text-align: center;">Know a food resource? Add it here!</p>
+          </div>
+        </section>
+      </aside>
+
+      <section class="content">
+        <div id="map" class="map notranslate" translate="no"></div>
+
+        <section class="list card">
+          <h2>Food Resources in KGO Area</h2>
+          <div id="resultCount" class="subtle"></div>
+          <ul id="results"></ul>
+        </section>
+      </section>
+    </main>
+
+    <!-- Google Maps Loader -->
+    <script>
+      function loadGoogleMaps() {
+        if (!window.__CONFIG__ || !window.__CONFIG__.GOOGLE_MAPS_API_KEY) {
+          console.error("Missing API key in config.js");
+          return;
+        }
+
+        const script = document.createElement("script");
+        script.src =
+          "https://maps.googleapis.com/maps/api/js?key=" +
+          window.__CONFIG__.GOOGLE_MAPS_API_KEY +
+          "&callback=initMap";
+
+        script.async = true;
+        script.defer = true;
+
+        document.body.appendChild(script);
+      }
+
+      function initMap() {
+        if (window.__APP && window.__APP.initMap) {
+          window.__APP.initMap();
+        } else {
+          console.error("APP not ready yet");
+        }
+      }
+
+      window.initMap = initMap;
+
+      // Load Google Maps AFTER config.js and app.js
+      window.addEventListener("DOMContentLoaded", loadGoogleMaps);
+    </script>
+
+    <!-- Floating Language Button -->
+    <style>
+    
+    /* CRITICAL: Protect ONLY map and results from translation */
+    /* Sidebar, filters, and labels WILL translate */
+    #map,
+    #map *,
+    .leaflet-container,
+    .leaflet-container *,
+    .mapboxgl-map,
+    .mapboxgl-map *,
+    #results,
+    #results * {
+        translate: no !important;
+    }
+    
+    .notranslate,
+    .notranslate * {
+        translate: no !important;
+    }
+    
+    </style>
+
+
+      <script>
+    fetch("components/navbar.html")
+    .then(response => response.text())
+    .then(data => {
+      document.getElementById("navbar").innerHTML = data;
+    })
+    .catch(error => console.error("Error loading navbar:", error));
+  </script>
+    <script src="components/translation.js"></script>
+
+  </body>
+</html>

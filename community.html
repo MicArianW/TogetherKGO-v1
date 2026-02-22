@@ -6,899 +6,332 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Community Board - TogetherKGO</title>
     <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
-    <style>
-        /* Light Blue Color Scheme */
-        :root {
-            --primary-blue: #7DBFE8;
-            --dark-blue: #5BA3D0;
-            --light-blue: #E3F2FD;
-            --pale-blue: #F0F9FF;
-            --sky-blue: #BAE6FD;
-            --text-dark: #1F2937;
-            --text-light: #6B7280;
-            --white: #FFFFFF;
-            --green-border: #C8E6C9;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            color: var(--text-dark);
-            line-height: 1.6;
-            background: var(--pale-blue);
-        }
-
-        /* Navigation matching home page */
-        nav {
-            background: var(--white);
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-            padding: 1rem 0;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-        }
-
-        .nav-container {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 0 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: nowrap;
-        }
-
-        .logo {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--primary-blue);
-            text-decoration: none;
-            flex-shrink: 0;
-            margin-right: 2rem;
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 1rem;
-            list-style: none;
-            margin-left: auto;
-            flex-wrap: nowrap;
-            justify-content: flex-end;
-        }
-
-        .nav-links a {
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 700;
-            transition: all 0.3s;
-            padding: 0.75rem 1.5rem;
-            border-radius: 8px;
-            background: var(--white);
-            border: 2px solid var(--green-border);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .nav-links a:hover {
-            color: var(--primary-blue);
-            background: var(--white);
-            border-color: var(--primary-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        /* Hide Google Translate branding and banner - COMPREHENSIVE */
-        .goog-te-banner-frame,
-        .goog-te-banner-frame.skiptranslate,
-        #goog-gt-tt,
-        .goog-te-balloon-frame,
-        .goog-tooltip,
-        .goog-te-spinner-pos,
-        .goog-te-ftab,
-        .goog-te-menu-value span,
-        div#goog-gt-,
-        .goog-te-gadget,
-        .goog-te-combo {
-            display: none !important;
-            visibility: hidden !important;
-            opacity: 0 !important;
-            height: 0 !important;
-            max-height: 0 !important;
-            overflow: hidden !important;
-        }
-        
-        /* Hide the white notification bar at top */
-        body > .skiptranslate {
-            display: none !important;
-        }
-        
-        /* Hide top frame */
-        body > iframe.goog-te-banner-frame {
-            display: none !important;
-        }
-        
-        /* Prevent body shifting */
-        body {
-            top: 0px !important;
-            position: static !important;
-        }
-        
-        /* Hide tooltips and highlights */
-        .goog-text-highlight {
-            background-color: transparent !important;
-            box-shadow: none !important;
-        }
-        
-        /* Hide any fixed position divs from Google */
-        div[style*="position: fixed"][style*="z-index: 2147483647"],
-        div[style*="position: fixed"][style*="z-index: 999999"] {
-            display: none !important;
-        }
-
-        /* Home Dropdown with Hover */
-        .nav-dropdown-community {
-            position: relative;
-        }
-
-        .nav-dropdown-menu-community {
-            display: none;
-            position: absolute;
-            top: 100%;
-            left: 0;
-            margin-top: 0.5rem;
-            background: var(--white);
-            border: 2px solid var(--green-border);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            min-width: 220px;
-            z-index: 1000;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: opacity 0.3s ease, transform 0.3s ease;
-            pointer-events: none;
-        }
-
-        /* Show dropdown on hover */
-        .nav-dropdown-community:hover .nav-dropdown-menu-community {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: all;
-        }
-
-        .nav-dropdown-menu-community a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-            border: none;
-            box-shadow: none;
-            border-radius: 0;
-            transform: none;
-        }
-
-        .nav-dropdown-menu-community a:first-child {
-            border-radius: 6px 6px 0 0;
-        }
-
-        .nav-dropdown-menu-community a:last-child {
-            border-radius: 0 0 6px 6px;
-        }
-
-        .nav-dropdown-menu-community a:hover {
-            background: var(--light-blue);
-            color: var(--primary-blue);
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Language Dropdown */
-        .language-dropdown {
-            position: relative;
-        }
-
-        .language-btn {
-            cursor: pointer;
-            user-select: none;
-        }
-
-        .language-menu {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
-            background: var(--white);
-            border: 2px solid var(--green-border);
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-            min-width: 200px;
-            z-index: 1000;
-        }
-
-        .language-menu.show {
-            display: block;
-        }
-
-        .language-menu a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-            border: none;
-            box-shadow: none;
-            border-radius: 0;
-        }
-
-        .language-menu a:first-child {
-            border-radius: 6px 6px 0 0;
-        }
-
-        .language-menu a:last-child {
-            border-radius: 0 0 6px 6px;
-        }
-
-        .language-menu a:hover {
-            background: var(--light-blue);
-            color: var(--primary-blue);
-            transform: none;
-            box-shadow: none;
-        }
-
-        /* Header Section */
-        .page-header {
-            background: linear-gradient(135deg, var(--sky-blue) 0%, var(--light-blue) 100%);
-            padding: 3rem 2rem;
-            text-align: center;
-        }
-
-        .page-header h1 {
-            font-size: 2.5rem;
-            color: var(--text-dark);
-            margin-bottom: 1rem;
-        }
-
-        .page-header p {
-            font-size: 1.15rem;
-            color: var(--text-light);
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        /* Main Container */
-        .container {
-            max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-        }
-
-        /* Filter Section */
-        .filter-section {
-            background: var(--white);
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-        }
-
-        .filter-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1rem;
-        }
-
-        .filter-group label {
-            display: block;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .filter-group select {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid var(--light-blue);
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: all 0.3s;
-        }
-
-        .filter-group select:focus {
-            outline: none;
-            border-color: var(--primary-blue);
-        }
-
-        /* Posts Grid */
-        .posts-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        /* Post Card */
-        .post-card {
-            background: var(--white);
-            border-radius: 12px;
-            padding: 2rem;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-            border-left: 4px solid var(--primary-blue);
-        }
-
-        .post-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
-        }
-
-        .post-card.urgent {
-            border-left-color: #EF4444;
-            background: #FEF2F2;
-        }
-
-        .post-card.event {
-            border-left-color: #F59E0B;
-            background: #FFFBEB;
-        }
-
-        .post-card.food_available {
-            border-left-color: #10B981;
-            background: #F0FDF4;
-        }
-
-        .post-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: start;
-            margin-bottom: 1rem;
-        }
-
-        .post-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .post-type {
-            display: inline-block;
-            padding: 0.25rem 0.75rem;
-            border-radius: 20px;
-            font-size: 0.85rem;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-
-        .post-type.update {
-            background: var(--light-blue);
-            color: var(--dark-blue);
-        }
-
-        .post-type.urgent {
-            background: #FEE2E2;
-            color: #DC2626;
-        }
-
-        .post-type.event {
-            background: #FEF3C7;
-            color: #D97706;
-        }
-
-        .post-type.food_available {
-            background: #D1FAE5;
-            color: #059669;
-        }
-
-        .post-meta {
-            display: flex;
-            gap: 1rem;
-            font-size: 0.9rem;
-            color: var(--text-light);
-            margin-bottom: 1rem;
-        }
-
-        .post-location {
-            font-weight: 600;
-            color: var(--primary-blue);
-        }
-
-        .post-message {
-            color: var(--text-dark);
-            line-height: 1.7;
-            margin-bottom: 1rem;
-        }
-
-        .post-contact {
-            padding-top: 1rem;
-            border-top: 1px solid var(--light-blue);
-            font-size: 0.9rem;
-            color: var(--text-light);
-        }
-
-        /* No Posts Message */
-        .no-posts {
-            background: var(--white);
-            padding: 3rem;
-            border-radius: 12px;
-            text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-        }
-
-        .no-posts h3 {
-            font-size: 1.5rem;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        /* Loading */
-        .loading {
-            text-align: center;
-            padding: 3rem;
-            color: var(--text-light);
-        }
-
-        /* Floating Language Button */
-        .floating-lang-btn {
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            z-index: 9999;
-            background: linear-gradient(135deg, #7DBFE8 0%, #5BA3D0 100%);
-            color: white;
-            padding: 15px 20px;
-            border-radius: 50px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            font-weight: 700;
-            font-size: 16px;
-            border: none;
-            transition: all 0.3s;
-        }
-
-        .floating-lang-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
-        }
-
-        .floating-lang-menu {
-            position: fixed;
-            bottom: 90px;
-            right: 30px;
-            z-index: 9998;
-            background: white;
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-            min-width: 250px;
-            max-height: 400px;
-            overflow-y: auto;
-            display: none;
-        }
-
-        .floating-lang-menu.show {
-            display: block;
-            animation: slideUp 0.3s ease;
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .floating-lang-menu a {
-            display: block;
-            padding: 12px 20px;
-            color: #1F2937;
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-            border-bottom: 1px solid #E5E7EB;
-        }
-
-        .floating-lang-menu a:hover {
-            background: #E3F2FD;
-            color: #7DBFE8;
-        }
-
-        .floating-lang-menu a:last-child {
-            border-bottom: none;
-        }
-        
-        /* Mobile Menu Styles */
-        .mobile-buttons-wrapper {
-            display: none; /* Hidden on desktop by default */
-        }
-        
-        .mobile-menu-btn,
-        .mobile-lang-btn-community {
-            display: none;
-            background: var(--white);
-            border: 2px solid #C8E6C9;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            font-size: 1rem;
-            cursor: pointer;
-            color: var(--text-dark);
-            font-weight: 700;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s;
-        }
-        
-        .mobile-menu-btn {
-            align-items: center;
-            gap: 0.5rem;
-        }
-        
-        .mobile-menu-btn:hover,
-        .mobile-lang-btn-community:hover {
-            color: var(--primary-blue);
-            border-color: var(--primary-blue);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
-        }
-        
-        .mobile-nav-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5);
-            z-index: 9998;
-        }
-        
-        .mobile-nav-menu {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: -300px;
-            width: 280px;
-            height: 100%;
-            background: var(--white);
-            z-index: 9999;
-            transition: left 0.3s ease;
-            box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
-            overflow-y: auto;
-        }
-        
-        .mobile-nav-menu.show {
-            left: 0;
-        }
-        
-        .mobile-nav-header {
-            padding: 1.5rem;
-            border-bottom: 2px solid #C8E6C9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .mobile-close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: var(--text-dark);
-        }
-        
-        .mobile-nav-links {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        
-        .mobile-nav-links li {
-            border-bottom: 1px solid #E5E7EB;
-        }
-        
-        .mobile-nav-links a {
-            display: block;
-            padding: 1rem 1.5rem;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-        }
-        
-        .mobile-nav-links a:hover {
-            background: var(--light-blue);
-            color: var(--primary-blue);
-        }
-        
-        /* Mobile Language Dropdown */
-        .mobile-lang-dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            margin-top: 0.5rem;
-            background: var(--white);
-            border: 2px solid #C8E6C9;
-            border-radius: 8px;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            min-width: 200px;
-            max-height: 400px;
-            overflow-y: auto;
-            z-index: 10000;
-        }
-        
-        .mobile-lang-dropdown.show {
-            display: block;
-        }
-        
-        .mobile-lang-dropdown a {
-            display: block;
-            padding: 0.75rem 1.25rem;
-            color: var(--text-dark);
-            text-decoration: none;
-            font-weight: 600;
-            transition: all 0.2s;
-            border-bottom: 1px solid #E5E7EB;
-        }
-        
-        .mobile-lang-dropdown a:last-child {
-            border-bottom: none;
-        }
-        
-        .mobile-lang-dropdown a:hover {
-            background: var(--light-blue);
-            color: var(--primary-blue);
-        }
-
-        /* Responsive */
-        @media (max-width: 1200px) {
-            .nav-links {
-                gap: 0.75rem;
-            }
-            
-            .nav-links a {
-                padding: 0.6rem 1.2rem;
-                font-size: 0.95rem;
-            }
-        }
-        
-        @media (max-width: 1000px) {
-            .nav-links {
-                gap: 0.6rem;
-            }
-            
-            .nav-links a {
-                padding: 0.5rem 1rem;
-                font-size: 0.9rem;
-            }
-        }
-
-        @media (max-width: 968px) {
-            .nav-container {
-                flex-wrap: wrap;
-            }
-            
-            .logo {
-                flex: 0 0 auto;
-            }
-            
-            .nav-links {
-                flex: 1 1 100%;
-                justify-content: center;
-                gap: 0.5rem;
-                margin-top: 1rem;
-            }
-            
-            .nav-links a {
-                padding: 0.5rem 0.9rem;
-                font-size: 0.9rem;
-            }
-        }
-        
-        @media (max-width: 768px) {
-            .nav-container {
-                flex-direction: column;
-                align-items: center; /* Center everything on mobile */
-                gap: 1rem;
-                text-align: center;
-            }
-            
-            .logo {
-                font-size: 1.5rem;
-                margin-right: 0;
-            }
-            
-            .mobile-buttons-wrapper {
-                display: flex !important; /* Show on mobile */
-            }
-            
-            .mobile-menu-btn,
-            .mobile-lang-btn-community {
-                display: block !important;
-            }
-            
-            .mobile-menu-btn {
-                display: flex !important;
-            }
-            
-            .nav-links {
-                display: none !important;
-            }
-            
-            .mobile-nav-overlay.show {
-                display: block;
-            }
-            
-            .mobile-nav-menu {
-                display: block;
-            }
-
-            .page-header h1 {
-                font-size: 2rem;
-            }
-
-            .posts-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-    <script>
-        // AGGRESSIVE Google Translate Banner Removal
-        (function() {
-            'use strict';
-            
-            function removeGoogleTranslateUI() {
-                // Remove all Google Translate iframes
-                const iframes = document.querySelectorAll('iframe.goog-te-banner-frame, iframe.skiptranslate, iframe[id^="goog-gt-"]');
-                iframes.forEach(iframe => iframe.remove());
-                
-                // Remove top banner divs
-                const banners = document.querySelectorAll('.goog-te-banner-frame, .skiptranslate, #goog-gt-tt');
-                banners.forEach(banner => banner.remove());
-                
-                // Reset body styling
-                document.body.style.top = '0px';
-                document.body.style.position = 'static';
-                
-                // Remove high z-index fixed elements
-                const fixedElements = document.querySelectorAll('div[style*="position: fixed"]');
-                fixedElements.forEach(el => {
-                    const zIndex = window.getComputedStyle(el).zIndex;
-                    if (zIndex > 1000000) el.remove();
-                });
-            }
-            
-            // Run multiple times
-            removeGoogleTranslateUI();
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', removeGoogleTranslateUI);
-            }
-            window.addEventListener('load', removeGoogleTranslateUI);
-            
-            // Watch for new elements
-            const observer = new MutationObserver(function(mutations) {
-                mutations.forEach(function(mutation) {
-                    mutation.addedNodes.forEach(function(node) {
-                        if (node.nodeType === 1) {
-                            if (node.classList && (
-                                node.classList.contains('goog-te-banner-frame') ||
-                                node.classList.contains('skiptranslate') ||
-                                node.id === 'goog-gt-tt'
-                            )) {
-                                node.remove();
-                            }
-                            if (node.tagName === 'IFRAME' && 
-                                (node.className.includes('goog-te') || node.id.includes('goog-gt'))) {
-                                node.remove();
-                            }
-                        }
-                    });
-                });
-            });
-            
-            function startObserver() {
-                if (!document.body) return;
-                observer.observe(document.body, { childList: true, subtree: true });
-            }
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', startObserver);
-            } else {
-                startObserver();
-            }
-            
-            // Continuous removal for first 5 seconds
-            let checkCount = 0;
-            const interval = setInterval(function() {
-                removeGoogleTranslateUI();
-                checkCount++;
-                if (checkCount > 50) clearInterval(interval);
-            }, 100);
-        })();
-    </script>
+    <link rel="stylesheet" href="components/navbar.css">
+ <style>
+
+/* ===============================
+   GLOBAL STYLES
+================================= */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+    color: var(--text-dark);
+    line-height: 1.6;
+    background: var(--pale-blue);
+}
+
+
+/* ===============================
+   PAGE HEADER
+================================= */
+.page-header {
+    background: linear-gradient(135deg, var(--sky-blue) 0%, var(--light-blue) 100%);
+    padding: 3rem 2rem;
+    text-align: center;
+}
+
+.page-header h1 {
+    font-size: 2.5rem;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
+}
+
+.page-header p {
+    font-size: 1.15rem;
+    color: var(--text-light);
+    max-width: 700px;
+    margin: 0 auto;
+}
+
+/* ===============================
+   MAIN CONTAINER
+================================= */
+.container {
+    max-width: 1200px;
+    margin: 3rem auto;
+    padding: 0 2rem;
+}
+
+/* ===============================
+   FILTER SECTION
+================================= */
+.filter-section {
+    background: var(--white);
+    padding: 2rem;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    margin-bottom: 2rem;
+}
+
+.filter-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 1.5rem;
+    margin-top: 1rem;
+}
+
+.filter-group label {
+    display: block;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.filter-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--light-blue);
+    border-radius: 8px;
+    font-size: 1rem;
+    transition: all 0.3s;
+}
+
+.filter-group select:focus {
+    outline: none;
+    border-color: var(--primary-blue);
+}
+
+/* ===============================
+   POSTS GRID
+================================= */
+.posts-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Post Card */
+.post-card {
+    background: var(--white);
+    border-radius: 12px;
+    padding: 2rem;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s;
+    border-left: 4px solid var(--primary-blue);
+}
+
+.post-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+}
+
+.post-card.urgent {
+    border-left-color: #EF4444;
+    background: #FEF2F2;
+}
+
+.post-card.event {
+    border-left-color: #F59E0B;
+    background: #FFFBEB;
+}
+
+.post-card.food_available {
+    border-left-color: #10B981;
+    background: #F0FDF4;
+}
+
+.post-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 1rem;
+}
+
+.post-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+.post-type {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.post-type.update {
+    background: var(--light-blue);
+    color: var(--dark-blue);
+}
+
+.post-type.urgent {
+    background: #FEE2E2;
+    color: #DC2626;
+}
+
+.post-type.event {
+    background: #FEF3C7;
+    color: #D97706;
+}
+
+.post-type.food_available {
+    background: #D1FAE5;
+    color: #059669;
+}
+
+.post-meta {
+    display: flex;
+    gap: 1rem;
+    font-size: 0.9rem;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+}
+
+.post-location {
+    font-weight: 600;
+    color: var(--primary-blue);
+}
+
+.post-message {
+    color: var(--text-dark);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+}
+
+.post-contact {
+    padding-top: 1rem;
+    border-top: 1px solid var(--light-blue);
+    font-size: 0.9rem;
+    color: var(--text-light);
+}
+
+/* ===============================
+   NO POSTS MESSAGE
+================================= */
+.no-posts {
+    background: var(--white);
+    padding: 3rem;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.no-posts h3 {
+    font-size: 1.5rem;
+    color: var(--text-dark);
+    margin-bottom: 0.5rem;
+}
+
+/* ===============================
+   LOADING
+================================= */
+.loading {
+    text-align: center;
+    padding: 3rem;
+    color: var(--text-light);
+}
+
+/* ===============================
+   FLOATING LANGUAGE BUTTON
+================================= */
+.floating-lang-btn {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+    background: linear-gradient(135deg, #7DBFE8 0%, #5BA3D0 100%);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 50px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    cursor: pointer;
+    font-weight: 700;
+    font-size: 16px;
+    border: none;
+    transition: all 0.3s;
+}
+
+.floating-lang-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.4);
+}
+
+.floating-lang-menu {
+    position: fixed;
+    bottom: 90px;
+    right: 30px;
+    z-index: 9998;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    min-width: 250px;
+    max-height: 400px;
+    overflow-y: auto;
+    display: none;
+}
+
+.floating-lang-menu.show {
+    display: block;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.floating-lang-menu a {
+    display: block;
+    padding: 12px 20px;
+    color: #1F2937;
+    text-decoration: none;
+    font-weight: 600;
+    transition: all 0.2s;
+    border-bottom: 1px solid #E5E7EB;
+}
+
+.floating-lang-menu a:hover {
+    background: #E3F2FD;
+    color: #7DBFE8;
+}
+
+.floating-lang-menu a:last-child {
+    border-bottom: none;
+}
+
+/* ===============================
+   RESPONSIVE
+================================= */
+@media (max-width: 768px) {
+    .page-header h1 {
+        font-size: 2rem;
+    }
+
+    .posts-grid {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
 </head>
 <body>
     <div id="google_translate_element" style="display:none;"></div>
     <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <a href="index.html" class="logo">TogetherKGO</a>
-            
-            <!-- Mobile Buttons (hidden on desktop) -->
-            <div class="mobile-buttons-wrapper" style="display: flex; gap: 0.75rem; align-items: center;">
-                <button class="mobile-menu-btn" onclick="toggleMobileMenu()" aria-label="Menu" id="mobileMenuBtn">
-                    <span style="font-size: 1.2rem;">☰</span>
-                    <span>Menu</span>
-                </button>
-            
-                <!-- Desktop Navigation (hidden on mobile) -->
-                <ul class="nav-links">
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="food-banks.html">Find Food Banks</a></li>
-                    <li><a href="community.html">Community Board</a></li>
-                    <li><a href="resources.html">Resources</a></li>
-                    <li class="language-dropdown">
-                        <a href="#" class="language-btn" onclick="toggleLanguageMenu(event)">
-                            🌐 Languages
-                        </a>
-                        <div class="language-menu" id="languageMenu">
-                            <a href="#" onclick="changeLanguage('en'); return false;">English</a>
-                            <a href="#" onclick="changeLanguage('ta'); return false;">தமிழ் (Tamil)</a>
-                            <a href="#" onclick="changeLanguage('bn'); return false;">বাংলা (Bengali)</a>
-                            <a href="#" onclick="changeLanguage('tl'); return false;">Tagalog (Filipino)</a>
-                            <a href="#" onclick="changeLanguage('gu'); return false;">ગુજરાતી (Gujarati)</a>
-                            <a href="#" onclick="changeLanguage('ur'); return false;">اردو (Urdu)</a>
-                            <a href="#" onclick="changeLanguage('fa'); return false;">فارسی (Persian/Farsi)</a>
-                            <a href="#" onclick="changeLanguage('es'); return false;">Español (Spanish)</a>
-                            <a href="#" onclick="changeLanguage('fr'); return false;">Français (French)</a>
-                            <a href="#" onclick="changeLanguage('hi'); return false;">हिन्दी (Hindi)</a>
-                            <a href="#" onclick="changeLanguage('ar'); return false;">العربية (Arabic)</a>
-                            <a href="#" onclick="changeLanguage('zh-CN'); return false;">中文 (Chinese)</a>
-                        </div>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
-    
-    <!-- Mobile Navigation Menu -->
-    <div class="mobile-nav-overlay" id="mobileNavOverlay" onclick="closeMobileMenu()"></div>
-    <div class="mobile-nav-menu" id="mobileNavMenu">
-        <div class="mobile-nav-header">
-            <a href="index.html" class="logo" style="color: var(--primary-blue); text-decoration: none; font-weight: bold; font-size: 1.5rem;">TogetherKGO</a>
-            <button class="mobile-close-btn" onclick="closeMobileMenu()" aria-label="Close">×</button>
-        </div>
-        <ul class="mobile-nav-links">
-            <li><a href="index.html" onclick="closeMobileMenu()">Home</a></li>
-            <li><a href="food-banks.html" onclick="closeMobileMenu()">Find Food Banks</a></li>
-            <li><a href="community.html" onclick="closeMobileMenu()">Community Board</a></li>
-            <li><a href="resources.html" onclick="closeMobileMenu()">Resources</a></li>
-            <li style="border-top: 2px solid #E5E7EB; margin-top: 1rem; padding-top: 1rem;">
-                <div style="padding: 0 1.5rem 0.5rem; font-weight: 700; color: var(--primary-blue); font-size: 0.9rem;">🌐 TRANSLATE PAGE</div>
-            </li>
-            <li><a href="#" onclick="changeLanguage('en'); closeMobileMenu(); return false;">English</a></li>
-            <li><a href="#" onclick="changeLanguage('ta'); closeMobileMenu(); return false;">தமிழ் (Tamil)</a></li>
-            <li><a href="#" onclick="changeLanguage('bn'); closeMobileMenu(); return false;">বাংলা (Bengali)</a></li>
-            <li><a href="#" onclick="changeLanguage('tl'); closeMobileMenu(); return false;">Tagalog</a></li>
-            <li><a href="#" onclick="changeLanguage('gu'); closeMobileMenu(); return false;">ગુજરાતી (Gujarati)</a></li>
-            <li><a href="#" onclick="changeLanguage('ur'); closeMobileMenu(); return false;">اردو (Urdu)</a></li>
-            <li><a href="#" onclick="changeLanguage('fa'); closeMobileMenu(); return false;">فارسی (Farsi)</a></li>
-            <li><a href="#" onclick="changeLanguage('es'); closeMobileMenu(); return false;">Español (Spanish)</a></li>
-            <li><a href="#" onclick="changeLanguage('fr'); closeMobileMenu(); return false;">Français (French)</a></li>
-            <li><a href="#" onclick="changeLanguage('hi'); closeMobileMenu(); return false;">हिन्दी (Hindi)</a></li>
-            <li><a href="#" onclick="changeLanguage('ar'); closeMobileMenu(); return false;">العربية (Arabic)</a></li>
-            <li><a href="#" onclick="changeLanguage('zh-CN'); closeMobileMenu(); return false;">中文 (Chinese)</a></li>
-        </ul>
-    </div>
+    <div id="navbar"></div>
+
+    <script>
+      fetch("components/navbar.html")
+      .then(response => response.text())
+      .then(data => {
+        document.getElementById("navbar").innerHTML = data;
+      })
+      .catch(error => console.error("Error loading navbar:", error));
+    </script>
     
     <!-- Page Header -->
     <div class="page-header">
@@ -1192,6 +625,7 @@
         console.log('📍 Initialization code executed');
     </script>
     
+    
     <!-- Floating Language Button -->
     <button class="floating-lang-btn" onclick="toggleFloatingLangMenuCommunity(event)">
         🌐 Translate
@@ -1212,130 +646,7 @@
         <a href="#" onclick="translatePageFloatingCommunity('zh-CN')">中文 (Chinese)</a>
     </div>
     
-    <!-- Translation Script -->
-    <script type="text/javascript">
-        // Toggle nav dropdown
-        function toggleLanguageMenu(event) {
-            event.preventDefault();
-            const menu = document.getElementById('languageMenu');
-            menu.classList.toggle('show');
-        }
-        
-        // Toggle floating menu
-        // Mobile menu functions
-        function toggleMobileMenu() {
-            const overlay = document.getElementById('mobileNavOverlay');
-            const menu = document.getElementById('mobileNavMenu');
-            overlay.classList.toggle('show');
-            menu.classList.toggle('show');
-            document.body.style.overflow = menu.classList.contains('show') ? 'hidden' : '';
-        }
-        
-        function closeMobileMenu() {
-            const overlay = document.getElementById('mobileNavOverlay');
-            const menu = document.getElementById('mobileNavMenu');
-            overlay.classList.remove('show');
-            menu.classList.remove('show');
-            document.body.style.overflow = '';
-        }
-        
-        // Mobile language dropdown toggle
-        function toggleMobileLangDropdown(event) {
-            event.stopPropagation();
-            const dropdown = document.getElementById('mobileLangDropdown');
-            dropdown.classList.toggle('show');
-        }
-        
-        // Close mobile language dropdown when clicking outside
-        document.addEventListener('click', function(event) {
-            const mobileDropdown = document.getElementById('mobileLangDropdown');
-            const mobileLangBtn = document.getElementById('mobileLangBtn');
-            
-            if (mobileDropdown && !mobileDropdown.contains(event.target) && !mobileLangBtn.contains(event.target)) {
-                mobileDropdown.classList.remove('show');
-            }
-        });
-        
-        function toggleFloatingLangMenuCommunity(event) {
-            event.stopPropagation();
-            const menu = document.getElementById('floatingLangMenuCommunity');
-            menu.classList.toggle('show');
-        }
-
-        // Close menus when clicking outside
-        document.addEventListener('click', function(event) {
-            const navMenu = document.getElementById('languageMenu');
-            const floatingMenu = document.getElementById('floatingLangMenuCommunity');
-            const floatingBtn = document.querySelector('.floating-lang-btn');
-            
-            if (navMenu && !event.target.closest('.language-dropdown')) {
-                navMenu.classList.remove('show');
-            }
-            
-            if (floatingMenu && !floatingMenu.contains(event.target) && event.target !== floatingBtn) {
-                floatingMenu.classList.remove('show');
-            }
-        });
-
-        // Translation Functions (URL Redirect Method - WORKS!)
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement(
-                { pageLanguage: 'en', autoDisplay: false },
-                'google_translate_element'
-            );
-        }
-
-        function setGoogTransCookie(lang) {
-            const value = `/en/${lang}`;
-            document.cookie = `googtrans=${value}; path=/`;
-            document.cookie = `googtrans=${value}; path=/; domain=${location.hostname}`;
-        }
-
-        // Translation Functions (IN-PAGE, NO REDIRECT)
-        function changeLanguage(langCode) {
-            console.log('Changing language to:', langCode);
-
-            // Close all dropdowns
-            const langMenu = document.getElementById('languageMenu');
-            const mobileDropdown = document.getElementById('mobileLangDropdown');
-            const floatingMenu = document.getElementById('floatingLangMenuCommunity');
-            if (langMenu) langMenu.classList.remove('show');
-            if (mobileDropdown) mobileDropdown.classList.remove('show');
-            if (floatingMenu) floatingMenu.classList.remove('show');
-
-            if (langCode === 'en') {
-                if (typeof clearGoogleTranslateCookies === 'function') {
-                    clearGoogleTranslateCookies();
-                }
-                setGoogTransCookie('en');
-            } else {
-                setGoogTransCookie(langCode);
-            }
-
-            // Reload so translation applies cleanly without breaking the page
-            window.location.reload();
-        }
-        
-        // For floating button compatibility
-        function translatePageFloatingCommunity(langCode) {
-            changeLanguage(langCode);
-        }
-        
-        // Clear Google Translate cookies
-        function clearGoogleTranslateCookies() {
-            const cookies = document.cookie.split(';');
-            cookies.forEach(cookie => {
-                const name = cookie.split('=')[0].trim();
-                if (name.includes('googtrans') || name.includes('_ga') || name.includes('_gid')) {
-                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
-                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=.translate.google.com;';
-                    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/; domain=' + window.location.hostname + ';';
-                }
-            });
-        }
-        
-
-    </script>
+<script src="components/translation.js"></script>
 <script src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
 </body>
 </html>
